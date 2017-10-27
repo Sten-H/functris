@@ -1,5 +1,5 @@
 import { handleActions } from "redux-actions";
-import * as actions from "../../actions/actions";
+import * as actions from "../../../actions/actions";
 import { dec, inc, lensIndex, over } from "ramda";
 const xLens = lensIndex(0);
 const yLens = lensIndex(1);

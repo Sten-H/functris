@@ -1,4 +1,4 @@
-import { EMPTY_TOKEN } from './constants';
+import { EMPTY_TOKEN } from '../constants';
 import { all, equals } from 'ramda';
 import { defaultState } from "./boardReducer";
 

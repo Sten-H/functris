@@ -1,7 +1,7 @@
 // Piece functions
 import { compose, converge, equals, head, identity, ifElse, last, map, multiply } from "ramda";
 import { handleActions } from "redux-actions";
-import { PIECES } from './constants';
+import { PIECES } from '../constants';
 
 const isZero = compose(
     equals(0),

@@ -2,50 +2,26 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { map, addIndex } from 'ramda';
 import './Tetris.css';
-import { shiftLeft } from "../../actions/actions";
+import { shiftLeft, shiftRight } from "../../actions/actions";
+import KeyHandler from 'react-key-handler';
 
 const drawRow = (row, i) => <p key={i} className="tetris-row">{row}</p>;
 const drawBoard = addIndex(map)(drawRow);
 
 class Tetris extends React.Component {
-    handleKeyPress = (event) => {
-        const {board, piece} = this.props;
-        switch(event.key) {
-            case 'Enter':
-                console.log('enter press');
-                return;
-            case 'ArrowLeft':
-                this.props.onLeftPress({board, piece});
-                return;
-            case 'ArrowRight':
-                return;
-            case 'ArrowDown':
-                console.log('Down arrow press');
-                return;
-            case 'z':
-                console.log('z key press');
-                return;
-            case 'x':
-                console.log('x key press');
-                return;
-            default:
-                return;
-        }
-    };
-    componentDidMount(){
-        document.addEventListener("keydown", this.handleKeyPress, false);
-    }
-    componentWillUnmount(){
-        document.removeEventListener("keydown", this.handleKeyPress, false);
-    }
     render() {
         return (
         <div className="tetris-game">
+            <KeyHandler keyValue="ArrowLeft" onKeyHandle={this.props.onLeftPress} />
+            <KeyHandler keyValue="ArrowRight" onKeyHandle={this.props.onRightPress} />
+            <KeyHandler keyValue="z" onKeyHandle={() => log("z")} />
+            <KeyHandler keyValue="x" onKeyHandle={() => log("x")} />
             {drawBoard(this.props.board)}
         </div>
         );
     };
 }
+const log = (str) => console.log(str);
 const mapStateToProps = (state) => {
     return {
         board: state.tetris.board,
@@ -56,7 +32,8 @@ const mapStateToProps = (state) => {
 
 export function mapDispatchToProps(dispatch) {
     return {
-        onLeftPress: ({piece, board}) => dispatch(shiftLeft({board, piece}))
+        onLeftPress: ({piece, board}) => dispatch(shiftLeft({board, piece})),
+        onRightPress: ({piece, board}) => dispatch(shiftRight({board, piece}))
     };
 }
 
