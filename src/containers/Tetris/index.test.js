@@ -5,7 +5,7 @@ import configureMockStore, { MockStore } from 'redux-mock-store';
 import { join, repeat } from 'ramda';
 import { KEYUP } from 'react-key-handler';
 import Tetris from './';
-import * as constants from '../../reducers/tetris/constants';
+import * as constants from '../../reducers/tetris/logic/constants';
 
 
 function triggerKeyEvent(eventName, keyCode, keyValue = undefined) {
@@ -41,5 +41,5 @@ describe('Tetris container', () => {
         triggerKeyEvent(KEYUP, undefined, ARROW_RIGHT);
         expect(store.getActions()).toHaveLength(1);
         expect(store.getActions()[0].type).toEqual("SHIFT_RIGHT");
-    })
+    });
 });

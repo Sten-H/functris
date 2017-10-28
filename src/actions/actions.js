@@ -5,8 +5,10 @@ export const {increment, decrement} = createActions({
     'DECREMENT': () => ({amount: -1}),
     }
 );
-
+// position
 export const {shiftLeft, shiftRight} = createActions({
     'SHIFT_LEFT': ({board, piece}) =>  ({board, piece}),
     'SHIFT_RIGHT': ({board, piece}) =>  ({board, piece})
 });
+
+// tick

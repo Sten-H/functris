@@ -1,14 +1,20 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { map, addIndex } from 'ramda';
+import { map, addIndex, inc } from 'ramda';
 import './Tetris.css';
-import { shiftLeft, shiftRight } from "../../actions/actions";
+import { shiftLeft, shiftRight, startTick, tick } from "../../actions/actions";
 import KeyHandler from 'react-key-handler';
 
 const drawRow = (row, i) => <p key={i} className="tetris-row">{row}</p>;
 const drawBoard = addIndex(map)(drawRow);
 
 class Tetris extends React.Component {
+    tickState = {
+        TICK_RATE: 100,
+        timer: null,  // setInterval func
+        counter: 0,  // Is increased by 1 every tick
+        speed: 10,  // counter % speed == 1 is when action is dispatched
+    };
     render() {
         return (
         <div className="tetris-game">
@@ -33,7 +39,7 @@ const mapStateToProps = (state) => {
 export function mapDispatchToProps(dispatch) {
     return {
         onLeftPress: ({piece, board}) => dispatch(shiftLeft({board, piece})),
-        onRightPress: ({piece, board}) => dispatch(shiftRight({board, piece}))
+        onRightPress: ({piece, board}) => dispatch(shiftRight({board, piece})),
     };
 }
 
