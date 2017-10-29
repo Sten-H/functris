@@ -8,14 +8,14 @@ import { Col, ListGroup, ListGroupItem, Row, Table } from "react-bootstrap";
 
 export const App = () => {
     return (
-      <div className="App">
-          <Row>
+      <Row className="App">
+          <Col xs={12}>
               <Col sm={12}>
                   <h2>TETRIS</h2>
                   <hr />
               </Col>
-              <Col className="dotted-border hs-info" sm={4} xsHidden>
-                  <Col className="float-right"xs={12}>
+              <Col className="hs-info" smOffset={1} sm={3} mdOffset={0} md={4} xsHidden>
+                  <Col className="hs-info-inner dotted-border" sm={12} mdOffset={2} md={10} lgOffset={2} lg={10}>
                       <h4>High Score</h4>
                       <Table className="hs-table" condensed hover>
                           <thead>
@@ -48,15 +48,17 @@ export const App = () => {
               <Col xs={12} sm={4}>
                   <Tetris />
               </Col>
-              <Col className="info-view dotted-border text-left" sm={4} xsHidden>
-                  <Bag />
-                  <h4>Score</h4>
-                  <p>100</p>
-                  <h4>Lines</h4>
-                  <p>23</p>
+              <Col className="info-view" smOffset={1} sm={3} mdOffset={0} md={4} xsHidden>
+                  <Col className="info-view-inner dotted-border text-left" sm={12} md={6}>
+                      <Bag />
+                      <h4>Score</h4>
+                      <p>100</p>
+                      <h4>Lines</h4>
+                      <p>23</p>
+                  </Col>
               </Col>
-          </Row>
-      </div>
+          </Col>
+      </Row>
     );
 };
 const mapStateToProps = (state) => {

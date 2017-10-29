@@ -29,14 +29,6 @@
  FIXME probably shouldn't use margin for this, instead wrap in container and use padding, this way it won't mess
  with total width of columns I think
 */
-.hs-info {
-    margin-left: 3em;
-    margin-right: -3em;
-}
-.info-view {
-    margin-left: -3em;
-    margin-right: 3em;
-}
 
 @keyframes App-logo-spin {
     from { transform: rotate(0deg); }
