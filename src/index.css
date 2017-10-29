@@ -1,5 +1,23 @@
+html, body {
+    width: 100%;
+}
 body {
-  margin: 0;
-  padding: 0;
-  font-family: sans-serif;
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+}
+.dotted-border {
+    border: 3px dashed black;
+}
+.cyan {
+    background-color:cyan;
+    border: 5px outset darkcyan;
+}
+.block {
+    width:1em;
+    height:1em;
+    /*content: "";*/
+    padding:0;
+    margin:0;
+    display: inline-block;
 }

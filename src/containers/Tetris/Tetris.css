@@ -1,10 +1,13 @@
 .tetris-row {
+    font-size: 1.5em;
+    padding: 0;
     margin: 0;
+    /*margin: -0.78em 0;*/
+    margin-bottom: -0.39em;
 }
 
 .tetris-game {
-    border-width: 1px;
-    border-style: dashed;
+    white-space: pre;
     display: inline-block;
     padding: 2px;
     font-size: 1.5em;

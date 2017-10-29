@@ -8,6 +8,7 @@ import {
     view
 } from "ramda";
 import { ROW_COUNT, EMPTY_BOARD, EMPTY_TOKEN, FILL_TOKEN, COL_COUNT } from "./constants/index";
+import { getBag, getpiece } from "./bagLogic";
 
 describe('Tetris logic', () => {
     const emptyBoard = EMPTY_BOARD;
@@ -155,5 +156,13 @@ describe('Tetris logic', () => {
             const s2 = over(posLens, adjust(inc, 1), state);
             expect(isPieceOverlapping(s2)).toBe(false);
         });
+    });
+});
+describe('SevenBag logic', () => {
+    it('should get new bag with seven pieces in random order', () => {
+        // expect(getBag()).toHaveLength(7);
+    });
+    it('should spin piece randomly', () => {
+        console.log(getpiece());
     });
 });
