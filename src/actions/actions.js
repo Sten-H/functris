@@ -6,9 +6,10 @@ export const {increment, decrement} = createActions({
     }
 );
 // position
-export const {shiftLeft, shiftRight} = createActions({
-    'SHIFT_LEFT': ({board, piece}) =>  ({board, piece}),
-    'SHIFT_RIGHT': ({board, piece}) =>  ({board, piece})
+export const {shiftLeft, shiftRight, rotateClockwise, rotateCounter} = createActions({
+    'SHIFT_LEFT': () =>  ({}),
+    'SHIFT_RIGHT': () =>  ({}),
+    'ROTATE_CLOCKWISE': () => ({}),
+    'ROTATE_COUNTER': () => ({})
 });
-
 // tick

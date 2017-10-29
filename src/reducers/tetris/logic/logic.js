@@ -1,6 +1,6 @@
 import {
-    add, any, compose, converge, curry, dec, equals, flip, head, identity, ifElse, inc, last, lensIndex, map, multiply,
-    over, path, zipWith, reverse, __, always, cond, and, when, gte, lt, view, or, not, lensProp, allPass, anyPass
+    add, any, compose, converge, curry, dec, equals, flip, head, inc, last, lensIndex, map, multiply,
+    over, path, zipWith, reverse, __, when, gte, lt, view, or, not, lensProp, anyPass
 } from "ramda";
 import * as constants from './constants';
 import { ROW_COUNT } from "./constants/index";
@@ -43,7 +43,7 @@ const isXOutOfBounds = coordValidator(
 const isYOutOfBounds = coordValidator(
     yLens,
     [
-        gte(__, 20)
+        gte(__, ROW_COUNT)
     ]);
 // coord -> boolean
 export const isCoordOutOfBounds = anyPass([isXOutOfBounds, isYOutOfBounds]);
@@ -83,7 +83,7 @@ const normalizeZero = when(equals(-0), Math.abs);
 // c -> c Sets all -0 to 0 in coord.
 const normalizeCoord = map(normalizeZero);
 
-// adds position value to each piece coord to get true position
+//state -> piece, adds position value to each piece coord to get true position
 export const pieceActualPosition = curry(({pos, piece}) => map(addCoords(pos), piece));
 
 // state -> coord -> boolean

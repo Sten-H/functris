@@ -137,7 +137,9 @@ describe('Tetris logic', () => {
         it('should get cells with x y coords', () => {
             const filledRowBoard = update(dec(ROW_COUNT), filledRow, emptyBoard);
             const cell1 = getCell(filledRowBoard, [5, dec(ROW_COUNT)]); // get cell from filled bottom row
+            const cell2 = getCell(filledRowBoard, [5, 5]);  // empty
             expect(cell1).toEqual(FILL_TOKEN);
+            expect(cell2).toEqual(EMPTY_TOKEN);
         });
     });
     describe('Overlap detection', () => {
