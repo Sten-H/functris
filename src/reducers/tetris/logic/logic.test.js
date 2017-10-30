@@ -1,13 +1,12 @@
 import {
     shiftLeft, shiftRight, rotateClockwise, rotateCounterClockwise, isPieceOverlapping,
     pieceActualPosition, isCoordOverlapping, getCell, isCoordOutOfBounds, isPieceOutOfBounds, posLens, boardLens,
-    pieceLens, shiftDown, writeToBoard
+    pieceLens, shiftDown, writeToBoard, lockPiece, bagLens
 } from "./logic";
 import {
-    adjust, all, compose, concat, dec, equals, inc, last, lensProp, map, over, path, prop, repeat, set, update,
-    view
+    adjust, all, compose, concat, dec, equals, inc, last, over, prop, repeat, set, update, view
 } from "ramda";
-import { ROW_COUNT, EMPTY_BOARD, EMPTY_TOKEN, FILL_TOKEN, COL_COUNT } from "./constants/index";
+import { ROW_COUNT, EMPTY_BOARD, EMPTY_TOKEN, FILL_TOKEN, COL_COUNT, START_POS } from "./constants/index";
 import { getBag, getpiece } from "./bagLogic";
 
 describe('Tetris logic', () => {
@@ -20,7 +19,8 @@ describe('Tetris logic', () => {
     const state = {
         board: emptyBoard,
         pos: pos,
-        piece: IPiece
+        piece: IPiece,
+        bag: [LPiece, IPiece ]
     };
     describe('Out of bounds', () => {
         it('should detect x out of bounds', () => {
@@ -177,8 +177,22 @@ describe('Tetris logic', () => {
             const expected = concat(repeat(FILL_TOKEN, 4), repeat(EMPTY_TOKEN, 6));
             expect(last(writeToBoard(s).board)).toEqual(expected);
         });
-        it('should reset position and get new piece after piece written to board', () => {
-
+        it('should reset position after piece written to board', () => {
+            const s = compose(
+                set(posLens, [1, 19]),
+                set(pieceLens, IPiece),  // laying down I piece, going 1 block to left 2 to right
+                set(boardLens, EMPTY_BOARD)
+            )(state);
+            expect(lockPiece(s).pos).toEqual(START_POS);
+        });
+        it('should get new piece after piece written to board', () => {
+            const s = compose(
+                set(posLens, [1, 19]),
+                set(pieceLens, IPiece),  // laying down I piece, going 1 block to left 2 to right
+                set(boardLens, EMPTY_BOARD),
+                set(bagLens, [LPiece])
+            )(state);
+            expect(lockPiece(s).piece).toEqual(LPiece);
         });
     });
     describe('Overlap detection', () => {

@@ -5,11 +5,13 @@ import {
 } from "ramda";
 import * as constants from './constants';
 import { FILL_TOKEN, ROW_COUNT } from "./constants/index";
+import { getNextPiece } from "./bagLogic";
 // LENSES
 // State lenses
 export const posLens = lensProp('pos');
 export const boardLens = lensProp('board');
 export const pieceLens = lensProp('piece');
+export const bagLens = lensProp('bag');
 // cell lens from state (ex: ['board', [0, 1]). coord is reversed because board is [y, x] oriented
 export const cellLens = compose(lensPath,
     concat(['board']),
@@ -111,6 +113,9 @@ const rotatePiece = (dirFuncs) => map(
         dirFuncs
     )
 );
+// [f] -> state -> state, f is a pair of transformers, first applies to x coord, second to y coord
+const rotate = dirFuncs => over(pieceLens, rotatePiece(dirFuncs));
+
 // (state, coord) -> state
 const fillCell = (state, coord) => set(cellLens( coord ), FILL_TOKEN, state);
 // state -> state
@@ -118,12 +123,17 @@ export const writeToBoard = converge(
     reduce(fillCell),
     [identity, pieceActualPosition]
 );
-// [f] -> state -> state, f is a pair of transformers, first applies to x coord, second to y coord
-const rotate = dirFuncs => over(pieceLens, rotatePiece(dirFuncs));
+// PUBLIC FUNCTIONS
+export const lockPiece = compose(
+    getNextPiece,
+    set(posLens, constants.START_POS),
+    writeToBoard
+);
+
 // Public piece transformer functions
 export const shiftLeft = tryTransform(shift(leftDir));
 export const shiftRight = tryTransform(shift(rightDir));
-export const shiftDown = tryTransformElse(writeToBoard, shift(downDir));
+export const shiftDown = tryTransformElse(lockPiece, shift(downDir));
 export const rotateClockwise = tryTransform(rotate(clockwise));
 export const rotateCounterClockwise = tryTransform(rotate(counterClockwise));
 // const tryTransformElse = curry((elseFunc, transformFunc, state)

@@ -6,7 +6,7 @@ export const EMPTY_TOKEN = "O";
 export const FILL_TOKEN = "X";
 const EMPTY_ROW = new Array(COL_COUNT).fill(EMPTY_TOKEN);
 export const EMPTY_BOARD = repeat(EMPTY_ROW, ROW_COUNT);
-
+export const START_POS = [ 4, 0 ];
 export const PIECES = {
     I: [ [-1,  0], [0,  0], [ 1,  0], [ 2,  0] ],
     T: [ [ 0, -1], [-1,  0], [ 0,  0], [ 1,  0] ],

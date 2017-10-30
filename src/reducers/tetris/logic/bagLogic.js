@@ -1,11 +1,12 @@
 import {
-    __, always, apply, compose, curry, values, lensProp, map, pipe, prop, repeat
+    __, always, apply, compose, curry, values, lensProp, map, pipe, prop, repeat, head, view, over, tail, set, isEmpty
 } from "ramda";
 import { rotateClockwise } from "./logic";
 import * as constants from './constants';
 import shuffle from 'shuffle-array';
 
 const pieceLens = lensProp('piece');
+const bagLens = lensProp('bag');
 // Returns a random integer between min (included) and max (included)
 const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 const getTimes = always(getRandomInt(1, 16));
@@ -31,3 +32,27 @@ const shuffleObjValues = compose(
  * @type {Function}
  */
 export const getBag = () => shuffleObjValues(constants.PIECES);
+
+export const nextPiece = compose(
+    head,
+    view(bagLens)
+);
+const fromBag = (func) => compose(
+    func,
+    view(bagLens)
+);
+const bagHead = fromBag(head);
+const bagTail = fromBag(tail);
+
+// FIXME refactor and rewrite this to be nicer
+export const getNextPiece = (state) => {
+    const nextPiece = bagHead(state);
+    let newBag = bagTail(state);
+    if(isEmpty(newBag)) {
+        newBag = getBag();
+    }
+    return compose(
+        set(bagLens, newBag),
+        set(pieceLens, nextPiece)
+    )(state);
+};
