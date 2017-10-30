@@ -7,7 +7,7 @@ import {
     adjust, all, compose, concat, dec, equals, inc, last, over, prop, repeat, set, update, view
 } from "ramda";
 import { ROW_COUNT, EMPTY_BOARD, EMPTY_TOKEN, FILL_TOKEN, COL_COUNT, START_POS } from "./constants/index";
-import { getBag, getpiece } from "./bagLogic";
+import { getShuffledBag, getpiece } from "./bagLogic";
 
 describe('Tetris logic', () => {
     const emptyBoard = EMPTY_BOARD;

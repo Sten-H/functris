@@ -2,13 +2,13 @@ import * as constants from './logic/constants';
 import * as actions from '../../actions/actions';
 import { handleActions } from "redux-actions";
 import * as logic from "./logic/logic";
-import { getBag } from "./logic/bagLogic";
+import { getShuffledBag } from "./logic/bagLogic";
 
 const defaultState = {
     board: constants.EMPTY_BOARD,
     piece: constants.PIECES.L,
     pos: [5, 6],
-    bag: getBag()
+    bag: getShuffledBag()
 };
 const reducer = handleActions({
     [actions.shiftLeft](state) {

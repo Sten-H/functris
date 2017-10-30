@@ -1,4 +1,4 @@
-import { getBag, getNextPiece, nextPiece } from "./bagLogic";
+import { getShuffledBag, getNextPiece, nextPiece } from "./bagLogic";
 import { compose, lensProp, set, takeLast, values } from "ramda";
 import { EMPTY_BOARD } from "./constants/index";
 import * as constants from './constants';
@@ -13,7 +13,7 @@ const state = {
 };
 describe('Seven Bag logic', () => {
     it('should return list of seven pieces (in random order)', () => {
-        const bag = getBag();
+        const bag = getShuffledBag();
         expect(bag).toHaveLength(7);
         expect(takeLast(bag).length).toBeGreaterThanOrEqual(1);
     });

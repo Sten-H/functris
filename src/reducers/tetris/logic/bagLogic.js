@@ -1,5 +1,6 @@
 import {
-    __, always, apply, compose, curry, values, lensProp, map, pipe, prop, repeat, head, view, over, tail, set, isEmpty
+    __, always, apply, compose, curry, values, lensProp, map, pipe, prop, repeat, head, view, over, tail, set, isEmpty,
+    ifElse, converge, identity, equals, length, lensPath
 } from "ramda";
 import { rotateClockwise } from "./logic";
 import * as constants from './constants';
@@ -7,31 +8,13 @@ import shuffle from 'shuffle-array';
 
 const pieceLens = lensProp('piece');
 const bagLens = lensProp('bag');
-// Returns a random integer between min (included) and max (included)
-const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
-const getTimes = always(getRandomInt(1, 16));
+const bagLengthLens = lensPath(['bag', 'length']);
 
-// This state is only used as argument for rotate function
-const mockState = {board: [], pos: [5, 5], piece: null};
-// state -> state
-const rotateN = curry((times, state) => compose(apply(pipe), repeat(rotateClockwise))(state)(times));
-// state -> piece
-const spinPieceRandom = compose(
-    prop('piece'),
-    rotateN(__, getTimes())
-);
-// FIXME actually just hit me, I think pieces are always same rotation on spawn, look it up
 const shuffleObjValues = compose(
     shuffle,
     values
 );
-/**
- * Returns an array of pieces (as array of coords, no additional info such as shape descriptor ('J').
- * @param {obj} key value pair with pieces ( { p: [piece] } )
- * @return {Array[]} returns array of pieces (which are arrays of coords)
- * @type {Function}
- */
-export const getBag = () => shuffleObjValues(constants.PIECES);
+export const getShuffledBag = () => shuffleObjValues(constants.PIECES);
 
 export const nextPiece = compose(
     head,
@@ -41,18 +24,23 @@ const fromBag = (func) => compose(
     func,
     view(bagLens)
 );
+const bagWillBeEmpty = compose(equals(1), view(bagLengthLens));
+
 const bagHead = fromBag(head);
 const bagTail = fromBag(tail);
-
-// FIXME refactor and rewrite this to be nicer
-export const getNextPiece = (state) => {
-    const nextPiece = bagHead(state);
-    let newBag = bagTail(state);
-    if(isEmpty(newBag)) {
-        newBag = getBag();
-    }
-    return compose(
-        set(bagLens, newBag),
-        set(pieceLens, nextPiece)
-    )(state);
-};
+const getBagRest = ifElse(
+    bagWillBeEmpty,
+    getShuffledBag,
+    bagTail
+);
+// basically "over" but it uses and returns whole state as argument, not only lens part
+const overProperty = (lens, func) => converge(
+    set(lens),
+        [func, identity]
+    );
+// state -> state
+const setNextPiece = overProperty(pieceLens, bagHead);
+// state -> state
+const setBag = overProperty(bagLens, getBagRest);
+// state -> state
+export const getNextPiece = compose(setBag, setNextPiece);
