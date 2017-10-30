@@ -1,10 +1,10 @@
 import {
     shiftLeft, shiftRight, rotateClockwise, rotateCounterClockwise, isPieceOverlapping,
     pieceActualPosition, isCoordOverlapping, getCell, isCoordOutOfBounds, isPieceOutOfBounds, posLens, boardLens,
-    pieceLens
+    pieceLens, shiftDown, writeToBoard
 } from "./logic";
 import {
-    adjust, all, compose, dec, equals, inc, lensProp, map, over, path, prop, repeat, set, update,
+    adjust, all, compose, concat, dec, equals, inc, last, lensProp, map, over, path, prop, repeat, set, update,
     view
 } from "ramda";
 import { ROW_COUNT, EMPTY_BOARD, EMPTY_TOKEN, FILL_TOKEN, COL_COUNT } from "./constants/index";
@@ -57,7 +57,32 @@ describe('Tetris logic', () => {
             expect(shiftRight(s2).pos).toEqual(expected2)
         });
         it('Should return call value if piece overlapping after shift', () => {
-            expect(true).toBe(true);
+            const row = update(0, FILL_TOKEN, repeat(EMPTY_TOKEN, COL_COUNT));
+            const board = update(dec(ROW_COUNT), row, emptyBoard);
+            const s = compose(
+                set(pieceLens, [[0,0]]),
+                set(boardLens, board),
+                set(posLens, [1, dec(ROW_COUNT)])
+            )(state);
+            const expected = [1, 19];
+            expect(shiftLeft(s).pos).toEqual(expected);
+        })
+    });
+    describe('Shift vertical', () => {
+       it('should shift vertically', () => {
+           const s = set(posLens, [5, 5], state);
+           const expected = [5, 6];
+           expect(shiftDown(s).pos).toEqual(expected);
+       });
+        it('should write piece to board when shifted to overlap', () => {
+            const s = compose(
+                set(posLens, [1, 19]),
+                set(pieceLens, IPiece),  // laying down I piece, going 1 block to left 2 to right
+                set(boardLens, EMPTY_BOARD)
+            )(state);
+            const newState = shiftDown(s);
+            const expected = concat(repeat(FILL_TOKEN, 4), repeat(EMPTY_TOKEN, 6));
+            expect(last(newState.board)).toEqual(expected);
         })
     });
     describe('Rotate', () => {
@@ -137,10 +162,23 @@ describe('Tetris logic', () => {
         });
         it('should get cells with x y coords', () => {
             const filledRowBoard = update(dec(ROW_COUNT), filledRow, emptyBoard);
-            const cell1 = getCell(filledRowBoard, [5, dec(ROW_COUNT)]); // get cell from filled bottom row
-            const cell2 = getCell(filledRowBoard, [5, 5]);  // empty
+            const s = set(boardLens, filledRowBoard, state);
+            const cell1 = getCell(s, [5, dec(ROW_COUNT)]); // get cell from filled bottom row
+            const cell2 = getCell(s, [5, 5]);  // empty
             expect(cell1).toEqual(FILL_TOKEN);
             expect(cell2).toEqual(EMPTY_TOKEN);
+        });
+        it('should write piece to board', () => {
+            const s = compose(
+                set(posLens, [1, 19]),
+                set(pieceLens, IPiece),  // laying down I piece, going 1 block to left 2 to right
+                set(boardLens, EMPTY_BOARD)
+            )(state);
+            const expected = concat(repeat(FILL_TOKEN, 4), repeat(EMPTY_TOKEN, 6));
+            expect(last(writeToBoard(s).board)).toEqual(expected);
+        });
+        it('should reset position and get new piece after piece written to board', () => {
+
         });
     });
     describe('Overlap detection', () => {

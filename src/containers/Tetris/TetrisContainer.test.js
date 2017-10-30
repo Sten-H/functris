@@ -15,6 +15,8 @@ function triggerKeyEvent(eventName, keyCode, keyValue = undefined) {
 }
 const ARROW_LEFT = 'ArrowLeft';
 const ARROW_RIGHT = 'ArrowRight';
+const ARROW_DOWN = 'ArrowDown';
+
 const state = {
     tetris: {
         board: constants.EMPTY_BOARD,
@@ -35,7 +37,7 @@ describe('Tetris container', () => {
         expect(component.find('.tetris-row')).toHaveLength(20);
         expect(component.find('.tetris-row').first().find('.block')).toHaveLength(10);
     });
-    it('should dispatch event on left key press', () => {
+    it('should dispatch event on left arrow key press', () => {
         triggerKeyEvent(KEYUP, undefined, ARROW_LEFT);
         // FIXME all KEYUP events fire twice, or atleast create two actions
         // It's very odd, it doesn't cause bad behaviour, I wonder what causes it
@@ -43,8 +45,14 @@ describe('Tetris container', () => {
         expect(store.getActions()[0].type).toEqual("SHIFT_LEFT");
 
     });
-    it('should dispatch event on right key press', () => {
+    it('should dispatch event on right arrow key press', () => {
         triggerKeyEvent(KEYUP, undefined, ARROW_RIGHT);
         expect(store.getActions()[0].type).toEqual("SHIFT_RIGHT");
+    });
+    it('should dispatch event on down arrow key press', () => {
+        triggerKeyEvent(KEYUP, undefined, ARROW_DOWN);
+        // expect(store.getActions()).toHaveLength(1);
+        expect(store.getActions()[0].type).toEqual("SHIFT_DOWN");
+
     });
 });

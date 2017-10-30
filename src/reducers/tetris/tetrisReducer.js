@@ -21,6 +21,11 @@ const reducer = handleActions({
             ...logic.shiftRight(state)
         };
     },
+    [actions.shiftDown](state) {
+        return {
+            ...logic.shiftDown(state)
+        };
+    },
     [actions.rotateClockwise](state) {
         return {
             ...logic.rotateClockwise(state)

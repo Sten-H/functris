@@ -12,6 +12,7 @@ class Tetris extends React.Component {
         <div className="tetris-game dotted-border">
             <KeyHandler keyValue="ArrowLeft" onKeyHandle={this.props.onLeftPress} />
             <KeyHandler keyValue="ArrowRight" onKeyHandle={this.props.onRightPress} />
+            <KeyHandler keyValue="ArrowDown" onKeyHandle={this.props.onDownPress} />
             <KeyHandler keyValue="ArrowUp" onKeyHandle={this.props.onUpPress} />
             <KeyHandler keyValue="z" onKeyHandle={this.props.onUpPress} />
             <KeyHandler keyValue="x" onKeyHandle={this.props.onXPress} />
@@ -31,6 +32,7 @@ export function mapDispatchToProps(dispatch) {
     return {
         onLeftPress: () => dispatch(actions.shiftLeft()),
         onRightPress: () => dispatch(actions.shiftRight()),
+        onDownPress: () => dispatch(actions.shiftDown()),
         onUpPress: () => dispatch(actions.rotateClockwise()),
         onXPress: () => dispatch(actions.rotateCounter())
     };
