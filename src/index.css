@@ -12,14 +12,16 @@ body {
     border: 3px dashed black;
 }
 .cyan {
-    background-color:cyan;
-    border: 5px outset darkcyan;
+    background-color: cyan !important;
+    /*border: 5px outset darkcyan;*/
+    border: 1px solid black;
 }
 .block {
     width:1em;
     height:1em;
-    /*content: "";*/
-    padding:0;
-    margin:0;
+    padding: 0;
+    margin: 0;
+    background-color: darkslategray;
     display: inline-block;
+    line-height: 1em;
 }

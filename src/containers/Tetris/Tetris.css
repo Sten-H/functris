@@ -3,7 +3,8 @@
     padding: 0;
     margin: 0;
     /*margin: -0.78em 0;*/
-    margin-bottom: -0.39em;
+    /*margin-bottom: -0.39em;*/
+    line-height: 0em;
 }
 
 .tetris-game {

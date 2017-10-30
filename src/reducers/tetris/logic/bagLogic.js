@@ -1,6 +1,9 @@
-import { __, always, apply, compose, curry, flip, lensProp, pipe, prop, repeat, set } from "ramda";
+import {
+    __, always, apply, compose, curry, values, lensProp, map, pipe, prop, repeat
+} from "ramda";
 import { rotateClockwise } from "./logic";
 import * as constants from './constants';
+import shuffle from 'shuffle-array';
 
 const pieceLens = lensProp('piece');
 // Returns a random integer between min (included) and max (included)
@@ -12,14 +15,19 @@ const mockState = {board: [], pos: [5, 5], piece: null};
 // state -> state
 const rotateN = curry((times, state) => compose(apply(pipe), repeat(rotateClockwise))(state)(times));
 // state -> piece
-export const spinPieceRandom = compose(
+const spinPieceRandom = compose(
     prop('piece'),
     rotateN(__, getTimes())
 );
-export const getpiece = () => {
-    const choosePiece = constants.PIECES.L;  // FIXME
-    const state = set(pieceLens, choosePiece, mockState);
-    return spinPieceRandom(state);
-};
-export const getBag = () => {
-};
+// FIXME actually just hit me, I think pieces are always same rotation on spawn, look it up
+const shuffleObjValues = compose(
+    shuffle,
+    values
+);
+/**
+ * Returns an array of pieces (as array of coords, no additional info such as shape descriptor ('J').
+ * @param {obj} key value pair with pieces ( { p: [piece] } )
+ * @return {Array[]} returns array of pieces (which are arrays of coords)
+ * @type {Function}
+ */
+export const getBag = () => shuffleObjValues(constants.PIECES);

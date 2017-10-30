@@ -20,18 +20,28 @@ const mountWithStore = (component, store) => {
 };
 const ARROW_LEFT = 'ArrowLeft';
 const ARROW_RIGHT = 'ArrowRight';
-const state = {tetris: {board: constants.EMPTY_BOARD, piece: constants.PIECES.L, position: [0, 0]}, counter: 0};
+const state = {
+    tetris: {
+        board: constants.EMPTY_BOARD,
+        piece: constants.PIECES.L,
+        pos: [ 0, 0 ],
+        bag: [ [ [ 0, 0 ], [ 1, 0 ] ], [ [ 0, 0 ], [ 1, 0 ] ] ]
+    }
+};
 describe('Tetris container', () => {
     const mockStore = configureMockStore();
     const store = mockStore(state);
-    const component = mountWithStore(<Tetris />, store);
     beforeEach(store.clearActions);
+    it('should mount with store without crashing', () => {
+        const component = mountWithStore(<Tetris />, store);
+    });
     it('Should render board state', () => {
+        const component = mountWithStore(<Tetris />, store);
         expect(component.find('.tetris-row')).toHaveLength(20);
-        const expectedRow = join('', repeat(constants.EMPTY_TOKEN, 10));
-        expect(component.find('.tetris-row').first().text()).toEqual(expectedRow);
+        expect(component.find('.tetris-row').first().find('.block')).toHaveLength(10);
     });
     it('should dispatch event on left key press', () => {
+        store.clearActions();
         triggerKeyEvent(KEYUP, undefined, ARROW_LEFT);
         expect(store.getActions()).toHaveLength(1);
         expect(store.getActions()[0].type).toEqual("SHIFT_LEFT");

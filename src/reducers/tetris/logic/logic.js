@@ -3,7 +3,7 @@ import {
     over, path, zipWith, reverse, __, when, gte, lt, view, or, not, lensProp, anyPass
 } from "ramda";
 import * as constants from './constants';
-import { ROW_COUNT } from "./constants/index";
+import { FILL_TOKEN, ROW_COUNT } from "./constants/index";
 // LENSES
 // State lenses
 export const posLens = lensProp('pos');
@@ -88,7 +88,7 @@ export const pieceActualPosition = curry(({pos, piece}) => map(addCoords(pos), p
 
 // state -> coord -> boolean
 export const isCoordOverlapping = ({board}) => compose(
-    equals("X"),
+    equals(FILL_TOKEN),
     getCell(board));
 
 // state -> boolean

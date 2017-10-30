@@ -158,11 +158,3 @@ describe('Tetris logic', () => {
         });
     });
 });
-describe('SevenBag logic', () => {
-    it('should get new bag with seven pieces in random order', () => {
-        // expect(getBag()).toHaveLength(7);
-    });
-    it('should spin piece randomly', () => {
-        console.log(getpiece());
-    });
-});

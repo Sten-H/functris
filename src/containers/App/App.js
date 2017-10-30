@@ -1,10 +1,9 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { increment, decrement } from "../../actions/actions"
 import Tetris from '../Tetris';
-import { Bag } from '../Bag';
+import Bag from '../Bag';
 import './App.css';
-import { Col, ListGroup, ListGroupItem, Row, Table } from "react-bootstrap";
+import { Col, Row, Table } from "react-bootstrap";
 
 export const App = () => {
     return (

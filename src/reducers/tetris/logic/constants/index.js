@@ -2,8 +2,8 @@ import { repeat } from "ramda";
 
 export const COL_COUNT = 10;
 export const ROW_COUNT = 20;
-export const EMPTY_TOKEN = "  ";
-export const FILL_TOKEN = "□";
+export const EMPTY_TOKEN = "O";
+export const FILL_TOKEN = "X";
 const EMPTY_ROW = new Array(COL_COUNT).fill(EMPTY_TOKEN);
 export const EMPTY_BOARD = repeat(EMPTY_ROW, ROW_COUNT);
 
