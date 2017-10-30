@@ -6,4 +6,3 @@ export const {shiftLeft, shiftRight, rotateClockwise, rotateCounter} = createAct
     'ROTATE_CLOCKWISE': () => ({}),
     'ROTATE_COUNTER': () => ({})
 });
-// tick
