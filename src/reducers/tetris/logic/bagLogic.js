@@ -1,10 +1,15 @@
 import {
-    __, always, apply, compose, curry, values, lensProp, map, pipe, prop, repeat, head, view, over, tail, set, isEmpty,
-    ifElse, converge, identity, equals, length, lensPath
+    compose, values, lensProp, head, view, tail, set, ifElse, converge, identity, equals, lensPath
 } from "ramda";
-import { rotateClockwise } from "./logic";
 import * as constants from './constants';
 import shuffle from 'shuffle-array';
+
+/**
+ * Bag logic keeps manages the state of the "bag" of pieces. A bag consists of the seven possible
+ * tetris pieces in random order as an array. The head of the array is the next piece to be played.
+ * When the final piece is taken from the bag it makes a new bag. With this bag approach a piece can
+ * at most go without being played for
+ */
 
 const pieceLens = lensProp('piece');
 const bagLens = lensProp('bag');

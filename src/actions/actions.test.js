@@ -14,6 +14,10 @@ describe('Actions', () => {
         const expected = 'SHIFT_DOWN';
         expect(prop('type', actions.shiftDown())).toEqual(expected);
     });
+    it('should create drop piece action', () => {
+        const expected = 'DROP_PIECE';
+        expect(prop('type', actions.dropPiece())).toEqual(expected);
+    });
     it('should create rotate clockwise action', () => {
         const expected = 'ROTATE_CLOCKWISE';
         expect(prop('type', actions.rotateClockwise())).toEqual(expected);

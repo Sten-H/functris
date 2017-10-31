@@ -1,11 +1,15 @@
 import {
-    add, any, compose, converge, curry, dec, equals, flip, head, inc, last, lensIndex, map, multiply,
-    over, path, zipWith, reverse, __, when, gte, lt, view, or, not, lensProp, anyPass, ifElse, identity, lensPath,
-    concat, set, reduce
+    add, any, compose, converge, curry, dec, equals, head, inc, last, lensIndex, map, multiply,
+    over, zipWith, reverse, __, when, gte, lt, view, or, not, lensProp, anyPass, ifElse, identity, lensPath,
+    concat, set, reduce, always, complement
 } from "ramda";
 import * as constants from './constants';
 import { FILL_TOKEN, ROW_COUNT } from "./constants/index";
 import { getNextPiece } from "./bagLogic";
+
+/**
+ * Main logic of tetris game.
+ */
 // LENSES
 // State lenses
 export const posLens = lensProp('pos');
@@ -49,22 +53,26 @@ export const isCoordOverlapping = (state) => compose(
     getCell(state)
 );
 // state -> boolean
-export const isPieceOverlapping = state =>
-    compose(
-        any(isCoordOverlapping(state)),
-        pieceActualPosition)(state);
-// (lens, [predicates] -> f(coord) -> boolean
+export const isPieceOverlapping =
+    converge(
+        any,
+        [isCoordOverlapping, pieceActualPosition]
+    );
+
+// (lens, [predicates]) -> f(coord) -> boolean
 const coordValidator = (lens, predicates) =>
     compose(
         anyPass(predicates),
         view(lens)
     );
+// coord -> boolean
 const isXOutOfBounds = coordValidator(
     xLens,
     [
         lt(__, 0),
         gte(__, constants.COL_COUNT)
     ]);
+// coord -> boolean
 const isYOutOfBounds = coordValidator(
     yLens,
     [
@@ -76,26 +84,21 @@ export const isCoordOutOfBounds = anyPass([isXOutOfBounds, isYOutOfBounds]);
 export const isPieceOutOfBounds = curry((state) => compose(
     any(isCoordOutOfBounds),
     pieceActualPosition)(state));
-// f -> state -> boolean, validates transformed state, returns true if valid
-const transformAndValidate = transformFunc =>
+// state -> boolean
+export const isShiftValid = complement(anyPass([isPieceOutOfBounds, isPieceOverlapping]));
+// (f, [validator]) -> state -> boolean, validates transformed state, returns true if valid
+const isTransformValid = (transformFunc, validator)=>
     compose(
-        not,
-        converge(
-            or,
-            [
-                isPieceOutOfBounds,
-                isPieceOverlapping
-            ]
-        ),
+        validator,
         transformFunc
     );
 /**
- * tries to transform state with transformFunc, returns transformed state if valid
+ * tries to transform state with transformFunc, returns transformed state if validated by validator
  * if invalid it returns result of running elseFunc with final arg (state)
  */
-const tryTransformElse = curry((elseFunc, transformFunc, state) =>
+const tryTransformElse = curry((elseFunc, transformFunc, validator, state) =>
     ifElse(
-        transformAndValidate(transformFunc),
+        isTransformValid(transformFunc, validator),
         transformFunc,
         elseFunc
     )(state));
@@ -130,10 +133,10 @@ export const lockPiece = compose(
     writeToBoard
 );
 
-// Public piece transformer functions
-export const shiftLeft = tryTransform(shift(leftDir));
-export const shiftRight = tryTransform(shift(rightDir));
-export const shiftDown = tryTransformElse(lockPiece, shift(downDir));
-export const rotateClockwise = tryTransform(rotate(clockwise));
-export const rotateCounterClockwise = tryTransform(rotate(counterClockwise));
-// const tryTransformElse = curry((elseFunc, transformFunc, state)
+// PUBLIC FUNCS
+export const shiftLeft = tryTransform(shift(leftDir), isShiftValid);
+export const shiftRight = tryTransform(shift(rightDir), isShiftValid);
+export const shiftDown = tryTransformElse(lockPiece, shift(downDir), isShiftValid);
+export const dropPiece = identity;
+export const rotateClockwise = tryTransform(rotate(clockwise), isShiftValid);
+export const rotateCounterClockwise = tryTransform(rotate(counterClockwise), isShiftValid);

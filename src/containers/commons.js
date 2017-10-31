@@ -4,6 +4,10 @@ import { pieceActualPosition } from "../reducers/tetris/logic/logic";
 import { FILL_TOKEN } from "../reducers/tetris/logic/constants/index";
 import { equals } from "ramda";
 
+/**
+ * The drawBoard function is generalized because it is also used in the next piece component
+ * which draws like a mini board to show the piece
+ */
 // lens for accessing board cells, board cells are accessed [y x] so incoming coord is reversed before lens
 const cellLens = compose(lensPath, reverse);
 // (board, coord) -> board, sets cell to FILL_TOKEN value

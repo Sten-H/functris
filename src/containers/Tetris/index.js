@@ -13,9 +13,10 @@ class Tetris extends React.Component {
             <KeyHandler keyValue="ArrowLeft" onKeyHandle={this.props.onLeftPress} />
             <KeyHandler keyValue="ArrowRight" onKeyHandle={this.props.onRightPress} />
             <KeyHandler keyValue="ArrowDown" onKeyHandle={this.props.onDownPress} />
-            <KeyHandler keyValue="ArrowUp" onKeyHandle={this.props.onUpPress} />
-            <KeyHandler keyValue="z" onKeyHandle={this.props.onUpPress} />
-            <KeyHandler keyValue="x" onKeyHandle={this.props.onXPress} />
+            <KeyHandler keyValue="ArrowUp" onKeyHandle={this.props.onRotateClockwisePress} />
+            <KeyHandler keyValue="Space" onKeyHandle={this.props.onDropPress} />
+            <KeyHandler keyValue="z" onKeyHandle={this.props.onRotateClockwisePress} />
+            <KeyHandler keyValue="x" onKeyHandle={this.props.onRotateCounterPress} />
             {drawBoard(getBoardWithPiece(this.props.gameState))}
         </div>
         );
@@ -33,8 +34,9 @@ export function mapDispatchToProps(dispatch) {
         onLeftPress: () => dispatch(actions.shiftLeft()),
         onRightPress: () => dispatch(actions.shiftRight()),
         onDownPress: () => dispatch(actions.shiftDown()),
-        onUpPress: () => dispatch(actions.rotateClockwise()),
-        onXPress: () => dispatch(actions.rotateCounter())
+        onDropPress: () => dispatch(actions.dropPiece()),
+        onRotateClockwisePress: () => dispatch(actions.rotateClockwise()),
+        onRotateCounterPress: () => dispatch(actions.rotateCounter()),
     };
 }
 

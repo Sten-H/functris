@@ -11,6 +11,9 @@ const defaultState = {
     bag: getShuffledBag()
 };
 const reducer = handleActions({
+    // I could combine all shifts (atleast horizontal) by having the action send the direction as an argument
+    // So it would be logic.shift(leftDir, state)
+    // FIXME I could probably remove the spread from all of these and just return the value from func
     [actions.shiftLeft](state) {
         return {
             ...logic.shiftLeft(state)
@@ -24,6 +27,11 @@ const reducer = handleActions({
     [actions.shiftDown](state) {
         return {
             ...logic.shiftDown(state)
+        };
+    },
+    [actions.dropPiece](state) {
+        return {
+            ...state
         };
     },
     [actions.rotateClockwise](state) {

@@ -1,7 +1,7 @@
 import {
     shiftLeft, shiftRight, rotateClockwise, rotateCounterClockwise, isPieceOverlapping,
     pieceActualPosition, isCoordOverlapping, getCell, isCoordOutOfBounds, isPieceOutOfBounds, posLens, boardLens,
-    pieceLens, shiftDown, writeToBoard, lockPiece, bagLens
+    pieceLens, shiftDown, writeToBoard, lockPiece, bagLens, dropPiece
 } from "./logic";
 import {
     adjust, all, compose, concat, dec, equals, inc, last, over, prop, repeat, set, update, view
@@ -39,51 +39,60 @@ describe('Tetris logic', () => {
             expect(isPieceOutOfBounds(s)).toBe(true);
         });
     });
-    describe('Shift horizontal', () => {
-        it('Should shift horizontally', () => {
-            const s = set(posLens, [5, 5], state);
-            const expected = [4, 5];
-            expect(shiftLeft(s).pos).toEqual(expected);
+    describe('Shift pice', () => {
+        describe('Horizontal', () => {
+            it('Should shift horizontally', () => {
+                const s = set(posLens, [5, 5], state);
+                const expected = [4, 5];
+                expect(shiftLeft(s).pos).toEqual(expected);
+            });
+            it('Should return call value if piece out of bounds after shift', () => {
+                const s1 = set(posLens, [0, 5], state);
+                const expected1 = [0, 5];
+                expect(shiftLeft(s1).pos).toEqual(expected1);
+                const s2 = set(posLens, [7, 10], state);
+                const expected2 = [7, 10];
+                // Check to see that it is valid before move
+                expect(isPieceOutOfBounds(s2)).toBe(false);
+                // Stick will be out of bounds on right shift, should not move
+                expect(shiftRight(s2).pos).toEqual(expected2)
+            });
+            it('Should return call value if piece overlapping after shift', () => {
+                const row = update(0, FILL_TOKEN, repeat(EMPTY_TOKEN, COL_COUNT));
+                const board = update(dec(ROW_COUNT), row, emptyBoard);
+                const s = compose(
+                    set(pieceLens, [[0,0]]),
+                    set(boardLens, board),
+                    set(posLens, [1, dec(ROW_COUNT)])
+                )(state);
+                const expected = [1, 19];
+                expect(shiftLeft(s).pos).toEqual(expected);
+            })
         });
-        it('Should return call value if piece out of bounds after shift', () => {
-            const s1 = set(posLens, [0, 5], state);
-            const expected1 = [0, 5];
-            expect(shiftLeft(s1).pos).toEqual(expected1);
-            const s2 = set(posLens, [7, 10], state);
-            const expected2 = [7, 10];
-            // Check to see that it is valid before move
-            expect(isPieceOutOfBounds(s2)).toBe(false);
-            // Stick will be out of bounds on right shift, should not move
-            expect(shiftRight(s2).pos).toEqual(expected2)
+        describe('Vertical', () => {
+            it('should shift vertically', () => {
+                const s = set(posLens, [5, 5], state);
+                const expected = [5, 6];
+                expect(shiftDown(s).pos).toEqual(expected);
+            });
+            it('should write piece to board when shifted to overlap', () => {
+                const s = compose(
+                    set(posLens, [1, 19]),
+                    set(pieceLens, IPiece),  // laying down I piece, going 1 block to left 2 to right
+                    set(boardLens, EMPTY_BOARD)
+                )(state);
+                const newState = shiftDown(s);
+                const expected = concat(repeat(FILL_TOKEN, 4), repeat(EMPTY_TOKEN, 6));
+                expect(last(newState.board)).toEqual(expected);
+            })
         });
-        it('Should return call value if piece overlapping after shift', () => {
-            const row = update(0, FILL_TOKEN, repeat(EMPTY_TOKEN, COL_COUNT));
-            const board = update(dec(ROW_COUNT), row, emptyBoard);
-            const s = compose(
-                set(pieceLens, [[0,0]]),
-                set(boardLens, board),
-                set(posLens, [1, dec(ROW_COUNT)])
-            )(state);
-            const expected = [1, 19];
-            expect(shiftLeft(s).pos).toEqual(expected);
-        })
-    });
-    describe('Shift vertical', () => {
-       it('should shift vertically', () => {
-           const s = set(posLens, [5, 5], state);
-           const expected = [5, 6];
-           expect(shiftDown(s).pos).toEqual(expected);
-       });
-        it('should write piece to board when shifted to overlap', () => {
-            const s = compose(
-                set(posLens, [1, 19]),
-                set(pieceLens, IPiece),  // laying down I piece, going 1 block to left 2 to right
-                set(boardLens, EMPTY_BOARD)
-            )(state);
-            const newState = shiftDown(s);
-            const expected = concat(repeat(FILL_TOKEN, 4), repeat(EMPTY_TOKEN, 6));
-            expect(last(newState.board)).toEqual(expected);
-        })
+        describe('Drop piece', () => {
+            it('should drop piece', () => {
+                const s = set(posLens, [4,0], state);
+                // expect bottom row to contain filled cells after drop
+                expect(last(dropPiece(s).board)).toContain(FILL_TOKEN);
+            });
+        });
     });
     describe('Rotate', () => {
         const s1 = compose(
@@ -137,6 +146,8 @@ describe('Tetris logic', () => {
             expect(rotateCounterClockwise(s).piece).toEqual(expected);
         });
         it('Should return call value if piece overlapping after rotation', () => {
+            // FIXME actually it should only do this on X overlap?
+            // On Y overlap it should raise position to fit (if possible)
             const filledRowBoard = update(dec(ROW_COUNT), filledRow, emptyBoard);
             const s = compose(
                 set(posLens, [0, 18]),
