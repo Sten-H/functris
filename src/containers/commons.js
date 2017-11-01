@@ -16,8 +16,8 @@ const fillCoord = curry((board, coord) => set(cellLens(coord), FILL_TOKEN, board
 const drawBlock = (content, idx) =>
     ifElse(
         equals(FILL_TOKEN),
-        always(<span key={idx} className="block piece cyan"/>),
-        always(<span key={idx} className="block empty" />)
+        always(<span key={idx} className="piece-cyan" />),
+        always(<span key={idx} className="empty-cell" />)
     )(content);
 // (r, i) -> JSXElement
 const drawRow = (row, i) => <div key={i} className="tetris-row">{addIndex(map)(drawBlock, row)}</div>;

@@ -1,0 +1,68 @@
+// CELL COLORS
+$empty-cell-color: #3f3e3e;
+$cyan-color: #00b7b7;
+$shadow-color: #363535;
+$border-lighten-value: 10%;  // By how much lighter all piece borders should be
+
+@mixin piece-color($main-color) {
+    background-color: $main-color;
+    border-color: lighten($main-color, $border-lighten-value);
+}
+html, body {
+    height: 100%;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+body {
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+}
+
+.dotted-border {
+    border: 3px dashed black;
+}
+
+/* Every cell is a block whether empty or filled */
+.cell {
+    width:1em;
+    height:1em;
+    padding: 0;
+    margin: 0;
+    display: inline-block;
+    line-height: 1em;
+}
+/* Empty block styling */
+.empty-cell {
+    @extend .cell;
+    border: 1px solid darken($empty-cell-color, 7%);
+    background-color: $empty-cell-color;
+}
+/* Tetris pieces specific styling */
+.piece {
+    @extend .cell;
+    border: 3px outset;
+}
+.piece-cyan {
+    @extend .piece;
+    @include piece-color($cyan-color);
+}
+.shadow {
+    opacity: 0.2;
+    // FIXME would be nice to like make the color a bit brighter than normal piece color, not sure what I mean by brighter, saturated?
+}
+
+.tetris-row {
+     font-size: 1.5em;
+     padding: 0;
+     margin: 0;
+     line-height: 0;
+ }
+
+.tetris-game {
+    white-space: pre;
+    display: inline-block;
+    padding: 1em;
+    font-size: 1.5em;
+    background-color: $empty-cell-color;  // This is important so block transparency works
+}

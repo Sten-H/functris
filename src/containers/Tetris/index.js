@@ -1,10 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import './Tetris.css';
 import * as actions from "../../actions/actions";
 import KeyHandler from 'react-key-handler';
 import { drawBoard, getBoardWithPiece } from "../commons";
 
+import './Tetris.css';
 
 class Tetris extends React.Component {
     render() {
