@@ -11,17 +11,25 @@ body {
 .dotted-border {
     border: 3px dashed black;
 }
-.cyan {
-    background-color: cyan !important;
-    /*border: 5px outset darkcyan;*/
-    border: 1px solid black;
-}
+/* Every cell is a block whether empty or filled */
 .block {
     width:1em;
     height:1em;
     padding: 0;
     margin: 0;
-    background-color: darkslategray;
     display: inline-block;
     line-height: 1em;
+}
+/* Empty block styling */
+.block.empty {
+    border: 1px solid #302f2f;
+    background-color: #3f3e3e;
+}
+/* Tetris pieces specific styling */
+.block.piece {
+    border: 3px outset !important;
+}
+.piece.cyan {
+    background-color: #00b7b7 !important;
+    border-color: #00ebeb !important;
 }

@@ -1,12 +1,13 @@
 import {
     shiftLeft, shiftRight, rotateClockwise, rotateCounterClockwise, isPieceOverlapping,
-    pieceActualPosition, isCoordOverlapping, getCell, isCoordOutOfBounds, isPieceOutOfBounds, posLens, boardLens,
+    getCell, isCoordOutOfBounds, isPieceOutOfBounds, posLens, boardLens,
     pieceLens, shiftDown, writeToBoard, lockPiece, bagLens, dropPiece
 } from "./logic";
 import {
-    adjust, all, compose, concat, dec, equals, inc, last, over, prop, repeat, set, update, view
+    adjust, all, complement, compose, concat, countBy, dec, equals, inc, last, over, isNil, prop, repeat, set, subtract,
+    update, view
 } from "ramda";
-import { ROW_COUNT, EMPTY_BOARD, EMPTY_TOKEN, FILL_TOKEN, COL_COUNT, START_POS } from "./constants/index";
+import { ROW_COUNT, EMPTY_BOARD, EMPTY_TOKEN, FILL_TOKEN, COL_COUNT, START_POS, SHADOW_TOKEN } from "./constants/index";
 import { getShuffledBag, getpiece } from "./bagLogic";
 
 describe('Tetris logic', () => {
@@ -39,7 +40,7 @@ describe('Tetris logic', () => {
             expect(isPieceOutOfBounds(s)).toBe(true);
         });
     });
-    describe('Shift pice', () => {
+    describe('Shift piece', () => {
         describe('Horizontal', () => {
             it('Should shift horizontally', () => {
                 const s = set(posLens, [5, 5], state);
@@ -87,10 +88,29 @@ describe('Tetris logic', () => {
             })
         });
         describe('Drop piece', () => {
-            it('should drop piece', () => {
-                const s = set(posLens, [4,0], state);
+            it('should drop piece to empty bottom row', () => {
+                const s = compose(
+                    set(posLens, [4,0]),
+                    set(pieceLens, IPiece)
+                )(state);
                 // expect bottom row to contain filled cells after drop
                 expect(last(dropPiece(s).board)).toContain(FILL_TOKEN);
+            });
+            it('should drop piece to first encountered filled block', () => {
+                const bottomRow = concat(repeat(EMPTY_TOKEN, 4), repeat(FILL_TOKEN, 1), repeat(EMPTY_TOKEN, 5));
+                const board = update(dec(ROW_COUNT), bottomRow, emptyBoard);
+                const s = compose(
+                    set(posLens, [4,0]),
+                    set(pieceLens, IPiece),
+                    set(boardLens, board)
+                )(state);
+                // Expect second to last row to now contain filled cell
+                const secondLastRow = board[subtract(ROW_COUNT, 2)];
+                const filledCellCount = prop('true')(countBy(equals('X'), secondLastRow));
+                const expected = 4; // length of IPiece lying down
+                // cell count 0 is undefined x)
+                expect(complement(isNil)(filledCellCount)).toBe(true);
+                expect(filledCellCount).toEqual(expected);
             });
         });
     });
@@ -220,4 +240,32 @@ describe('Tetris logic', () => {
             expect(isPieceOverlapping(s2)).toBe(false);
         });
     });
+    describe('Piece Shadow', () => {
+        it('Should present piece shadow at lowest valid point', () => {
+            // Because initializing with proper shadow is a bit harder than shadow after move this test first
+            const tempState = compose(
+                set(posLens, [4,0]),
+                set(pieceLens, IPiece)
+            )(state);
+            const finalState = shiftDown(state);
+            const bottomRow = last(view(boardLens, finalState));
+            // FIXME This is a very lazy test, should make sure that piece shape is accurate
+            expect(bottomRow).toContain(SHADOW_TOKEN);
+        });
+        it('Should initialize board with piece shadow', () => {
+            // Hmm actually how do I test this, I'm setting the state explicitly, unlike when react app
+            // is run where it will have a random piece on init. An interesting solution to this
+            // would be to have a top row that is invisible where all pieces spawn and immediately shift down
+            // once to get shadow written.
+            // I read that many old and maybe new(?) official tetris games actually have 40 rows internally
+            // while only presenting 20 But maybe they meant that each row was subdivided by 2? Sounds likely
+            const s = compose(
+                set(posLens, [4,0]),
+                set(pieceLens, IPiece)
+            )(state);
+            const bottomRow = last(view(boardLens, s));
+            // FIXME This is a very lazy test, should make sure that piece shape is accurate
+            expect(bottomRow).toContain(SHADOW_TOKEN);
+        })
+    })
 });

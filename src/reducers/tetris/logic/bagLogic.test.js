@@ -31,5 +31,5 @@ describe('Seven Bag logic', () => {
             set(pieceLens, [ constants.PIECES.J ])
         )(state);
         expect(getNextPiece(s).bag).toHaveLength(7);
-    })
+    });
 });
