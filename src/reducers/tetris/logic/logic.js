@@ -4,7 +4,7 @@ import {
     concat, set, reduce, always, complement
 } from "ramda";
 import * as constants from './constants';
-import { FILL_TOKEN, ROW_COUNT } from "./constants/index";
+import { EMPTY_TOKEN, FILL_TOKEN, ROW_COUNT } from "./constants/index";
 import { getNextPiece } from "./bagLogic";
 
 /**
@@ -33,7 +33,7 @@ const normalizeZero = when(equals(-0), Math.abs);
 // c -> c Sets all -0 to 0 in coord.
 const normalizeCoord = map(normalizeZero);
 // c -> c -> c
-export const addCoords = zipWith(add);
+const addCoords = zipWith(add);
 // (board -> coord) -> str, cell value is string (token symbol)
 export const getCell = curry((state, coord) => view(
     cellLens(coord),
@@ -43,6 +43,8 @@ export const pieceActualPosition = converge(
     map,
     [compose(addCoords, view(posLens)), view(pieceCoordPath)]
 );
+const isCellEmpty = equals(EMPTY_TOKEN);
+const isCellFilled = complement(isCellEmpty);
 // TRANSFORMERS
 // directions used as transformers for shift function
 const leftDir = over(xLens, dec);
@@ -55,7 +57,7 @@ const counterClockwise = [last, compose(multiply(-1), head)];
 // VALIDATORS
 // state -> coord -> boolean
 export const isCoordOverlapping = (state) => compose(
-    equals(FILL_TOKEN),
+    isCellFilled,
     getCell(state)
 );
 // state -> boolean
@@ -126,7 +128,10 @@ const rotatePiece = (dirFuncs) => map(
 const rotate = dirFuncs => over(pieceCoordPath, rotatePiece(dirFuncs));
 
 // (state, coord) -> state
-const fillCell = (state, coord) => set(cellLens( coord ), FILL_TOKEN, state);
+const fillCell = (state, coord) => converge(
+    set(cellLens( coord )),
+    [view(pieceTokenPath), identity],
+)(state);
 // state -> state
 export const writeToBoard = converge(
     reduce(fillCell),

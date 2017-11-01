@@ -1,6 +1,18 @@
 # Tetris
 A functional approach to tetris (its game logic atleast) using a lot of ramda
 for fun. Game state is presented purely with html components and css.
+## BUGS
+* you can't rotate a piece that is not fully inside board yet (from top), because
+the validator invalidates rotation transforms that are out of bounds on both Y, it should
+only invalidate bottom Y, not top Y
+* O piece can be rotated, it shouldn't rotate. Can't put the pivot in center
+I wonder if most games don't acually rotate pieces but have an array of orientations and the O piece
+has only one orientation. I think my solution will be to build a validator that includes
+checking that the token is not O, downside is that it will still try the rotation
+* I think that the isPieceOverlapping returns true now if piece is out of bounds,
+it should not care about bounds, that is not its job. I think the problem is that it
+tries to read a token value on board[-1][10] and it fails and returns error/false,
+maybe I can be lazy and clamp the values?
 ## TODO
 * Piece drop
 * Piece shadow where it would end up on drop
@@ -14,10 +26,6 @@ increasing speed
 * Score tally
 * Line clear tally
 ## Thoughts
-* Instead of having a universal fill token ('X'), maybe the fill token can be
-the shape of the piece ('J' for example) and this can help for coloring
-on draw. Only problem is that piece object needs to contain that info somehow
-probably piece {coords: [], token: 'J'}
 * I wonder about rotations, some tetris games will raise the piece if it 
 intersect on Y (and maybe on X with a shift). Older variants don't do this
 I think. Maybe disregard until much later, should be easy enough to modify.

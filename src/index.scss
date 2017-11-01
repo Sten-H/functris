@@ -1,6 +1,12 @@
 // CELL COLORS
 $empty-cell-color: #3f3e3e;
-$cyan-color: #00b7b7;
+$I-color: #00b7b7;
+$O-color: #F5FF00;
+$T-color: #FF00FC;
+$L-color: #FF8200;
+$J-color: #5100FF;
+$S-color: #00FF2E;
+$Z-color: #FF0000;
 $shadow-color: #363535;
 $border-lighten-value: 10%;  // By how much lighter all piece borders should be
 
@@ -22,7 +28,7 @@ body {
 .dotted-border {
     border: 3px dashed black;
 }
-
+// FIXME move out all game styling to a separate file. Maybe a partial?
 /* Every cell is a block whether empty or filled */
 .cell {
     width:1em;
@@ -42,10 +48,40 @@ body {
 .piece {
     @extend .cell;
     border: 3px outset;
+    // I use opacity just as an easy way to adjust the brightness of all pieces. Probably a better way
+    opacity: 0.87;
 }
-.piece-cyan {
+.piece-I {
     @extend .piece;
-    @include piece-color($cyan-color);
+    @include piece-color($I-color);
+}
+.piece-O {
+    @extend .piece;
+    @include piece-color($O-color);
+}
+.piece-T {
+    @extend .piece;
+    @include piece-color($T-color);
+}
+.piece-L {
+    @extend .piece;
+    @include piece-color($L-color);
+}
+.piece-J {
+    @extend .piece;
+    @include piece-color($J-color);
+}
+.piece-T {
+    @extend .piece;
+    @include piece-color($T-color);
+}
+.piece-S {
+    @extend .piece;
+    @include piece-color($S-color);
+}
+.piece-Z {
+    @extend .piece;
+    @include piece-color($Z-color);
 }
 .shadow {
     opacity: 0.2;
