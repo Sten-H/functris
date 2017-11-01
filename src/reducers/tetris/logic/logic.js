@@ -15,6 +15,9 @@ import { getNextPiece } from "./bagLogic";
 export const posLens = lensProp('pos');
 export const boardLens = lensProp('board');
 export const pieceLens = lensProp('piece');
+export const coordLens = lensProp('coords');
+export const pieceCoordPath = lensPath(['piece', 'coords']);
+export const pieceTokenPath = lensPath(['piece', 'token']);
 export const bagLens = lensProp('bag');
 // cell lens from state (ex: ['board', [0, 1]). coord is reversed because board is [y, x] oriented
 export const cellLens = compose(lensPath,
@@ -35,8 +38,11 @@ export const addCoords = zipWith(add);
 export const getCell = curry((state, coord) => view(
     cellLens(coord),
     state));
-//state -> piece, adds position value to each piece coord to get true position
-export const pieceActualPosition = curry(({pos, piece}) => map(addCoords(pos), piece));
+// state -> piece, adds position value to each piece coord to get true position
+export const pieceActualPosition = converge(
+    map,
+    [compose(addCoords, view(posLens)), view(pieceCoordPath)]
+);
 // TRANSFORMERS
 // directions used as transformers for shift function
 const leftDir = over(xLens, dec);
@@ -117,7 +123,7 @@ const rotatePiece = (dirFuncs) => map(
     )
 );
 // [f] -> state -> state, f is a pair of transformers, first applies to x coord, second to y coord
-const rotate = dirFuncs => over(pieceLens, rotatePiece(dirFuncs));
+const rotate = dirFuncs => over(pieceCoordPath, rotatePiece(dirFuncs));
 
 // (state, coord) -> state
 const fillCell = (state, coord) => set(cellLens( coord ), FILL_TOKEN, state);

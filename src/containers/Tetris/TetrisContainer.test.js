@@ -37,7 +37,7 @@ describe('Tetris container', () => {
     it('Should render board state', () => {
         const component = mountWithStore(<Tetris />, store);
         expect(component.find('.tetris-row')).toHaveLength(20);
-        expect(component.find('.tetris-row').first().find('.block')).toHaveLength(10);
+        expect(component.find('.tetris-row').last().find('.empty-cell')).toHaveLength(10);
     });
     it('should dispatch shift left event on left arrow key press', () => {
         triggerKeyEvent(KEYUP, undefined, ARROW_LEFT);

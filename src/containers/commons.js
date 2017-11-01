@@ -20,7 +20,7 @@ const drawBlock = (content, idx) =>
         always(<span key={idx} className="empty-cell" />)
     )(content);
 // (r, i) -> JSXElement
-const drawRow = (row, i) => <div key={i} className="tetris-row">{addIndex(map)(drawBlock, row)}</div>;
+const drawRow = (row, i) => <div key={i} className="tetris-row" >{addIndex(map)(drawBlock, row)}</div>;
 // board -> [JSXElement]
 export const drawBoard = addIndex(map)(drawRow);
 // state -> board

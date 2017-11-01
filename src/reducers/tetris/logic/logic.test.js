@@ -1,26 +1,26 @@
 import {
     shiftLeft, shiftRight, rotateClockwise, rotateCounterClockwise, isPieceOverlapping,
     getCell, isCoordOutOfBounds, isPieceOutOfBounds, posLens, boardLens,
-    pieceLens, shiftDown, writeToBoard, lockPiece, bagLens, dropPiece
+    pieceLens, pieceCoordPath, shiftDown, writeToBoard, lockPiece, bagLens, dropPiece,
 } from "./logic";
 import {
     adjust, all, complement, compose, concat, countBy, dec, equals, inc, last, over, isNil, prop, repeat, set, subtract,
     update, view
 } from "ramda";
 import { ROW_COUNT, EMPTY_BOARD, EMPTY_TOKEN, FILL_TOKEN, COL_COUNT, START_POS, SHADOW_TOKEN } from "./constants/index";
-import { getShuffledBag, getpiece } from "./bagLogic";
+import * as constants from "./constants/index";
 
 describe('Tetris logic', () => {
     const emptyBoard = EMPTY_BOARD;
     const emptyRow = emptyBoard[0];
     const filledRow = repeat(FILL_TOKEN, ROW_COUNT);
-    const LPiece = [ [ 1, -1], [-1,  0], [ 0,  0], [ 1,  0] ];  // L piece: -->  ___|
-    const IPiece = [ [-1,  0], [0,  0], [ 1,  0], [ 2,  0] ];  // I piece --> ____
+    const LPiece = constants.PIECES.L;  // L piece: -->  ___|
+    const IPiece = constants.PIECES.I;  // I piece --> ____
     const pos = [0 ,0];
     const state = {
         board: emptyBoard,
         pos: pos,
-        piece: IPiece,
+        piece: constants.PIECES.I,
         bag: [LPiece, IPiece ]
     };
     describe('Out of bounds', () => {
@@ -31,9 +31,10 @@ describe('Tetris logic', () => {
             expect(isCoordOutOfBounds([10, 7])).toBe(true);
         });
         it('should detect piece out of x bounds', () => {
-            expect(isPieceOutOfBounds(state)).toBe(true);
-            const s = set(posLens, [1, 0], state);
-            expect(isPieceOutOfBounds(s)).toBe(false);
+            // expect(isPieceOutOfBounds(state)).toBe(true);
+            const s = set(posLens, [0, 0], state);
+            console.log(s);
+            expect(isPieceOutOfBounds(s)).toBe(true);
         });
         it('should detect piece out of lower y bounds', () => {
             const s = set(posLens, [5, 20], state);
@@ -47,7 +48,7 @@ describe('Tetris logic', () => {
                 const expected = [4, 5];
                 expect(shiftLeft(s).pos).toEqual(expected);
             });
-            it('Should return call value if piece out of bounds after shift', () => {
+            it('Should return call value when piece out of bounds after shift', () => {
                 const s1 = set(posLens, [0, 5], state);
                 const expected1 = [0, 5];
                 expect(shiftLeft(s1).pos).toEqual(expected1);
@@ -58,11 +59,11 @@ describe('Tetris logic', () => {
                 // Stick will be out of bounds on right shift, should not move
                 expect(shiftRight(s2).pos).toEqual(expected2)
             });
-            it('Should return call value if piece overlapping after shift', () => {
+            it('Should return call value when  piece overlapping after shift', () => {
                 const row = update(0, FILL_TOKEN, repeat(EMPTY_TOKEN, COL_COUNT));
                 const board = update(dec(ROW_COUNT), row, emptyBoard);
                 const s = compose(
-                    set(pieceLens, [[0,0]]),
+                    set(pieceLens, { coords: [ [ 0, 0 ] ], token: "I" } ),
                     set(boardLens, board),
                     set(posLens, [1, dec(ROW_COUNT)])
                 )(state);
@@ -120,11 +121,11 @@ describe('Tetris logic', () => {
             set(pieceLens, LPiece)
         )(state);
         it('Should rotate clockwise', () => {
-            const expected = [ [ 1,  1], [ 0, -1], [ 0,  0], [ 0,  1] ];
+            const expected = {coords: [ [ 1,  1], [ 0, -1], [ 0,  0], [ 0,  1] ], token: "L"};
             expect(rotateClockwise(s1).piece).toEqual(expected);
         });
         it('Should rotate counter clockwise', () => {
-            const expected = [ [-1, -1], [ 0,  1], [ 0,  0], [ 0, -1] ];
+            const expected = {coords: [ [-1, -1], [ 0,  1], [ 0,  0], [ 0, -1] ], token: "L"};
             expect(rotateCounterClockwise(s1).piece).toEqual(expected);
         });
         it('Rotate counter then clockwise should revert to original', () => {
@@ -141,12 +142,12 @@ describe('Tetris logic', () => {
                 set(posLens, [5, 5]),
                 set(pieceLens, LPiece)
             )(state);
-            expect(rotateClockwise(s1).piece).not.toEqual(rotateCounterClockwise(s1).piece)
+            expect(rotateClockwise(s1).piece).not.toEqual(rotateCounterClockwise(s1).piece);
             const s2 = compose(
                 set(posLens, [5, 5]),
                 set(pieceLens, IPiece)
             )(state);
-            expect(rotateClockwise(s2).piece).not.toEqual(rotateCounterClockwise(s2).piece)
+            expect(rotateClockwise(s2).piece).not.toEqual(rotateCounterClockwise(s2).piece);
         });
         it('Should return call value if piece out of x bounds after rotation', () => {
             const s = compose(
@@ -166,11 +167,12 @@ describe('Tetris logic', () => {
             expect(rotateCounterClockwise(s).piece).toEqual(expected);
         });
         it('Should return call value if piece overlapping after rotation', () => {
-            // FIXME actually it should only do this on X overlap?
-            // On Y overlap it should raise position to fit (if possible)
-            const filledRowBoard = update(dec(ROW_COUNT), filledRow, emptyBoard);
+            const filledRowBoard = compose(
+                update(dec(dec(ROW_COUNT)), filledRow),
+                update(dec(ROW_COUNT), filledRow)
+            )(emptyBoard);
             const s = compose(
-                set(posLens, [0, 18]),
+                set(posLens, [0, 17]),
                 set(pieceLens, IPiece),
                 set(boardLens, filledRowBoard)
             )(state);
