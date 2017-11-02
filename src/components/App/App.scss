@@ -21,6 +21,10 @@
 .App-intro {
     font-size: large;
 }
+.game-info .info-text {
+    font-weight: 500;
+    font-size: 1.2em;
+}
 /* For some reason these hr are not responding to bootstrap margin classes */
 .game-info hr {
     margin-top: 0;
