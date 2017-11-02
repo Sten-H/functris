@@ -1,8 +1,6 @@
 import 'jsdom-global/register';  // Needs to be first import apparently
 import * as React from 'react';
-import * as enzyme from 'enzyme';
-import configureMockStore, { MockStore } from 'redux-mock-store';
-import { join, repeat } from 'ramda';
+import configureMockStore from 'redux-mock-store';
 import { KEYUP } from 'react-key-handler';
 import Tetris from './';
 import * as constants from '../../reducers/tetris/logic/constants';
@@ -66,6 +64,5 @@ describe('Tetris container', () => {
         triggerKeyEvent(KEYUP, undefined, SPACE);
         // expect(store.getActions()).toHaveLength(1);
         expect(store.getActions()[0].type).toEqual("DROP_PIECE");
-
     });
 });

@@ -9,14 +9,14 @@ import './Tetris.css';
 class Tetris extends React.Component {
     render() {
         return (
-        <div className="tetris-game dotted-border">
-            <KeyHandler keyValue="ArrowLeft" onKeyHandle={this.props.onLeftPress} />
-            <KeyHandler keyValue="ArrowRight" onKeyHandle={this.props.onRightPress} />
-            <KeyHandler keyValue="ArrowDown" onKeyHandle={this.props.onDownPress} />
-            <KeyHandler keyValue="ArrowUp" onKeyHandle={this.props.onRotateClockwisePress} />
-            <KeyHandler keyValue="Space" onKeyHandle={this.props.onDropPress} />
-            <KeyHandler keyValue="z" onKeyHandle={this.props.onRotateClockwisePress} />
-            <KeyHandler keyValue="x" onKeyHandle={this.props.onRotateCounterPress} />
+        <div className='tetris-game solid-border'>
+            <KeyHandler keyValue='ArrowLeft' onKeyHandle={this.props.onLeftPress} />
+            <KeyHandler keyValue='ArrowRight' onKeyHandle={this.props.onRightPress} />
+            <KeyHandler keyValue='ArrowDown' onKeyHandle={this.props.onDownPress} />
+            <KeyHandler keyValue='ArrowUp' onKeyHandle={this.props.onRotateClockwisePress} />
+            <KeyHandler keyValue='Space' onKeyHandle={this.props.onDropPress} />
+            <KeyHandler keyValue='z' onKeyHandle={this.props.onRotateClockwisePress} />
+            <KeyHandler keyValue='x' onKeyHandle={this.props.onRotateCounterPress} />
             {drawBoard(getBoardWithPiece(this.props.gameState))}
         </div>
         );

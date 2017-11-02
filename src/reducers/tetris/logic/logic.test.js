@@ -33,7 +33,6 @@ describe('Tetris logic', () => {
         it('should detect piece out of x bounds', () => {
             // expect(isPieceOutOfBounds(state)).toBe(true);
             const s = set(posLens, [0, 0], state);
-            console.log(s);
             expect(isPieceOutOfBounds(s)).toBe(true);
         });
         it('should detect piece out of lower y bounds', () => {
@@ -176,7 +175,6 @@ describe('Tetris logic', () => {
                 set(pieceLens, IPiece),
                 set(boardLens, filledRowBoard)
             )(state);
-                console.log(s);
             // check to see that it doesn't overlap before rotation
             expect(isPieceOverlapping(s)).toBe(false);
             const expected = view(pieceLens, s);

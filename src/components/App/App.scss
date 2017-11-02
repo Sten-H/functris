@@ -21,13 +21,11 @@
 .App-intro {
     font-size: large;
 }
-
-/*
- FIXME probably shouldn't use margin for this, instead wrap in container and use padding, this way it won't mess
- with total width of columns I think
-*/
-
-@keyframes App-logo-spin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
+/* For some reason these hr are not responding to bootstrap margin classes */
+.game-info hr {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+.game-info hr.line-top-margin {
+    margin-top: 10px;
 }

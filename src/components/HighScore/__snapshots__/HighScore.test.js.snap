@@ -32,19 +32,13 @@ ShallowWrapper {
 >
           <thead>
                     <tr>
-                              <th
-                                        className="text-muted"
-                              >
+                              <th>
                                         #
                               </th>
-                              <th
-                                        className="text-muted"
-                              >
+                              <th>
                                         NAME
                               </th>
-                              <th
-                                        className="text-muted"
-                              >
+                              <th>
                                         SCORE
                               </th>
                     </tr>
@@ -110,19 +104,13 @@ ShallowWrapper {
           "children": Array [
             <thead>
               <tr>
-                            <th
-                                          className="text-muted"
-                            >
+                            <th>
                                           #
                             </th>
-                            <th
-                                          className="text-muted"
-                            >
+                            <th>
                                           NAME
                             </th>
-                            <th
-                                          className="text-muted"
-                            >
+                            <th>
                                           SCORE
                             </th>
               </tr>
@@ -177,19 +165,13 @@ ShallowWrapper {
             "nodeType": "host",
             "props": Object {
               "children": <tr>
-                <th
-                                className="text-muted"
-                >
+                <th>
                                 #
                 </th>
-                <th
-                                className="text-muted"
-                >
+                <th>
                                 NAME
                 </th>
-                <th
-                                className="text-muted"
-                >
+                <th>
                                 SCORE
                 </th>
 </tr>,
@@ -201,19 +183,13 @@ ShallowWrapper {
               "nodeType": "host",
               "props": Object {
                 "children": Array [
-                  <th
-                    className="text-muted"
->
+                  <th>
                     #
 </th>,
-                  <th
-                    className="text-muted"
->
+                  <th>
                     NAME
 </th>,
-                  <th
-                    className="text-muted"
->
+                  <th>
                     SCORE
 </th>,
                 ],
@@ -226,7 +202,6 @@ ShallowWrapper {
                   "nodeType": "host",
                   "props": Object {
                     "children": "#",
-                    "className": "text-muted",
                   },
                   "ref": null,
                   "rendered": "#",
@@ -238,7 +213,6 @@ ShallowWrapper {
                   "nodeType": "host",
                   "props": Object {
                     "children": "NAME",
-                    "className": "text-muted",
                   },
                   "ref": null,
                   "rendered": "NAME",
@@ -250,7 +224,6 @@ ShallowWrapper {
                   "nodeType": "host",
                   "props": Object {
                     "children": "SCORE",
-                    "className": "text-muted",
                   },
                   "ref": null,
                   "rendered": "SCORE",
@@ -499,19 +472,13 @@ ShallowWrapper {
 >
             <thead>
                         <tr>
-                                    <th
-                                                className="text-muted"
-                                    >
+                                    <th>
                                                 #
                                     </th>
-                                    <th
-                                                className="text-muted"
-                                    >
+                                    <th>
                                                 NAME
                                     </th>
-                                    <th
-                                                className="text-muted"
-                                    >
+                                    <th>
                                                 SCORE
                                     </th>
                         </tr>
@@ -577,19 +544,13 @@ ShallowWrapper {
             "children": Array [
               <thead>
                 <tr>
-                                <th
-                                                className="text-muted"
-                                >
+                                <th>
                                                 #
                                 </th>
-                                <th
-                                                className="text-muted"
-                                >
+                                <th>
                                                 NAME
                                 </th>
-                                <th
-                                                className="text-muted"
-                                >
+                                <th>
                                                 SCORE
                                 </th>
                 </tr>
@@ -644,19 +605,13 @@ ShallowWrapper {
               "nodeType": "host",
               "props": Object {
                 "children": <tr>
-                  <th
-                                    className="text-muted"
-                  >
+                  <th>
                                     #
                   </th>
-                  <th
-                                    className="text-muted"
-                  >
+                  <th>
                                     NAME
                   </th>
-                  <th
-                                    className="text-muted"
-                  >
+                  <th>
                                     SCORE
                   </th>
 </tr>,
@@ -668,19 +623,13 @@ ShallowWrapper {
                 "nodeType": "host",
                 "props": Object {
                   "children": Array [
-                    <th
-                      className="text-muted"
->
+                    <th>
                       #
 </th>,
-                    <th
-                      className="text-muted"
->
+                    <th>
                       NAME
 </th>,
-                    <th
-                      className="text-muted"
->
+                    <th>
                       SCORE
 </th>,
                   ],
@@ -693,7 +642,6 @@ ShallowWrapper {
                     "nodeType": "host",
                     "props": Object {
                       "children": "#",
-                      "className": "text-muted",
                     },
                     "ref": null,
                     "rendered": "#",
@@ -705,7 +653,6 @@ ShallowWrapper {
                     "nodeType": "host",
                     "props": Object {
                       "children": "NAME",
-                      "className": "text-muted",
                     },
                     "ref": null,
                     "rendered": "NAME",
@@ -717,7 +664,6 @@ ShallowWrapper {
                     "nodeType": "host",
                     "props": Object {
                       "children": "SCORE",
-                      "className": "text-muted",
                     },
                     "ref": null,
                     "rendered": "SCORE",
