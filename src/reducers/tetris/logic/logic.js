@@ -1,8 +1,8 @@
 import {
-    add, any, compose, converge, curry, dec, equals, head, inc, last, lensIndex, map, multiply,
-    over, zipWith, reverse, __, when, gte, lt, view, or, not, lensProp, anyPass, ifElse, identity, lensPath,
-    concat, set, reduce, always, complement
-} from "ramda";
+	add, any, compose, converge, curry, dec, equals, head, inc, last, lensIndex, map, multiply,
+	over, zipWith, reverse, __, when, gte, lt, view, or, not, lensProp, anyPass, ifElse, identity, lensPath,
+	concat, set, reduce, always, complement, until
+} from 'ramda';
 import * as constants from './constants';
 import { EMPTY_TOKEN, FILL_TOKEN, ROW_COUNT } from "./constants/index";
 import { getNextPiece } from "./bagLogic";
@@ -95,7 +95,7 @@ export const isPieceOutOfBounds = curry((state) => compose(
 // state -> boolean
 export const isShiftValid = complement(anyPass([isPieceOutOfBounds, isPieceOverlapping]));
 // (f, [validator]) -> state -> boolean, validates transformed state, returns true if valid
-const isTransformValid = (transformFunc, validator)=>
+const isTransformValid = (transformFunc, validator) =>
     compose(
         validator,
         transformFunc
@@ -137,7 +137,7 @@ export const writeToBoard = converge(
     reduce(fillCell),
     [identity, pieceActualPosition]
 );
-// PUBLIC FUNCTIONS
+// state -> state, entry point for writing active piece to board and getting a new piece
 export const lockPiece = compose(
     getNextPiece,
     set(posLens, constants.START_POS),
@@ -145,9 +145,17 @@ export const lockPiece = compose(
 );
 
 // PUBLIC FUNCS
+export const dropPiece =
+	compose(
+		lockPiece,
+		until(
+			complement(isTransformValid(shift(downDir), isShiftValid)),
+			shift(downDir)
+		)
+	);
+
 export const shiftLeft = tryTransform(shift(leftDir), isShiftValid);
 export const shiftRight = tryTransform(shift(rightDir), isShiftValid);
 export const shiftDown = tryTransformElse(lockPiece, shift(downDir), isShiftValid);
-export const dropPiece = identity;
 export const rotateClockwise = tryTransform(rotate(clockwise), isShiftValid);
 export const rotateCounterClockwise = tryTransform(rotate(counterClockwise), isShiftValid);

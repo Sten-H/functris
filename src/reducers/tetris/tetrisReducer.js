@@ -15,34 +15,24 @@ const reducer = handleActions({
     // So it would be logic.shift(leftDir, state)
     // FIXME I could probably remove the spread from all of these and just return the value from func
     [actions.shiftLeft](state) {
-        return {
-            ...logic.shiftLeft(state)
-        };
+        return logic.shiftLeft(state)
     },
     [actions.shiftRight](state) {
-        return {
-            ...logic.shiftRight(state)
-        };
+        return logic.shiftRight(state)
     },
     [actions.shiftDown](state) {
-        return {
-            ...logic.shiftDown(state)
-        };
+	    console.log('hello down');
+        return logic.shiftDown(state)
     },
     [actions.dropPiece](state) {
-        return {
-            ...state
-        };
+        console.log('hello drop');
+        return logic.dropPiece(state);
     },
     [actions.rotateClockwise](state) {
-        return {
-            ...logic.rotateClockwise(state)
-        }
+        return logic.rotateClockwise(state)
     },
     [actions.rotateCounter](state) {
-        return {
-            ...logic.rotateCounterClockwise(state)
-        }
+        return logic.rotateCounterClockwise(state)
     }
 }, defaultState);
 

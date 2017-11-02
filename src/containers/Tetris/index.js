@@ -14,7 +14,7 @@ class Tetris extends React.Component {
             <KeyHandler keyValue='ArrowRight' onKeyHandle={this.props.onRightPress} />
             <KeyHandler keyValue='ArrowDown' onKeyHandle={this.props.onDownPress} />
             <KeyHandler keyValue='ArrowUp' onKeyHandle={this.props.onRotateClockwisePress} />
-            <KeyHandler keyValue='Space' onKeyHandle={this.props.onDropPress} />
+            <KeyHandler keyValue=' ' onKeyHandle={this.props.onDropPress} />
             <KeyHandler keyValue='z' onKeyHandle={this.props.onRotateClockwisePress} />
             <KeyHandler keyValue='x' onKeyHandle={this.props.onRotateCounterPress} />
             {drawBoard(getBoardWithPiece(this.props.gameState))}

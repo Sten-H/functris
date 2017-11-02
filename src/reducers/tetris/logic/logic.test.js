@@ -2,17 +2,26 @@ import {
     shiftLeft, shiftRight, rotateClockwise, rotateCounterClockwise, isPieceOverlapping,
     getCell, isCoordOutOfBounds, isPieceOutOfBounds, posLens, boardLens,
     pieceLens, pieceCoordPath, shiftDown, writeToBoard, lockPiece, bagLens, dropPiece,
-} from "./logic";
+} from './logic';
 import {
-    adjust, all, complement, compose, concat, countBy, dec, equals, inc, last, over, isNil, prop, repeat, set, subtract,
-    update, view, not
-} from "ramda";
-import { ROW_COUNT, EMPTY_BOARD, EMPTY_TOKEN, FILL_TOKEN, COL_COUNT, START_POS, SHADOW_TOKEN } from "./constants/index";
-import * as c from "./constants/index";
+	adjust, all, compose, concat, countBy, dec, equals, inc, last, over, isNil, prop, repeat, set, subtract,
+	update, view, identity, always, ifElse, head, path
+} from 'ramda';
+import { ROW_COUNT, EMPTY_BOARD, EMPTY_TOKEN, FILL_TOKEN, COL_COUNT, START_POS, SHADOW_TOKEN } from './constants/index';
+import * as c from './constants/index';
 
+const tokensInRow = (token, row) => compose(
+    ifElse(
+        isNil,
+        always(0),
+        identity
+    ),
+    prop('true'),
+    countBy(equals(token)),
+)(row);
 describe('Tetris logic', () => {
     const emptyBoard = EMPTY_BOARD;
-    const emptyRow = emptyBoard[0];
+    const emptyRow = head(EMPTY_BOARD);
     const filledRow = repeat(FILL_TOKEN, ROW_COUNT);
     const LPiece = c.PIECES.L;  // L piece: -->  ___|
     const IPiece = c.PIECES.I;  // I piece --> ____
@@ -94,22 +103,26 @@ describe('Tetris logic', () => {
                     set(pieceLens, IPiece)
                 )(state);
                 // expect bottom row to contain filled cells after drop
-                expect(last(dropPiece(s).board)).toContain(FILL_TOKEN);
+	            const lastRowAfterDrop = path(['board', dec(ROW_COUNT)], dropPiece(s));
+                expect(lastRowAfterDrop).toContain(IPiece.token);
+	            const filledCellCount = tokensInRow(IPiece.token, lastRowAfterDrop);
+	            const expected = 4; // length of IPiece lying down
+	            expect(filledCellCount).toEqual(expected);
             });
             it('should drop piece to first encountered filled block', () => {
                 const bottomRow = concat(repeat(EMPTY_TOKEN, 4), repeat(FILL_TOKEN, 1), repeat(EMPTY_TOKEN, 5));
                 const board = update(dec(ROW_COUNT), bottomRow, emptyBoard);
+                // board has one block in bottom middle
                 const s = compose(
                     set(posLens, [4,0]),
                     set(pieceLens, IPiece),
                     set(boardLens, board)
                 )(state);
+                const stateAfterDrop = dropPiece(s);
                 // Expect second to last row to now contain filled cell
-                const secondLastRow = board[subtract(ROW_COUNT, 2)];
-                const filledCellCount = prop('true')(countBy(complement(equals(EMPTY_TOKEN)), secondLastRow));
+                const secondLastRow = path(['board', subtract(ROW_COUNT, 2)], stateAfterDrop);
+                const filledCellCount = tokensInRow(IPiece.token, secondLastRow);
                 const expected = 4; // length of IPiece lying down
-                // cell count 0 is undefined x)
-                expect(complement(isNil)(filledCellCount)).toBe(true);
                 expect(filledCellCount).toEqual(expected);
             });
         });
@@ -242,6 +255,10 @@ describe('Tetris logic', () => {
         });
     });
     describe('Piece Shadow', () => {
+    	/* FIXME Actually I don't think I want to write shadow to board state like that
+	       I think I'll go with having a shadowPos: [5,19] type of deal in state and then
+	       the thing drawing the state can do whatever it wants. Will have to redo tests.
+	       */
         it('Should present piece shadow at lowest valid point', () => {
             // Because initializing with proper shadow is a bit harder than shadow after move this test first
             const tempState = compose(
