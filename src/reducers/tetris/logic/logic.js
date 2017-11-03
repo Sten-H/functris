@@ -44,10 +44,17 @@ const clampCoord = compose(
 // c -> c -> c
 const addCoords = zipWith(add);
 
-// (board -> coord) -> str, cell value is string (token symbol)
-export const getCell = curry((state, coord) => view(
-    cellLens(clampCoord(coord)),
-    state));
+// (board -> coord) -> str, cell value is string (token symbol), returns empty on out of bounds coord
+export const getCell = curry((state, coord) =>
+	ifElse(
+		anyPass([isTopYOutOfBounds, isCoordOutOfBounds]),
+		always(EMPTY_TOKEN),
+		compose(
+			view(__, state),
+			cellLens
+		)
+	)(coord)
+);
 
 // state -> piece, adds position value to each piece coord to get true position
 export const pieceActualPosition = converge(
@@ -60,18 +67,6 @@ const isCellEmpty = equals(EMPTY_TOKEN);
 const isCellFilled = complement(isCellEmpty);
 
 // VALIDATORS
-// state -> coord -> boolean
-export const isCoordOverlapping = (state) => compose(
-    isCellFilled,
-    getCell(state)
-);
-// state -> boolean
-export const isPieceOverlapping =
-    converge(
-        any,
-        [isCoordOverlapping, pieceActualPosition]
-    );
-
 // (lens, [predicates]) -> f(coord) -> boolean
 const coordValidator = (lens, predicates) =>
     compose(
@@ -86,17 +81,35 @@ const isXOutOfBounds = coordValidator(
         gte(__, constants.COL_COUNT)
     ]);
 // coord -> boolean
-const isYOutOfBounds = coordValidator(
-    yLens,
-    [
-        gte(__, constants.ROW_COUNT)
-    ]);
+const isBottomYOutOfBounds = coordValidator(yLens, [ gte(__, constants.ROW_COUNT) ]);
 // coord -> boolean
-export const isCoordOutOfBounds = anyPass([isXOutOfBounds, isYOutOfBounds]);
-// (pos -> piece) -> boolean
-export const isPieceOutOfBounds = curry((state) => compose(
-    any(isCoordOutOfBounds),
-    pieceActualPosition)(state));
+const isTopYOutOfBounds = coordValidator(yLens, [ lt(__, 0) ]);
+
+// coord -> boolean, above board top does not count as out of bounds, can move piece freely at top.
+export const isCoordOutOfBounds = anyPass([isXOutOfBounds, isBottomYOutOfBounds]);
+
+// state -> boolean
+export const isPieceOutOfBounds = compose(
+	any(isCoordOutOfBounds),
+	pieceActualPosition
+);
+// state -> coord -> boolean
+export const isCoordOverlapping = (state) =>
+	// ifElse(
+	// 	anyPass([isTopYOutOfBounds, isCoordOutOfBounds]),
+	// 	always(false),
+		compose(
+			isCellFilled,
+			getCell(state)
+		);
+	// );
+// state -> boolean
+export const isPieceOverlapping =
+	converge(
+		any,
+		[isCoordOverlapping, pieceActualPosition]
+	);
+
 // state -> boolean
 export const isShiftValid = complement(anyPass([isPieceOutOfBounds, isPieceOverlapping]));
 // (f, [validator]) -> state -> boolean, validates transformed state, returns true if valid
