@@ -1,7 +1,7 @@
 import {
 	shiftLeft, shiftRight, rotateClockwise, rotateCounterClockwise, isPieceOverlapping,
 	getCell, isCoordOutOfBounds, isPieceOutOfBounds, posLens, boardLens,
-	pieceLens, pieceCoordPath, shiftDown, writeToBoard, lockPiece, bagLens, dropPiece, isCoordOverlapping, getGell,
+	pieceLens, shiftDown, writeToBoard, lockPiece, bagLens, dropPiece, isCoordOverlapping, pieceCoordPath,
 } from './logic';
 import {
 	adjust, all, compose, concat, countBy, dec, equals, inc, last, over, isNil, prop, repeat, set, subtract,
@@ -9,6 +9,7 @@ import {
 } from 'ramda';
 import { ROW_COUNT, EMPTY_BOARD, EMPTY_TOKEN, FILL_TOKEN, COL_COUNT, START_POS, SHADOW_TOKEN } from './constants/index';
 import * as c from './constants/index';
+import { clearLines } from './lineClearLogic';
 
 const tokensInRow = (token, row) => compose(
     ifElse(
@@ -141,15 +142,15 @@ describe('Tetris logic', () => {
             set(posLens, [5, 5]),
             set(pieceLens, LPiece)
         )(state);
-        it('Should rotate clockwise', () => {
+        it('should rotate clockwise', () => {
             const expected = {coords: [ [ 1,  1], [ 0, -1], [ 0,  0], [ 0,  1] ], token: "L"};
             expect(rotateClockwise(s1).piece).toEqual(expected);
         });
-        it('Should rotate counter clockwise', () => {
+        it('should rotate counter clockwise', () => {
             const expected = {coords: [ [-1, -1], [ 0,  1], [ 0,  0], [ 0, -1] ], token: "L"};
             expect(rotateCounterClockwise(s1).piece).toEqual(expected);
         });
-        it('Rotate counter then clockwise should revert to original', () => {
+        it('rotate counter then clockwise should revert to original', () => {
             const expected = prop('piece')(s1);
             const rotated = compose(
                 prop('piece'),
@@ -170,7 +171,7 @@ describe('Tetris logic', () => {
             )(state);
             expect(rotateClockwise(s2).piece).not.toEqual(rotateCounterClockwise(s2).piece);
         });
-        it('Should return call value if piece out of x bounds after rotation', () => {
+        it('should return call value if piece out of x bounds after rotation', () => {
             const s = compose(
                 rotateClockwise,
                 set(posLens, [0, 5]),
@@ -185,7 +186,7 @@ describe('Tetris logic', () => {
 	        )(state);
             expect(rotateClockwise(s).piece.coords).not.toEqual(LPiece.coords);
         });
-        it('Should return call value if piece out of lower y bound after rotation', () => {
+        it('should return call value if piece out of lower y bound after rotation', () => {
             // FIXME this should probably later raise the piece instead of invalidating
             const s = compose(
                 set(posLens, [0, 19]),
@@ -194,7 +195,7 @@ describe('Tetris logic', () => {
             const expected = view(pieceLens, s);
             expect(rotateCounterClockwise(s).piece).toEqual(expected);
         });
-        it('Should return call value when piece overlapping after rotation', () => {
+        it('should return call value when piece overlapping after rotation', () => {
             const filledRowBoard = compose(
                 update(dec(dec(ROW_COUNT)), filledRow),
                 update(dec(ROW_COUNT), filledRow)
@@ -209,6 +210,14 @@ describe('Tetris logic', () => {
             const expected = view(pieceLens, s);
             expect(rotateClockwise(s).piece).toEqual(expected);
             expect(rotateCounterClockwise(s).piece).toEqual(expected);
+        });
+        it('O-piece should not rotate', () => {
+	        const s = compose(
+		        set(posLens, [4, 2]),
+		        set(pieceLens, c.PIECES.O),
+	        )(state);
+            expect(view(pieceCoordPath, rotateClockwise(s))).toEqual(c.PIECES.O);
+            expect(view(pieceCoordPath, rotateCounterClockwise(s))).toEqual(c.PIECES.O);
         });
     });
     describe('Board', () => {
@@ -280,7 +289,7 @@ describe('Tetris logic', () => {
         });
         it('should get empty cell from cell out of bounds', () => {
         	const s = set(boardLens, emptyBoard, state);
-	        expect(getGell(s, [0, -5])).toEqual(EMPTY_TOKEN);
+	        expect(getCell(s, [0, -5])).toEqual(EMPTY_TOKEN);
         })
     });
     describe('Piece Shadow', () => {
@@ -288,7 +297,7 @@ describe('Tetris logic', () => {
 	       I think I'll go with having a shadowPos: [5,19] type of deal in state and then
 	       the thing drawing the state can do whatever it wants. Will have to redo tests.
 	       */
-        it('Should present piece shadow at lowest valid point', () => {
+        it('should present piece shadow at lowest valid point', () => {
             // Because initializing with proper shadow is a bit harder than shadow after move this test first
             const tempState = compose(
                 set(posLens, [4,0]),
@@ -299,7 +308,7 @@ describe('Tetris logic', () => {
             // FIXME This is a very lazy test, should make sure that piece shape is accurate
             expect(bottomRow).toContain(SHADOW_TOKEN);
         });
-        it('Should initialize board with piece shadow', () => {
+        it('should initialize board with piece shadow', () => {
             // Hmm actually how do I test this, I'm setting the state explicitly, unlike when react app
             // is run where it will have a random piece on init. An interesting solution to this
             // would be to have a top row that is invisible where all pieces spawn and immediately shift down
@@ -314,5 +323,34 @@ describe('Tetris logic', () => {
             // FIXME This is a very lazy test, should make sure that piece shape is accurate
             expect(bottomRow).toContain(SHADOW_TOKEN);
         })
-    })
+    });
+	describe('Line Clear', () => {
+		it('should clear filled line', () => {
+			const board = update(dec(ROW_COUNT), filledRow, emptyBoard);
+			const s = compose(
+				set(posLens, [4,0]),
+				set(pieceLens, IPiece),
+				set(boardLens, board)
+			)(state);
+			// before clear last row should be filled
+			expect(last(s.board)).not.toContain(EMPTY_TOKEN);
+			// should now be cleared
+			expect(last(clearLines(s).board)).toContain(EMPTY_TOKEN);
+		});
+		it('should move remaining lines down', () => {
+			const secondLast = concat(repeat(c.PIECES.O.token, 4), repeat(EMPTY_TOKEN, 4));
+			const board = compose(
+				update(dec(ROW_COUNT), filledRow),
+				update(dec(ROW_COUNT), secondLast)
+			)(emptyBoard);
+			const s = compose(
+				set(posLens, [4,0]),
+				set(pieceLens, IPiece),
+				set(boardLens, board)
+			)(state);
+			const stateAfterClear = clearLines(s);
+			const lastRow = last(stateAfterClear.board);
+			expect(lastRow).toEqual(secondLast);
+		});
+	});
 });
