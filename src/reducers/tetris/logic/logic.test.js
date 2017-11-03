@@ -68,12 +68,13 @@ describe('Tetris logic', () => {
                 expect(shiftRight(s2).pos).toEqual(expected2)
             });
             it('should shift piece that is partly outside of top y bounds (top of screen)', () => {
+                const startPos = [4, 0];
                 const s = compose(
-                    set(posLens, [4, 0]),
+                    set(posLens, startPos),
                     set(pieceLens, LPiece)  // Top of L outside y top border
                 )(state);
-                const expected = [5, 0];
-                expect(shiftRight(s).pos).toEqual(expected);
+
+                expect(shiftRight(s).pos).not.toEqual(startPos);
             });
             it('should return call value when  piece overlapping after shift', () => {
                 const row = update(0, FILL_TOKEN, repeat(EMPTY_TOKEN, COL_COUNT));

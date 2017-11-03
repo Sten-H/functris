@@ -1,10 +1,10 @@
 import {
 	add, any, compose, converge, curry, dec, equals, head, inc, last, lensIndex, map, multiply,
 	over, zipWith, reverse, __, when, gte, lt, view, or, not, lensProp, anyPass, ifElse, identity, lensPath,
-	concat, set, reduce, always, complement, until
+	concat, set, reduce, always, complement, until, clamp
 } from 'ramda';
 import * as constants from './constants';
-import { EMPTY_TOKEN, FILL_TOKEN, ROW_COUNT } from "./constants/index";
+import { COL_COUNT, EMPTY_TOKEN, FILL_TOKEN, ROW_COUNT } from './constants/index';
 import { getNextPiece } from "./bagLogic";
 
 /**
@@ -31,29 +31,33 @@ const yLens = lensIndex(1);
 // GENERAL HELPER FUNCTIONS
 // n -> n, transforms -0 to 0
 const normalizeZero = when(equals(-0), Math.abs);
+
 // c -> c Sets all -0 to 0 in coord.
 const normalizeCoord = map(normalizeZero);
+
+// c -> c
+const clampCoord = compose(
+	over(yLens, clamp(0, dec(ROW_COUNT))),
+	over(xLens, clamp(0, dec(COL_COUNT))),
+);
+
 // c -> c -> c
 const addCoords = zipWith(add);
+
 // (board -> coord) -> str, cell value is string (token symbol)
 export const getCell = curry((state, coord) => view(
-    cellLens(coord),
+    cellLens(clampCoord(coord)),
     state));
+
 // state -> piece, adds position value to each piece coord to get true position
 export const pieceActualPosition = converge(
     map,
     [compose(addCoords, view(posLens)), view(pieceCoordPath)]
 );
+// string -> boolean
 const isCellEmpty = equals(EMPTY_TOKEN);
+// string -> boolean
 const isCellFilled = complement(isCellEmpty);
-// TRANSFORMERS
-// directions used as transformers for shift function
-const leftDir = over(xLens, dec);
-const rightDir = over(xLens, inc);
-const downDir = over(yLens, inc);
-// rotation directions used as transformers for rotate functions
-const clockwise = [compose(multiply(-1), last), head];
-const counterClockwise = [last, compose(multiply(-1), head)];
 
 // VALIDATORS
 // state -> coord -> boolean
@@ -85,7 +89,7 @@ const isXOutOfBounds = coordValidator(
 const isYOutOfBounds = coordValidator(
     yLens,
     [
-        gte(__, ROW_COUNT)
+        gte(__, constants.ROW_COUNT)
     ]);
 // coord -> boolean
 export const isCoordOutOfBounds = anyPass([isXOutOfBounds, isYOutOfBounds]);
@@ -101,6 +105,14 @@ const isTransformValid = (transformFunc, validator) =>
         validator,
         transformFunc
     );
+// TRANSFORMERS
+// directions used as transformers for shift function
+const leftDir = over(xLens, dec);
+const rightDir = over(xLens, inc);
+const downDir = over(yLens, inc);
+// rotation directions used as transformers for rotate functions
+const clockwise = [compose(multiply(-1), last), head];
+const counterClockwise = [last, compose(multiply(-1), head)];
 /**
  * tries to transform state with transformFunc, returns transformed state if validated by validator
  * if invalid it returns result of running elseFunc with final arg (state)

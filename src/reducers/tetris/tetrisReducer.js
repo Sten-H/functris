@@ -7,7 +7,7 @@ import { getShuffledBag } from "./logic/bagLogic";
 const defaultState = {
     board: constants.EMPTY_BOARD,
     piece: constants.PIECES.L,
-    pos: [5, 6],
+    pos: [5, 1],
     bag: getShuffledBag()
 };
 const reducer = handleActions({
