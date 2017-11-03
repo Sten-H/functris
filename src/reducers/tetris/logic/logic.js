@@ -8,7 +8,8 @@ import { EMPTY_TOKEN, FILL_TOKEN, ROW_COUNT } from "./constants/index";
 import { getNextPiece } from "./bagLogic";
 
 /**
- * Main logic of tetris game.
+ * Logic mostly contained to moving/rotating/dropping piece, though it also handles writing piece to board
+ * and calling to get the next piece. Which is a bit outside its responsibility. Maybe refactor this somehow
  */
 // LENSES
 // State lenses
@@ -132,11 +133,13 @@ const fillCell = (state, coord) => converge(
     set(cellLens( coord )),
     [view(pieceTokenPath), identity],
 )(state);
+
 // state -> state
 export const writeToBoard = converge(
     reduce(fillCell),
     [identity, pieceActualPosition]
 );
+
 // state -> state, entry point for writing active piece to board and getting a new piece
 export const lockPiece = compose(
     getNextPiece,
@@ -144,12 +147,15 @@ export const lockPiece = compose(
     writeToBoard
 );
 
+// state -> boolean
+const isDownShiftInvalid = complement(isTransformValid(shift(downDir), isShiftValid));
 // PUBLIC FUNCS
+// state -> state
 export const dropPiece =
 	compose(
 		lockPiece,
 		until(
-			complement(isTransformValid(shift(downDir), isShiftValid)),
+			isDownShiftInvalid,
 			shift(downDir)
 		)
 	);

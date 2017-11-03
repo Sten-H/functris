@@ -13,7 +13,6 @@ const defaultState = {
 const reducer = handleActions({
     // I could combine all shifts (atleast horizontal) by having the action send the direction as an argument
     // So it would be logic.shift(leftDir, state)
-    // FIXME I could probably remove the spread from all of these and just return the value from func
     [actions.shiftLeft](state) {
         return logic.shiftLeft(state)
     },
@@ -21,11 +20,9 @@ const reducer = handleActions({
         return logic.shiftRight(state)
     },
     [actions.shiftDown](state) {
-	    console.log('hello down');
         return logic.shiftDown(state)
     },
     [actions.dropPiece](state) {
-        console.log('hello drop');
         return logic.dropPiece(state);
     },
     [actions.rotateClockwise](state) {

@@ -51,12 +51,12 @@ describe('Tetris logic', () => {
     });
     describe('Shift piece', () => {
         describe('Horizontal', () => {
-            it('Should shift horizontally', () => {
+            it('should shift horizontally', () => {
                 const s = set(posLens, [5, 5], state);
                 const expected = [4, 5];
                 expect(shiftLeft(s).pos).toEqual(expected);
             });
-            it('Should return call value when piece out of bounds after shift', () => {
+            it('should return call value when piece out of bounds after shift', () => {
                 const s1 = set(posLens, [0, 5], state);
                 const expected1 = [0, 5];
                 expect(shiftLeft(s1).pos).toEqual(expected1);
@@ -67,7 +67,15 @@ describe('Tetris logic', () => {
                 // Stick will be out of bounds on right shift, should not move
                 expect(shiftRight(s2).pos).toEqual(expected2)
             });
-            it('Should return call value when  piece overlapping after shift', () => {
+            it('should shift piece that is partly outside of top y bounds (top of screen)', () => {
+                const s = compose(
+                    set(posLens, [4, 0]),
+                    set(pieceLens, LPiece)  // Top of L outside y top border
+                )(state);
+                const expected = [5, 0];
+                expect(shiftRight(s).pos).toEqual(expected);
+            });
+            it('should return call value when  piece overlapping after shift', () => {
                 const row = update(0, FILL_TOKEN, repeat(EMPTY_TOKEN, COL_COUNT));
                 const board = update(dec(ROW_COUNT), row, emptyBoard);
                 const s = compose(
@@ -77,7 +85,7 @@ describe('Tetris logic', () => {
                 )(state);
                 const expected = [1, 19];
                 expect(shiftLeft(s).pos).toEqual(expected);
-            })
+            });
         });
         describe('Vertical', () => {
             it('should shift vertically', () => {
@@ -169,6 +177,13 @@ describe('Tetris logic', () => {
             const expected = view(pieceLens, s);
             expect(rotateClockwise(s).piece).toEqual(expected);
         });
+        it('should rotate piece, even if it it is out of top y bounds (top of screen)', () => {
+	        const s = compose(
+		        set(posLens, [4, 0]),
+		        set(pieceLens, LPiece)  // Top of L outside y top border
+	        )(state);
+            expect(rotateClockwise(s).piece.coords).not.toEqual(LPiece.coords);
+        });
         it('Should return call value if piece out of lower y bound after rotation', () => {
             // FIXME this should probably later raise the piece instead of invalidating
             const s = compose(
@@ -255,7 +270,7 @@ describe('Tetris logic', () => {
         });
     });
     describe('Piece Shadow', () => {
-    	/* FIXME Actually I don't think I want to write shadow to board state like that
+    	/* FIXME Actually I don't think I want to write shadow to board state like this
 	       I think I'll go with having a shadowPos: [5,19] type of deal in state and then
 	       the thing drawing the state can do whatever it wants. Will have to redo tests.
 	       */

@@ -15,7 +15,7 @@ const ARROW_LEFT = 'ArrowLeft';
 const ARROW_RIGHT = 'ArrowRight';
 const ARROW_DOWN = 'ArrowDown';
 const ARROW_UP = 'ArrowUp';
-const SPACE = 'Space';
+const SPACE = ' ';
 
 const state = {
     tetris: {
