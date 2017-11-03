@@ -6,6 +6,7 @@ export const EMPTY_TOKEN = "E";
 export const FILL_TOKEN = "X";
 export const SHADOW_TOKEN = "S";  // Unused as of now, for piece shadow
 export const EMPTY_ROW = repeat(EMPTY_TOKEN, COL_COUNT);
+export const FILLED_ROW = repeat(FILL_TOKEN, COL_COUNT);  // Fill token is made up token
 export const EMPTY_BOARD = repeat(EMPTY_ROW, ROW_COUNT);
 export const START_POS = [ 4, 0 ];
 export const PIECES = {

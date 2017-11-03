@@ -9,7 +9,7 @@ import { bagLens, pieceLens } from './helpers';
  * Bag logic keeps manages the state of the "bag" of pieces. A bag consists of the seven possible
  * tetris pieces in random order as an array. The head of the array is the next piece to be played.
  * When the final piece is taken from the bag it makes a new bag. With this bag approach a piece can
- * at most go without being played for
+ * at most go without being played for 14(?) pieces (I think?)
  */
 const bagLengthLens = lensPath(['bag', 'length']);
 

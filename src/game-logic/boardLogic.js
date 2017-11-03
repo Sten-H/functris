@@ -1,5 +1,5 @@
 import {
-	__, addIndex, always, any, anyPass, complement, compose, concat, converge, countBy, curry, dissocPath, equals,
+	__, always, any, anyPass, complement, compose, concat, converge, countBy, curry, dissocPath, equals,
 	filter,
 	flatten, gte,
 	identity, ifElse,
@@ -7,7 +7,7 @@ import {
 	map, over, prop, reduce, reject, repeat, set, subtract, view
 } from 'ramda';
 import { boardLens, cellLens, pieceActualPosition, pieceTokenLens, xLens, yLens } from './helpers';
-import * as c from './constants/index';
+import * as c from './constants';
 
 /**
  * Board logic contains validators if a piece or coord is out of board bounds, it also has transformers
@@ -15,11 +15,7 @@ import * as c from './constants/index';
  */
 // string -> row -> number
 export const tokensInRow = curry((token, row) => compose(
-	ifElse(
-		isNil,
-		always(0),
-		identity
-	),
+	ifElse(isNil, always(0), identity),
 	prop('true'),
 	countBy(equals(token)),
 )(row));
@@ -83,19 +79,6 @@ const isRowTokenCountEqual = curry((n, token, row) => equals(n, tokensInRow(toke
 export const isRowEmpty = isRowTokenCountEqual(c.COL_COUNT, c.EMPTY_TOKEN);
 // row -> boolean
 export const isRowFull = isRowTokenCountEqual(0, c.EMPTY_TOKEN);
-// row -> row
-export const getIndexIfFull = (row, idx) => ifElse(
-	isRowFull,
-	always(idx),
-	always(-1)
-)(row);
-
-// board -> [index]
-export const getFullRowIndexes = compose(
-	filter(gte(__, 0)),
-	addIndex(map)(getIndexIfFull),
-);
-
 // state -> state
 export const clearAllRows = over(boardLens, reject(isRowFull));
 // state -> state
