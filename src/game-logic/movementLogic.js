@@ -62,6 +62,7 @@ const rotate = dirFuncs => over(pieceCoordLens, rotatePiece(dirFuncs));
 // state -> state, entry point for writing active piece to board and getting a new piece
 export const lockPiece = compose(
     bag.getNextPiece,
+	board.clearLines,
     set(posLens, constants.START_POS),
     board.writeToBoard
 );
