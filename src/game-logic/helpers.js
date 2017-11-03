@@ -1,4 +1,4 @@
-import * as c from 'constants';
+import * as c from './constants';
 import {
 	add, clamp, compose, concat, converge, dec, equals, lensIndex, lensPath, lensProp, map, over, reverse, view,
 	when, zipWith

@@ -1,7 +1,7 @@
 import {
     compose, values, head, view, tail, set, ifElse, converge, identity, equals, lensPath
 } from "ramda";
-import * as constants from './constants';
+import * as constants from './constants/index';
 import shuffle from 'shuffle-array';
 import { bagLens, pieceLens } from './helpers';
 

@@ -1,7 +1,7 @@
 import { getShuffledBag, getNextPiece, nextPiece } from "./bagLogic";
 import { compose, lensProp, set, takeLast, values } from "ramda";
 import { EMPTY_BOARD } from "./constants/index";
-import * as constants from './constants';
+import * as constants from './constants/index';
 
 const bagLens = lensProp('bag');
 const pieceLens = lensProp('piece');

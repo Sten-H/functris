@@ -2,7 +2,7 @@ import {
 	compose, converge, curry, dec, head, inc, last, map, multiply, over, view, anyPass, ifElse, identity,
 	set, reduce, complement, until
 } from 'ramda';
-import * as constants from './constants';
+import * as constants from './constants/index';
 import * as board from './boardLogic';
 import * as bag from "./bagLogic";
 import { normalizeCoord, pieceCoordLens, posLens, xLens, yLens } from './helpers';

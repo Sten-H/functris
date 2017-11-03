@@ -1,7 +1,7 @@
 import { __, always, any, anyPass, complement, compose, converge, curry, equals, gte, identity, ifElse, lt,
 	map, over, reduce, set, view } from 'ramda';
 import { boardLens, cellLens, pieceActualPosition, pieceTokenLens, xLens, yLens } from './helpers';
-import * as c from './constants';
+import * as c from './constants/index';
 
 /**
  * Board logic contains validators if a piece or coord is out of board bounds, it also has transformers

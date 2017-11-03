@@ -3,7 +3,7 @@ import * as React from 'react';
 import configureMockStore from 'redux-mock-store';
 import { KEYUP } from 'react-key-handler';
 import Tetris from './';
-import * as constants from '../../reducers/tetris/logic/constants';
+import * as constants from '../../game-logic/constants';
 import { mountWithStore } from "../../testHelpers";
 
 

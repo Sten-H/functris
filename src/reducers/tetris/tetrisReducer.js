@@ -1,8 +1,8 @@
-import * as constants from './logic/constants';
+import * as constants from '../../game-logic/constants';
 import * as actions from '../../actions/actions';
 import { handleActions } from "redux-actions";
-import * as logic from "./logic/movementLogic";
-import { getShuffledBag } from "./logic/bagLogic";
+import * as logic from "../../game-logic/movementLogic";
+import { getShuffledBag } from "../../game-logic/bagLogic";
 
 const defaultState = {
     board: constants.EMPTY_BOARD,

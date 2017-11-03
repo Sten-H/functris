@@ -3,9 +3,9 @@ import {
     addIndex, always, compose, converge, curry, ifElse, lensPath, map, prop, reduce, reverse, set,
     view
 } from 'ramda';
-import { EMPTY_TOKEN } from '../reducers/tetris/logic/constants/index';
+import { EMPTY_TOKEN } from '../game-logic/constants/index';
 import { equals } from 'ramda';
-import { pieceActualPosition, pieceTokenLens } from '../reducers/tetris/logic/helpers';
+import { pieceActualPosition, pieceTokenLens } from '../game-logic/helpers';
 
 /**
  * The drawBoard function is generalized because it is also used in the next piece component

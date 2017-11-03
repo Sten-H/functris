@@ -1,10 +1,10 @@
 import * as React from 'react';
-import * as constants from '../../reducers/tetris/logic/constants';
-import { EMPTY_TOKEN } from "../../reducers/tetris/logic/constants/index";
+import * as constants from '../../game-logic/constants';
+import { EMPTY_TOKEN } from "../../game-logic/constants/index";
 import { drawBoard, getBoardWithPiece } from "../commons";
 import { connect } from "react-redux";
 import { __, compose, head, isNil, not, set, when } from "ramda";
-import { pieceLens } from '../../reducers/tetris/logic/helpers';
+import { pieceLens } from '../../game-logic/helpers';
 const piece = constants.PIECES.L;
 
 
