@@ -1,7 +1,7 @@
 import * as constants from './logic/constants';
 import * as actions from '../../actions/actions';
 import { handleActions } from "redux-actions";
-import * as logic from "./logic/logic";
+import * as logic from "./logic/movementLogic";
 import { getShuffledBag } from "./logic/bagLogic";
 
 const defaultState = {

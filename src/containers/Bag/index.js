@@ -3,10 +3,11 @@ import * as constants from '../../reducers/tetris/logic/constants';
 import { EMPTY_TOKEN } from "../../reducers/tetris/logic/constants/index";
 import { drawBoard, getBoardWithPiece } from "../commons";
 import { connect } from "react-redux";
-import { __, compose, head, isNil, lensProp, not, set, when } from "ramda";
+import { __, compose, head, isNil, not, set, when } from "ramda";
+import { pieceLens } from '../../reducers/tetris/logic/helpers';
 const piece = constants.PIECES.L;
 
-const pieceLens = lensProp('piece');
+
 const mockBoard = new Array(5).fill(new Array(5).fill(EMPTY_TOKEN));
 const mockState = {board: mockBoard, pos: [2, 2], piece: piece};
 

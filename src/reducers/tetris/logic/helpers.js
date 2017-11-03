@@ -1,6 +1,6 @@
 import * as c from 'constants';
 import {
-	add, clamp, compose, concat, dec, equals, lensIndex, lensPath, lensProp, map, over, reverse,
+	add, clamp, compose, concat, converge, dec, equals, lensIndex, lensPath, lensProp, map, over, reverse, view,
 	when, zipWith
 } from 'ramda';
 
@@ -36,3 +36,9 @@ export const clampCoord = compose(
 
 // c -> c -> c
 export const addCoords = zipWith(add);
+
+// state -> piece, adds position value to each piece coord to get true position
+export const pieceActualPosition = converge(
+	map,
+	[compose(addCoords, view(posLens)), view(pieceCoordLens)]
+);
