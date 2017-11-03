@@ -6,43 +6,13 @@ import {
 import * as constants from './constants';
 import { COL_COUNT, EMPTY_TOKEN, FILL_TOKEN, ROW_COUNT } from './constants/index';
 import { getNextPiece } from "./bagLogic";
+import { addCoords, cellLens, normalizeCoord, pieceCoordLens, pieceTokenLens, posLens, xLens, yLens } from './helpers';
 
 /**
  * Logic mostly contained to moving/rotating/dropping piece, though it also handles writing piece to board
  * and calling to get the next piece. Which is a bit outside its responsibility. Maybe refactor this somehow
  */
-// LENSES
-// State lenses
-export const posLens = lensProp('pos');
-export const boardLens = lensProp('board');
-export const pieceLens = lensProp('piece');
-export const coordLens = lensProp('coords');
-export const pieceCoordPath = lensPath(['piece', 'coords']);
-export const pieceTokenPath = lensPath(['piece', 'token']);
-export const bagLens = lensProp('bag');
-// cell lens from state (ex: ['board', [0, 1]). coord is reversed because board is [y, x] oriented
-export const cellLens = compose(lensPath,
-    concat(['board']),
-    reverse);
-// Coord lenses
-const xLens = lensIndex(0);
-const yLens = lensIndex(1);
 
-// GENERAL HELPER FUNCTIONS
-// n -> n, transforms -0 to 0
-const normalizeZero = when(equals(-0), Math.abs);
-
-// c -> c Sets all -0 to 0 in coord.
-const normalizeCoord = map(normalizeZero);
-
-// c -> c
-const clampCoord = compose(
-	over(yLens, clamp(0, dec(ROW_COUNT))),
-	over(xLens, clamp(0, dec(COL_COUNT))),
-);
-
-// c -> c -> c
-const addCoords = zipWith(add);
 
 // (board -> coord) -> str, cell value is string (token symbol), returns empty on out of bounds coord
 export const getCell = curry((state, coord) =>
@@ -55,11 +25,10 @@ export const getCell = curry((state, coord) =>
 		)
 	)(coord)
 );
-
 // state -> piece, adds position value to each piece coord to get true position
 export const pieceActualPosition = converge(
     map,
-    [compose(addCoords, view(posLens)), view(pieceCoordPath)]
+    [compose(addCoords, view(posLens)), view(pieceCoordLens)]
 );
 // string -> boolean
 const isCellEmpty = equals(EMPTY_TOKEN);
@@ -151,12 +120,12 @@ const rotatePiece = (dirFuncs) => map(
     )
 );
 // [f] -> state -> state, f is a pair of transformers, first applies to x coord, second to y coord
-const rotate = dirFuncs => over(pieceCoordPath, rotatePiece(dirFuncs));
+const rotate = dirFuncs => over(pieceCoordLens, rotatePiece(dirFuncs));
 
 // (state, coord) -> state
 const fillCell = (state, coord) => converge(
     set(cellLens( coord )),
-    [view(pieceTokenPath), identity],
+    [view(pieceTokenLens), identity],
 )(state);
 
 // state -> state

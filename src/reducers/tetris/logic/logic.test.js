@@ -1,15 +1,15 @@
 import {
 	shiftLeft, shiftRight, rotateClockwise, rotateCounterClockwise, isPieceOverlapping,
-	getCell, isCoordOutOfBounds, isPieceOutOfBounds, posLens, boardLens,
-	pieceLens, shiftDown, writeToBoard, lockPiece, bagLens, dropPiece, isCoordOverlapping, pieceCoordPath,
+	getCell, isCoordOutOfBounds, isPieceOutOfBounds, shiftDown, writeToBoard, lockPiece, dropPiece, isCoordOverlapping,
 } from './logic';
 import {
-	adjust, all, compose, concat, countBy, dec, equals, inc, last, over, isNil, prop, repeat, set, subtract,
+	all, compose, concat, countBy, dec, equals, last, isNil, prop, repeat, set, subtract,
 	update, view, identity, always, ifElse, head, path
 } from 'ramda';
 import { ROW_COUNT, EMPTY_BOARD, EMPTY_TOKEN, FILL_TOKEN, COL_COUNT, START_POS, SHADOW_TOKEN } from './constants/index';
 import * as c from './constants/index';
 import { clearLines } from './lineClearLogic';
+import { bagLens, boardLens, pieceCoordLens, pieceLens, posLens } from './helpers';
 
 const tokensInRow = (token, row) => compose(
     ifElse(
@@ -143,11 +143,11 @@ describe('Tetris logic', () => {
             set(pieceLens, LPiece)
         )(state);
         it('should rotate clockwise', () => {
-            const expected = {coords: [ [ 1,  1], [ 0, -1], [ 0,  0], [ 0,  1] ], token: "L"};
+            const expected = { coords: [ [ 1,  1], [ 0, -1], [ 0,  0], [ 0,  1] ], token: "L"};
             expect(rotateClockwise(s1).piece).toEqual(expected);
         });
         it('should rotate counter clockwise', () => {
-            const expected = {coords: [ [-1, -1], [ 0,  1], [ 0,  0], [ 0, -1] ], token: "L"};
+            const expected = { coords: [ [-1, -1], [ 0,  1], [ 0,  0], [ 0, -1] ], token: "L"};
             expect(rotateCounterClockwise(s1).piece).toEqual(expected);
         });
         it('rotate counter then clockwise should revert to original', () => {
@@ -216,8 +216,8 @@ describe('Tetris logic', () => {
 		        set(posLens, [4, 2]),
 		        set(pieceLens, c.PIECES.O),
 	        )(state);
-            expect(view(pieceCoordPath, rotateClockwise(s))).toEqual(c.PIECES.O);
-            expect(view(pieceCoordPath, rotateCounterClockwise(s))).toEqual(c.PIECES.O);
+            expect(view(pieceCoordLens, rotateClockwise(s))).toEqual(c.PIECES.O);
+            expect(view(pieceCoordLens, rotateCounterClockwise(s))).toEqual(c.PIECES.O);
         });
     });
     describe('Board', () => {

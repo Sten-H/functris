@@ -3,9 +3,10 @@ import {
     addIndex, always, compose, converge, curry, ifElse, lensPath, map, prop, reduce, reverse, set,
     view
 } from 'ramda';
-import { pieceActualPosition, pieceTokenPath } from '../reducers/tetris/logic/logic';
+import { pieceActualPosition } from '../reducers/tetris/logic/logic';
 import { EMPTY_TOKEN } from '../reducers/tetris/logic/constants/index';
 import { equals } from 'ramda';
+import { pieceTokenLens } from '../reducers/tetris/logic/helpers';
 
 /**
  * The drawBoard function is generalized because it is also used in the next piece component
@@ -30,7 +31,7 @@ export const drawBoard = addIndex(map)(drawRow);
 export const getBoardWithPiece = (state) =>
     converge(
         reduce(
-            fillCoord(view(pieceTokenPath, state))),
+            fillCoord(view(pieceTokenLens, state))),
         [
             prop(['board']),
             pieceActualPosition

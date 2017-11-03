@@ -1,8 +1,9 @@
 import {
-    compose, values, lensProp, head, view, tail, set, ifElse, converge, identity, equals, lensPath
+    compose, values, head, view, tail, set, ifElse, converge, identity, equals, lensPath
 } from "ramda";
 import * as constants from './constants';
 import shuffle from 'shuffle-array';
+import { bagLens, pieceLens } from './helpers';
 
 /**
  * Bag logic keeps manages the state of the "bag" of pieces. A bag consists of the seven possible
@@ -10,9 +11,6 @@ import shuffle from 'shuffle-array';
  * When the final piece is taken from the bag it makes a new bag. With this bag approach a piece can
  * at most go without being played for
  */
-
-const pieceLens = lensProp('piece');
-const bagLens = lensProp('bag');
 const bagLengthLens = lensPath(['bag', 'length']);
 
 const shuffleObjValues = compose(
