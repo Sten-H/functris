@@ -18,6 +18,7 @@ export const isShiftValid = complement(
 		board.isPieceOutOfBounds,
 		board.isPieceOverlapping
 	]));
+
 export const isRotationValid = allPass(
 	[
 		isShiftValid,
@@ -33,6 +34,7 @@ export const isTransformValid = (transformFunc, validator) =>
 		validator,
 		transformFunc
 	);
+
 // TRANSFORMERS
 // directions used as transformers for shift function
 const leftDir = over(xLens, dec);
@@ -88,7 +90,6 @@ export const dropPiece =
 			shift(downDir)
 		)
 	);
-
 export const shiftLeft = tryTransform(shift(leftDir), isShiftValid);
 export const shiftRight = tryTransform(shift(rightDir), isShiftValid);
 export const shiftDown = tryTransformElse(lockPiece, shift(downDir), isShiftValid);
