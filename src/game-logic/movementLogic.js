@@ -1,11 +1,11 @@
 import {
 	compose, converge, curry, dec, head, inc, last, map, multiply, over, view, anyPass, ifElse, identity,
-	set, reduce, complement, until
+	set, reduce, complement, until, allPass, not, equals
 } from 'ramda';
-import * as constants from './constants/index';
+import * as c from './constants/index';
 import * as board from './boardLogic';
 import * as bag from "./bagLogic";
-import { normalizeCoord, pieceCoordLens, posLens, xLens, yLens } from './helpers';
+import { normalizeCoord, pieceCoordLens, pieceTokenLens, posLens, xLens, yLens } from './helpers';
 
 /**
  * Movement logic validates and executes valid shifts and rotations of pieces. As of right now it
@@ -18,6 +18,15 @@ export const isShiftValid = complement(
 		board.isPieceOutOfBounds,
 		board.isPieceOverlapping
 	]));
+export const isRotationValid = allPass(
+	[
+		isShiftValid,
+		compose(
+			not,
+			equals(c.PIECES.O.token),
+			view(pieceTokenLens))
+	]
+);
 // (f, [validator]) -> state -> boolean, validates transformed state, returns true if valid
 export const isTransformValid = (transformFunc, validator) =>
 	compose(
@@ -63,7 +72,7 @@ const rotate = dirFuncs => over(pieceCoordLens, rotatePiece(dirFuncs));
 export const lockPiece = compose(
     bag.getNextPiece,
 	board.clearLines,
-    set(posLens, constants.START_POS),
+    set(posLens, c.START_POS),
     board.writeToBoard
 );
 
@@ -83,5 +92,5 @@ export const dropPiece =
 export const shiftLeft = tryTransform(shift(leftDir), isShiftValid);
 export const shiftRight = tryTransform(shift(rightDir), isShiftValid);
 export const shiftDown = tryTransformElse(lockPiece, shift(downDir), isShiftValid);
-export const rotateClockwise = tryTransform(rotate(clockwise), isShiftValid);
-export const rotateCounterClockwise = tryTransform(rotate(counterClockwise), isShiftValid);
+export const rotateClockwise = tryTransform(rotate(clockwise), isRotationValid);
+export const rotateCounterClockwise = tryTransform(rotate(counterClockwise), isRotationValid);

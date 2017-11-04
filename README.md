@@ -2,10 +2,6 @@
 A functional approach to tetris (its game logic atleast) using a lot of ramda
 for fun. Game state is presented purely with html components and css.
 ## BUGS
-* O piece can be rotated, it shouldn't rotate. Can't put the pivot in center
-I wonder if most games don't acually rotate pieces but have an array of orientations and the O piece
-has only one orientation. I think my solution will be to build a validator that includes
-checking that the token is not O, downside is that it will still try the rotation
 ## TODO
 * Piece shadow where it would end up on drop
 * Make the next piece "mini-board" 4x4, and maybe set position to [1,2] and then have it rotate the presened piece

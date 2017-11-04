@@ -183,8 +183,8 @@ describe('Movement logic', () => {
 		        set(posLens, [4, 2]),
 		        set(pieceLens, c.PIECES.O),
 	        )(state);
-            expect(view(pieceCoordLens, rotateClockwise(s))).toEqual(c.PIECES.O);
-            expect(view(pieceCoordLens, rotateCounterClockwise(s))).toEqual(c.PIECES.O);
+            expect(view(pieceCoordLens, rotateClockwise(s))).toEqual(c.PIECES.O.coords);
+            expect(view(pieceCoordLens, rotateCounterClockwise(s))).toEqual(c.PIECES.O.coords);
         });
     });
     describe('Lock piece', () => {
