@@ -1,12 +1,8 @@
 import {
-	__, always, any, anyPass, complement, compose, concat, converge, countBy, curry, dissocPath, equals,
-	filter,
-	flatten, gte,
-	identity, ifElse,
-	isNil, length, lt,
-	map, over, prop, reduce, reject, repeat, set, subtract, view
+	__, always, any, anyPass, complement, compose, concat, converge, countBy, curry, equals, gte,
+	identity, ifElse, isNil, length, lt, over, prop, reduce, reject, repeat, set, subtract, view
 } from 'ramda';
-import { boardLens, cellLens, pieceActualPosition, pieceTokenLens, xLens, yLens } from './helpers';
+import { pieceActualPosition, lens } from './helpers';
 import * as c from './constants';
 
 /**
@@ -33,15 +29,15 @@ const coordValidator = (lens, predicates) =>
 	);
 // coord -> boolean
 const isXOutOfBounds = coordValidator(
-	xLens,
+	lens.coord.x,
 	[
 		lt(__, 0),
 		gte(__, c.COL_COUNT)
 	]);
 // coord -> boolean
-const isBottomYOutOfBounds = coordValidator(yLens, [ gte(__, c.ROW_COUNT) ]);
+const isBottomYOutOfBounds = coordValidator(lens.coord.y, [ gte(__, c.ROW_COUNT) ]);
 // coord -> boolean
-const isTopYOutOfBounds = coordValidator(yLens, [ lt(__, 0) ]);
+const isTopYOutOfBounds = coordValidator(lens.coord.y, [ lt(__, 0) ]);
 
 // coord -> boolean, above board top does not count as out of bounds, can move piece freely at top.
 export const isCoordOutOfBounds = anyPass([isXOutOfBounds, isBottomYOutOfBounds]);
@@ -58,7 +54,7 @@ export const getCell = curry((state, coord) =>
 		always(c.EMPTY_TOKEN),
 		compose(
 			view(__, state),
-			cellLens
+			lens.cell
 		)
 	)(coord)
 );
@@ -80,23 +76,23 @@ export const isRowEmpty = isRowTokenCountEqual(c.COL_COUNT, c.EMPTY_TOKEN);
 // row -> boolean
 export const isRowFull = isRowTokenCountEqual(0, c.EMPTY_TOKEN);
 // state -> state
-export const clearAllRows = over(boardLens, reject(isRowFull));
+export const clearAllRows = over(lens.board, reject(isRowFull));
 // state -> state
 export const addEmptyRows =
-	(state, rowAmount) => over(boardLens, concat(repeat(c.EMPTY_ROW, rowAmount)), state);
+	(state, rowAmount) => over(lens.board, concat(repeat(c.EMPTY_ROW, rowAmount)), state);
 // state -> state
 export const clearLines = compose(
 	converge(
 		addEmptyRows,
-		[identity, compose(subtract(c.ROW_COUNT), length, view(boardLens))]
+		[identity, compose(subtract(c.ROW_COUNT), length, view(lens.board))]
 	),
 	clearAllRows
 );
 
 // (state, coord) -> state, fills with current token symbol
 const fillCell = (state, coord) => converge(
-	set(cellLens( coord )),
-	[view(pieceTokenLens), identity],
+	set(lens.cell( coord )),
+	[view(lens.pieceToken), identity],
 )(state);
 
 // state -> state

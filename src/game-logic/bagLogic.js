@@ -3,7 +3,7 @@ import {
 } from "ramda";
 import * as constants from './constants/index';
 import shuffle from 'shuffle-array';
-import { bagLens, pieceLens } from './helpers';
+import { lens } from './helpers';
 
 /**
  * Bag logic keeps manages the state of the "bag" of pieces. A bag consists of the seven possible
@@ -11,8 +11,6 @@ import { bagLens, pieceLens } from './helpers';
  * When the final piece is taken from the bag it makes a new bag. With this bag approach a piece can
  * at most go without being played for 14(?) pieces (I think?)
  */
-const bagLengthLens = lensPath(['bag', 'length']);
-
 const shuffleObjValues = compose(
     shuffle,
     values
@@ -21,13 +19,13 @@ export const getShuffledBag = () => shuffleObjValues(constants.PIECES);
 
 export const nextPiece = compose(
     head,
-    view(bagLens)
+    view(lens.bag)
 );
 const fromBag = (func) => compose(
     func,
-    view(bagLens)
+    view(lens.bag)
 );
-const bagWillBeEmpty = compose(equals(1), view(bagLengthLens));
+const bagWillBeEmpty = compose(equals(1), view(lens.bagLength));
 
 const bagHead = fromBag(head);
 const bagTail = fromBag(tail);
@@ -42,8 +40,8 @@ const overProperty = (lens, func) => converge(
         [func, identity]
     );
 // state -> state
-const setNextPiece = overProperty(pieceLens, bagHead);
+const setNextPiece = overProperty(lens.piece, bagHead);
 // state -> state
-const setBag = overProperty(bagLens, getBagRest);
+const setBag = overProperty(lens.bag, getBagRest);
 // state -> state
 export const getNextPiece = compose(setBag, setNextPiece);

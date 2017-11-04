@@ -1,11 +1,11 @@
 import {
 	compose, converge, curry, dec, head, inc, last, map, multiply, over, view, anyPass, ifElse, identity,
-	set, reduce, complement, until, allPass, not, equals
+	set, complement, until, allPass, not, equals
 } from 'ramda';
 import * as c from './constants/index';
 import * as board from './boardLogic';
 import * as bag from "./bagLogic";
-import { normalizeCoord, pieceCoordLens, pieceTokenLens, posLens, xLens, yLens } from './helpers';
+import { normalizeCoord, lens } from './helpers';
 
 /**
  * Movement logic validates and executes valid shifts and rotations of pieces. As of right now it
@@ -25,7 +25,7 @@ export const isRotationValid = allPass(
 		compose(
 			not,
 			equals(c.PIECES.O.token),
-			view(pieceTokenLens))
+			view(lens.pieceToken))
 	]
 );
 // (f, [validator]) -> state -> boolean, validates transformed state, returns true if valid
@@ -37,9 +37,9 @@ export const isTransformValid = (transformFunc, validator) =>
 
 // TRANSFORMERS
 // directions used as transformers for shift function
-const leftDir = over(xLens, dec);
-const rightDir = over(xLens, inc);
-const downDir = over(yLens, inc);
+const leftDir = over(lens.coord.x, dec);
+const rightDir = over(lens.coord.x, inc);
+const downDir = over(lens.coord.y, inc);
 // rotation directions used as transformers for rotate functions
 const clockwise = [compose(multiply(-1), last), head];
 const counterClockwise = [last, compose(multiply(-1), head)];
@@ -57,7 +57,7 @@ const tryTransformElse = curry((elseFunc, transformFunc, validator, state) =>
 const tryTransform = tryTransformElse(identity);
 
 // f -> state -> state, f is piece transformer (leftDir/rightDir)
-const shift = over(posLens);
+const shift = over(lens.pos);
 const rotatePiece = (dirFuncs) => map(
     converge(
         compose(
@@ -68,13 +68,13 @@ const rotatePiece = (dirFuncs) => map(
     )
 );
 // [f] -> state -> state, f is a pair of transformers, first applies to x coord, second to y coord
-const rotate = dirFuncs => over(pieceCoordLens, rotatePiece(dirFuncs));
+const rotate = dirFuncs => over(lens.pieceCoord, rotatePiece(dirFuncs));
 
 // state -> state, entry point for writing active piece to board and getting a new piece
 export const lockPiece = compose(
     bag.getNextPiece,
 	board.clearLines,
-    set(posLens, c.START_POS),
+    set(lens.pos, c.START_POS),
     board.writeToBoard
 );
 

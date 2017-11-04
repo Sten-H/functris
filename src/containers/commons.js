@@ -3,9 +3,9 @@ import {
     addIndex, always, compose, converge, curry, ifElse, lensPath, map, prop, reduce, reverse, set,
     view
 } from 'ramda';
-import { EMPTY_TOKEN } from '../game-logic/constants/index';
+import * as c from '../game-logic/constants';
 import { equals } from 'ramda';
-import { pieceActualPosition, pieceTokenLens } from '../game-logic/helpers';
+import { pieceActualPosition, lens } from '../game-logic/helpers';
 
 /**
  * The drawBoard function is generalized because it is also used in the next piece component
@@ -18,7 +18,7 @@ const fillCoord = curry((token, board, coord) => set(cellLens(coord), token, boa
 // (content, i) -> JSXElement
 const drawBlock = (content, idx) =>
     ifElse(
-        equals(EMPTY_TOKEN),
+        equals(c.EMPTY_TOKEN),
         always(<span key={idx} className='empty-cell' />),
         always(<span key={idx} className={`piece-${content}`} />)
 )(content);
@@ -30,7 +30,7 @@ export const drawBoard = addIndex(map)(drawRow);
 export const getBoardWithPiece = (state) =>
     converge(
         reduce(
-            fillCoord(view(pieceTokenLens, state))),
+            fillCoord(view(lens.pieceToken, state))),
         [
             prop(['board']),
             pieceActualPosition

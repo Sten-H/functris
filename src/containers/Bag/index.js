@@ -4,10 +4,10 @@ import { EMPTY_TOKEN } from "../../game-logic/constants/index";
 import { drawBoard, getBoardWithPiece } from "../commons";
 import { connect } from "react-redux";
 import { __, compose, head, isNil, not, set, when } from "ramda";
-import { pieceLens } from '../../game-logic/helpers';
+import { lens } from '../../game-logic/helpers';
+
+// FIXME What's going on here why is it mocked?
 const piece = constants.PIECES.L;
-
-
 const mockBoard = new Array(5).fill(new Array(5).fill(EMPTY_TOKEN));
 const mockState = {board: mockBoard, pos: [2, 2], piece: piece};
 
@@ -16,7 +16,7 @@ const notNil = compose(not, isNil);
 const drawNextPiece = compose(
     drawBoard,
     getBoardWithPiece,
-    set(pieceLens, __, mockState),
+    set(lens.piece, __, mockState),
     head
 );
 // bag -> JSXElement

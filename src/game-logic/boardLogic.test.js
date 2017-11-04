@@ -2,7 +2,7 @@ import {
 	all, compose, concat, dec, equals, last, repeat, set, subtract, update, takeLast, reverse
 } from 'ramda';
 import * as c from './constants';
-import { boardLens, pieceLens, posLens } from './helpers';
+import { lens } from './helpers';
 import * as b from './boardLogic';
 import * as m from './movementLogic';
 
@@ -21,11 +21,11 @@ describe('Board logic', () => {
 			expect(b.isCoordOutOfBounds([10, 7])).toBe(true);
 		});
 		it('should detect piece out of x bounds', () => {
-			const s = set(posLens, [0, 0], state);
+			const s = set(lens.pos, [0, 0], state);
 			expect(b.isPieceOutOfBounds(s)).toBe(true);
 		});
 		it('should detect piece out of lower y bounds', () => {
-			const s = set(posLens, [5, 20], state);
+			const s = set(lens.pos, [5, 20], state);
 			expect(b.isPieceOutOfBounds(s)).toBe(true);
 		});
 	});
@@ -39,7 +39,7 @@ describe('Board logic', () => {
 		});
 		it('should get cells with x y coords', () => {
 			const filledRowBoard = update(dec(c.ROW_COUNT), c.FILLED_ROW, c.EMPTY_BOARD);
-			const s = set(boardLens, filledRowBoard, state);
+			const s = set(lens.board, filledRowBoard, state);
 			const cell1 = b.getCell(s, [5, dec(c.ROW_COUNT)]); // get cell from filled bottom row
 			const cell2 = b.getCell(s, [5, 5]);  // empty
 			expect(cell1).toEqual(c.FILL_TOKEN);
@@ -47,9 +47,9 @@ describe('Board logic', () => {
 		});
 		it('should write piece to board', () => {
 			const s = compose(
-				set(posLens, [1, 19]),
-				set(pieceLens, c.PIECES.I),  // laying down I piece, going 1 block to left 2 to right
-				set(boardLens, c.EMPTY_BOARD)
+				set(lens.pos, [1, 19]),
+				set(lens.piece, c.PIECES.I),  // laying down I piece, going 1 block to left 2 to right
+				set(lens.board, c.EMPTY_BOARD)
 			)(state);
 			const expected = concat(repeat(c.PIECES.I.token, 4), repeat(c.EMPTY_TOKEN, 6));
 			expect(last(b.writeToBoard(s).board)).toEqual(expected);
@@ -64,9 +64,9 @@ describe('Board logic', () => {
 		it('should clear filled line', () => {
 			const board = update(dec(c.ROW_COUNT), c.FILLED_ROW, c.EMPTY_BOARD);
 			const s = compose(
-				set(posLens, [4,0]),
-				set(pieceLens, c.PIECES.I),
-				set(boardLens, board)
+				set(lens.pos, [4,0]),
+				set(lens.piece, c.PIECES.I),
+				set(lens.board, board)
 			)(state);
 			// before clear last row should be filled
 			expect(last(s.board)).not.toContain(c.EMPTY_TOKEN);
@@ -81,7 +81,7 @@ describe('Board logic', () => {
 				reverse,
 				concat(repeat(c.FILLED_ROW, 4))
 			)(c.EMPTY_BOARD);
-			const s = set(boardLens, board, state);
+			const s = set(lens.board, board, state);
 			const stateAfterClear = b.clearLines(s);
 			takeLast(4, stateAfterClear.board).map(row => expect(row).toEqual(c.EMPTY_ROW));
 		});
@@ -92,9 +92,9 @@ describe('Board logic', () => {
 				update(subtract(c.ROW_COUNT, 2), secondLast)
 			)(c.EMPTY_BOARD);
 			const s = compose(
-				set(posLens, [4,0]),
-				set(pieceLens, c.PIECES.I),
-				set(boardLens, board)
+				set(lens.pos, [4,0]),
+				set(lens.piece, c.PIECES.I),
+				set(lens.board, board)
 			)(state);
 			const stateAfterClear = b.clearLines(s);
 			const lastRowAfterClear = last(stateAfterClear.board);
@@ -104,9 +104,9 @@ describe('Board logic', () => {
 		it('should clear lines after piece drop', () => {
 			const board = update(dec(c.ROW_COUNT), concat([c.EMPTY_TOKEN], repeat('X', 9)), c.EMPTY_BOARD);
 			const s = compose(
-				set(posLens, [0,0]),
-				set(pieceLens, { coords: [[0, 0]], token: 'X'}),
-				set(boardLens, board)  // Board final row has one empty cell (leftmost cell)
+				set(lens.pos, [0,0]),
+				set(lens.piece, { coords: [[0, 0]], token: 'X'}),
+				set(lens.board, board)  // Board final row has one empty cell (leftmost cell)
 			)(state);
 			const stateAfterDrop = m.dropPiece(s);
 			expect(last(stateAfterDrop.board)).toEqual(c.EMPTY_ROW);

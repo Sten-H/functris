@@ -5,10 +5,27 @@ import {
 } from 'ramda';
 
 // LENSES
+export const lens = {
+	pos: lensProp('pos'),
+	board: lensProp('board'),
+	piece: lensProp('piece'),
+	pieceCoord: lensPath(['piece', 'coords']),
+	pieceToken: lensPath(['piece', 'token']),
+	bag: lensProp('bag'),
+	bagLength: lensPath(['bag', 'length']),
+	coord: {
+		x: lensIndex(0),
+		y: lensIndex(1)
+	},
+	// cell lens creates the lens as it is supplied with a coord
+	cell: compose(lensPath,
+		concat(['board']),
+		reverse)
+
+};
 export const posLens = lensProp('pos');
 export const boardLens = lensProp('board');
 export const pieceLens = lensProp('piece');
-export const coordLens = lensProp('coords');
 export const pieceCoordLens = lensPath(['piece', 'coords']);
 export const pieceTokenLens = lensPath(['piece', 'token']);
 export const bagLens = lensProp('bag');
