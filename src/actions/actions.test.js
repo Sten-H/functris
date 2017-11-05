@@ -30,4 +30,8 @@ describe('Actions', () => {
 		const expected = 'DECREASE_TICK';
 		expect(prop('type', actions.decreaseTick())).toEqual(expected);
 	});
+	it('should create pause toggle action', () => {
+		const expected = 'TOGGLE_PAUSE';
+		expect(prop('type', actions.togglePause())).toEqual(expected);
+	});
 });

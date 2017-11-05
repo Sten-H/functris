@@ -17,6 +17,7 @@ const ARROW_RIGHT = 'ArrowRight';
 const ARROW_DOWN = 'ArrowDown';
 const ARROW_UP = 'ArrowUp';
 const SPACE = ' ';
+const P = 'p';
 
 const state = {
     tetris: {
@@ -25,7 +26,8 @@ const state = {
         pos: [ 0, 0 ],
         bag: [],
 	    options: {
-        	tick: 50
+        	tick: 50,
+		    paused: false
 	    }
     }
 };
@@ -69,14 +71,23 @@ describe('Tetris container', () => {
         // expect(store.getActions()).toHaveLength(1);
         expect(store.getActions()[0].type).toEqual("DROP_PIECE");
     });
-    it('should dispatch drop events on tick', () => {
-	    const component = mountWithStore(<Tetris />, store);
-	    const actionsAfterInit = tail(store.getActions());  // It always dispatches 1 SHIFT_DOWN on init, disregard
-	    expect(actionsAfterInit).toHaveLength(0);
-	    setTimeout(() => {
-		    const actionsAfterWait = tail(store.getActions());
-		    expect(actionsAfterWait.length).toEqual(2);
-	    }, 105);  // Tickrate in mockstate is 50
-
-    });
+    // FIXME These tests don't work, I may need to use promises or something to wait for the timeout
+	// it('should dispatch drop events over time (on ticks)', () => {
+	//     const component = mountWithStore(<Tetris />, store);
+	//     const actionsAfterInit = tail(store.getActions());  // It always dispatches 1 SHIFT_DOWN on init, disregard
+	//     expect(actionsAfterInit).toHaveLength(0);
+	//     setTimeout(() => {
+	// 	    const actionsAfterWait = tail(store.getActions());
+	// 	    expect(actionsAfterWait.length).toEqual(2);
+	//     }, 105);  // Tickrate in mockstate is 50
+	//
+	// });
+	// it('should not change state during pause', () => {
+	// 	const component = mountWithStore(<Tetris />, store);
+	// 	triggerKeyEvent(KEYUP, undefined, P);
+	// 	setTimeout(() => {
+	// 		const actionsAfterWait = tail(store.getActions());
+	// 		expect(actionsAfterWait.length).toEqual(0);
+	// 	}, 105);  // Tickrate in mockstate is 50
+	// });
 });

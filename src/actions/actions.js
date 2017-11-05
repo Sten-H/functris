@@ -1,7 +1,7 @@
 import { createActions } from 'redux-actions';
 
 export const {shiftLeft, shiftRight, shiftDown, dropPiece,
-	rotateClockwise, rotateCounter, decreaseTick} = createActions({
+	rotateClockwise, rotateCounter, decreaseTick, togglePause} = createActions({
     'SHIFT_LEFT': () =>  ({}),
     'SHIFT_RIGHT': () =>  ({}),
     'SHIFT_DOWN': () => ({}),
@@ -9,4 +9,5 @@ export const {shiftLeft, shiftRight, shiftDown, dropPiece,
     'ROTATE_CLOCKWISE': () => ({}),
     'ROTATE_COUNTER': () => ({}),
 	'DECREASE_TICK': () => ({}),
+	'TOGGLE_PAUSE': () => ({}),
 });

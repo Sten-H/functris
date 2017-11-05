@@ -3,7 +3,7 @@ import * as actions from '../../actions/actions';
 import { handleActions } from "redux-actions";
 import * as logic from "../../game-logic/movementLogic";
 import { getShuffledBag } from "../../game-logic/bagLogic";
-import { __, clamp, compose, over, subtract } from 'ramda';
+import { __, clamp, compose, identity, ifElse, not, over, subtract, view } from 'ramda';
 import { lens } from '../../game-logic/helpers';
 
 const defaultState = {
@@ -11,33 +11,48 @@ const defaultState = {
     piece: constants.PIECES.L,
     pos: [5, 1],
     bag: getShuffledBag(),
+	info: {
+    	gameOver: false,  // When true game should not be unpausable
+		score: 0,
+		lines: 0
+	},
     options: {
 	    tickRate: 1000,
         paused: false,
         shadow: true
     }
 };
+const isPaused = view(lens.options.paused);
+// FIXME I think this function should be in some root 'tetris api' file that doesn't exist
+const executeTranform = (transformFunc) => ifElse(
+	isPaused,
+	identity,
+	transformFunc
+);
 const reducer = handleActions({
     // I could combine all shifts (atleast horizontal) by having the action send the direction as an argument
     // So it would be logic.shift(leftDir, state)
     [actions.shiftLeft](state) {
-        return logic.shiftLeft(state)
+        return executeTranform(logic.shiftLeft)(state)
     },
     [actions.shiftRight](state) {
-        return logic.shiftRight(state)
+        return executeTranform(logic.shiftRight)(state)
     },
     [actions.shiftDown](state) {
-        return logic.shiftDown(state)
+        return executeTranform(logic.shiftDown)(state)
     },
     [actions.dropPiece](state) {
-        return logic.dropPiece(state);
+        return executeTranform(logic.dropPiece)(state);
     },
     [actions.rotateClockwise](state) {
-        return logic.rotateClockwise(state)
+        return executeTranform(logic.rotateClockwise)(state)
     },
     [actions.rotateCounter](state) {
-        return logic.rotateCounterClockwise(state)
+        return executeTranform(logic.rotateCounterClockwise)(state)
     },
+	[actions.togglePause](state) {
+		return over(lens.options.paused, not, state);
+	},
 	[actions.decreaseTick](state) {
     	const DECREASE_RATE = 100;  // FIXME temporary variable
 		return over(

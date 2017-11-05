@@ -8,7 +8,6 @@ for fun. Game state is presented purely with html components and css.
 * Definitely need to refactor all the extremely explicit state creation in test so they all
 call some function that creates the test. Changing the lenses now and this would take 1 second
 if they all just called a function
-* Pause function (Need to implement 'gravity' first, so pause turns that off and locks controls)
 * Refactor css, a lot of styling is housed in root index.scss file right now because it is used by many files.
 I don't think this is according to react way, I think I should refactor it out to a partial and have the components
 explicitly importing that partial and applying it as needed.
