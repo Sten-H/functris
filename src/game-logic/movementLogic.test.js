@@ -10,7 +10,7 @@ import {
 	FILLED_ROW
 } from './constants/index';
 import * as c from './constants/index';
-import { getTestState, lens } from './helpers';
+import { getTestState, lens, tokensInRow } from './helpers';
 import * as b from './boardLogic';
 
 describe('Movement logic', () => {
@@ -64,7 +64,7 @@ describe('Movement logic', () => {
                 // expect bottom row to contain filled cells after drop
 	            const lastRowAfterDrop = path(['board', dec(ROW_COUNT)], dropPiece(s));
                 expect(lastRowAfterDrop).toContain(c.PIECES.I.token);
-	            const filledCellCount = b.tokensInRow(c.PIECES.I.token, lastRowAfterDrop);
+	            const filledCellCount = tokensInRow(c.PIECES.I.token, lastRowAfterDrop);
 	            const expected = 4; // length of c.PIECES.I lying down
 	            expect(filledCellCount).toEqual(expected);
             });
@@ -75,7 +75,7 @@ describe('Movement logic', () => {
                 const stateAfterDrop = dropPiece(s);
                 // Expect second to last row to now contain filled cell
                 const secondLastRow = path(['board', subtract(ROW_COUNT, 2)], stateAfterDrop);
-                const filledCellCount = b.tokensInRow(c.PIECES.I.token, secondLastRow);
+                const filledCellCount = tokensInRow(c.PIECES.I.token, secondLastRow);
                 const expected = 4; // length of c.PIECES.I lying down
                 expect(filledCellCount).toEqual(expected);
             });

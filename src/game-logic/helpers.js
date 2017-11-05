@@ -1,10 +1,7 @@
 import * as c from './constants';
 import {
-	add, clamp, compose, concat, converge, dec, equals, lensIndex, lensPath, lensProp, map, over, repeat, reverse, set,
-	take,
-	takeLast, update,
-	view,
-	when, zipWith
+	add, always, clamp, compose, concat, converge, countBy, curry, dec, equals, identity, ifElse, isNil, lensIndex,
+	lensPath, lensProp, map, over, prop, reverse, set, takeLast, view, when, zipWith
 } from 'ramda';
 // TEST HELPERS
 const defaultState = {
@@ -30,7 +27,7 @@ const defaultInfo = { gameOver: false, lines: 0, score: 0 };
 const fillBoardBottomUp = compose(
 	takeLast(c.ROW_COUNT),
 	concat(c.EMPTY_BOARD)
-)
+);
 /**
  * Get new state, all unassigned values in argument map will have default values.
  * Board value is special. You can send an incomplete board of 4 rows and it will add
@@ -103,3 +100,9 @@ export const pieceActualPosition = converge(
 	map,
 	[compose(addCoords, view(lens.pos)), view(lens.pieceCoord)]
 );
+// string -> row -> number
+export const tokensInRow = curry((token, row) => compose(
+	ifElse(isNil, always(0), identity),
+	prop('true'),
+	countBy(equals(token)),
+)(row));

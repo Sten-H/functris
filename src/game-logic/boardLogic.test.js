@@ -81,12 +81,22 @@ describe('Board logic', () => {
 			expect(last(stateAfterDrop.board)).toEqual(c.EMPTY_ROW);
 		});
 	});
-	describe('Recognize game over state', () => {
-		it('Should recognize filled token in illegal rows', () => {
+	describe('Game over (top out)', () => {
+		it('should recognize filled token in illegal rows', () => {
 			const illegalRow = concat(repeat(c.FILL_TOKEN, 2), repeat(c.EMPTY_TOKEN, 8));
 			const board = concat([illegalRow], repeat(c.EMPTY_ROW, 21));
 			const s = getTestState({board});
-			expect(true).toBe(false);
+			expect(b.isTopOut(s)).toBe(true);
+		});
+		it('should recognize filled token not in illegal rows', () => {
+			const illegalRow = concat(repeat(c.FILL_TOKEN, 2), repeat(c.EMPTY_TOKEN, 8));
+			const s = getTestState({board: [illegalRow]});
+			expect(b.isTopOut(s)).toBe(false);
+		});
+		it('should not consider active piece in illegal rows', () => {
+			const illegalRow = concat(repeat(c.FILL_TOKEN, 2), repeat(c.EMPTY_TOKEN, 8));
+			const s = getTestState({board: [illegalRow], pos: [5,0], piece: c.PIECES.O});
+			expect(b.isTopOut(s)).toBe(false);
 		});
 	});
 });

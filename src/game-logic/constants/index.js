@@ -8,6 +8,7 @@ export const COL_COUNT = 10;
  */
 export const ROW_COUNT = 25;
 export const LEGAL_ROWS = 20;
+export const ILLEGAL_ROWS = subtract(ROW_COUNT, LEGAL_ROWS);
 export const START_POS = [4, subtract(ROW_COUNT, dec(LEGAL_ROWS))];
 export const MAX_CLEAR = 4;
 export const INITIAL_TICK_RATE = 1000;

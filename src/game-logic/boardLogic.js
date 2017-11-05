@@ -1,6 +1,6 @@
 import {
-	__, always, any, anyPass, complement, compose, concat, converge, countBy, curry, equals, gte,
-	identity, ifElse, isNil, length, lt, over, prop, reduce, reject, repeat, set, subtract, takeLast, view
+	__, always, any, anyPass, complement, compose, concat, converge, countBy, curry, equals, filter, gte,
+	identity, ifElse, isNil, length, lt, over, prop, reduce, reject, repeat, set, subtract, take, takeLast, view
 } from 'ramda';
 import { pieceActualPosition, lens } from './helpers';
 import * as c from './constants';
@@ -9,12 +9,6 @@ import * as c from './constants';
  * Board logic contains validators if a piece or coord is out of board bounds, it also has transformers
  * for board state to write a piece to board or to clear lines.
  */
-// string -> row -> number
-export const tokensInRow = curry((token, row) => compose(
-	ifElse(isNil, always(0), identity),
-	prop('true'),
-	countBy(equals(token)),
-)(row));
 // VALIDATORS
 // string -> boolean
 const isCellEmpty = equals(c.EMPTY_TOKEN);
@@ -28,12 +22,7 @@ const coordValidator = (lens, predicates) =>
 		view(lens)
 	);
 // coord -> boolean
-const isXOutOfBounds = coordValidator(
-	lens.coord.x,
-	[
-		lt(__, 0),
-		gte(__, c.COL_COUNT)
-	]);
+const isXOutOfBounds = coordValidator(lens.coord.x, [ lt(__, 0), gte(__, c.COL_COUNT) ]);
 // coord -> boolean
 const isBottomYOutOfBounds = coordValidator(lens.coord.y, [ gte(__, c.ROW_COUNT) ]);
 // coord -> boolean
@@ -70,11 +59,19 @@ export const isPieceOverlapping =
 		any,
 		[isCoordOverlapping, pieceActualPosition]
 	);
-const isRowTokenCountEqual = curry((n, token, row) => equals(n, tokensInRow(token, row)));
+const rowContainsNOfToken = (n, token) => compose(equals(n), length, filter(equals(token)));
 // row -> boolean
-export const isRowEmpty = isRowTokenCountEqual(c.COL_COUNT, c.EMPTY_TOKEN);
+export const isRowEmpty = rowContainsNOfToken(c.COL_COUNT, c.EMPTY_TOKEN);
 // row -> boolean
-export const isRowFull = isRowTokenCountEqual(0, c.EMPTY_TOKEN);
+const isNotRowEmpty = complement(isRowEmpty); // note not same as full, just filled somewhat
+// row -> boolean
+export const isRowFull = rowContainsNOfToken(0, c.EMPTY_TOKEN);
+// export const rowContainsFillTokens =
+export const isTopOut = compose(
+	any(isNotRowEmpty),
+	take(c.ILLEGAL_ROWS),
+	view(lens.board)
+);
 // state -> state
 export const clearAllRows = over(lens.board, reject(isRowFull));
 // state -> state
