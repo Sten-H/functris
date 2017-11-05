@@ -2,6 +2,7 @@ import { repeat } from "ramda";
 
 export const COL_COUNT = 10;
 export const ROW_COUNT = 20;
+export const MAX_CLEAR = 4;
 export const EMPTY_TOKEN = "E";
 export const FILL_TOKEN = "X";
 export const SHADOW_TOKEN = "S";  // Unused as of now, for piece shadow

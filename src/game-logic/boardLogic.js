@@ -1,6 +1,6 @@
 import {
 	__, always, any, anyPass, complement, compose, concat, converge, countBy, curry, equals, gte,
-	identity, ifElse, isNil, length, lt, over, prop, reduce, reject, repeat, set, subtract, view
+	identity, ifElse, isNil, length, lt, over, prop, reduce, reject, repeat, set, subtract, takeLast, view
 } from 'ramda';
 import { pieceActualPosition, lens } from './helpers';
 import * as c from './constants';
@@ -78,17 +78,15 @@ export const isRowFull = isRowTokenCountEqual(0, c.EMPTY_TOKEN);
 // state -> state
 export const clearAllRows = over(lens.board, reject(isRowFull));
 // state -> state
-export const addEmptyRows =
-	(state, rowAmount) => over(lens.board, concat(repeat(c.EMPTY_ROW, rowAmount)), state);
+export const addEmptyRows = compose(
+	over(lens.board, takeLast(c.ROW_COUNT)),  // actual board
+	over(lens.board, concat(repeat(c.EMPTY_ROW, c.MAX_CLEAR)))  // 4 empty to top (max cleared)
+);
 // state -> state
 export const clearLines = compose(
-	converge(
-		addEmptyRows,
-		[identity, compose(subtract(c.ROW_COUNT), length, view(lens.board))]
-	),
+	addEmptyRows,
 	clearAllRows
 );
-
 // (state, coord) -> state, fills with current token symbol
 const fillCell = (state, coord) => converge(
 	set(lens.cell( coord )),
