@@ -1,9 +1,55 @@
 import * as c from './constants';
 import {
-	add, clamp, compose, concat, converge, dec, equals, lensIndex, lensPath, lensProp, map, over, reverse, view,
+	add, clamp, compose, concat, converge, dec, equals, lensIndex, lensPath, lensProp, map, over, repeat, reverse, set,
+	take,
+	takeLast, update,
+	view,
 	when, zipWith
 } from 'ramda';
-
+// TEST HELPERS
+const defaultState = {
+	board: [],
+	piece: [],
+	pos: [],
+	bag: [],
+	info: {
+		gameOver: false,  // When true game should not be unpausable
+		score: 0,
+		lines: 0
+	},
+	options: {
+		tickRate: -1,
+		paused: false,
+		shadow: true
+	}
+};
+const defaultBag = [ c.PIECES.L, c.PIECES.I, c.PIECES.O, c.PIECES.J,
+	c.PIECES.Z, c.PIECES.L, c.PIECES.T, c.PIECES.S ];
+const defaultOptions = { paused:false, shadow: true, tickRate: c.INITIAL_TICK_RATE };
+const defaultInfo = { gameOver: false, lines: 0, score: 0 };
+const fillBoardBottomUp = compose(
+	takeLast(c.ROW_COUNT),
+	concat(c.EMPTY_BOARD)
+)
+/**
+ * Get new state, all unassigned values in argument map will have default values.
+ * Board value is special. You can send an incomplete board of 4 rows and it will add
+ * rows to bottom and fill top with empty rows.
+ * @returns {Function}
+ */
+export const getTestState = ({board=c.EMPTY_BOARD, piece=c.PIECES.I, pos=c.START_POS,
+	bag=defaultBag, options=defaultOptions, info= defaultInfo} = {}) => {
+	const s = compose(
+		set(lens.board, fillBoardBottomUp(board)),
+		set(lens.pos, pos),
+		set(lens.piece, piece),
+		set(lens.bag, bag),
+		set(lens.info.all, info),
+		set(lens.options.all, options)
+	)(defaultState);
+	return s;
+};
+// GENERAL HELPERS
 // LENSES
 export const lens = {
 	pos: lensProp('pos'),
@@ -17,6 +63,13 @@ export const lens = {
 		x: lensIndex(0),
 		y: lensIndex(1)
 	},
+	info: {
+		gameOver: lensPath(['info', 'gameOver']),
+		score: lensPath(['info', 'score']),
+		lines: lensPath(['info', 'lines']),
+		all: lensProp('info')
+
+	},
 	options: {
 		tick: lensPath(['options', 'tickRate']),
 		paused: lensPath(['options', 'paused']),
@@ -29,7 +82,7 @@ export const lens = {
 		reverse)
 };
 
-// GENERAL HELPER FUNCTIONS
+// FUNCTIONS
 // n -> n, transforms -0 to 0
 export const normalizeZero = when(equals(-0), Math.abs);
 
