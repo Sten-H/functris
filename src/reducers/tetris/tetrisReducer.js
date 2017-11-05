@@ -5,11 +5,12 @@ import * as logic from "../../game-logic/movementLogic";
 import { getShuffledBag } from "../../game-logic/bagLogic";
 import { __, clamp, compose, identity, ifElse, not, over, subtract, view } from 'ramda';
 import { lens } from '../../game-logic/helpers';
+import * as c from '../../game-logic/constants';
 
 const defaultState = {
     board: constants.EMPTY_BOARD,
     piece: constants.PIECES.L,
-    pos: [5, 1],
+    pos: c.START_POS,
     bag: getShuffledBag(),
 	info: {
     	gameOver: false,  // When true game should not be unpausable
@@ -17,7 +18,7 @@ const defaultState = {
 		lines: 0
 	},
     options: {
-	    tickRate: 1000,
+	    tickRate: c.INITIAL_TICK_RATE,
         paused: false,
         shadow: true
     }
