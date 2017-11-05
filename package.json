@@ -4,7 +4,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@types/react-bootstrap": "^0.31.6",
     "@types/redux-mock-store": "0.0.12",
     "bootstrap": "^3.3.7",
     "gh-pages": "^1.0.0",
@@ -16,6 +15,8 @@
     "react-key-handler": "^1.0.1",
     "react-redux": "^5.0.6",
     "react-scripts": "1.0.14",
+    "react-transition-group": "^2.2.1",
+    "reactstrap": "^4.8.0",
     "redux": "^3.7.2",
     "redux-actions": "^2.2.1",
     "redux-thunk": "^2.2.0",

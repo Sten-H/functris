@@ -1,7 +1,8 @@
 import * as React from 'react';
 import Bag from '../../containers/Bag/index';
-import { Col, Row } from "react-bootstrap";
-import { HighScore } from "../HighScore/index";
+import { Col, Row } from 'react-bootstrap';
+import { HighScore } from '../HighScore/index';
+import { PauseModal } from '../PauseModal';
 import Tetris from '../../containers/Tetris/index';
 import './App.css';
 
@@ -24,6 +25,7 @@ export const App = () => {
 				</Col>
 			</InfoBoxOuter>
 			<Col xs={12} sm={4}>
+				<PauseModal />
 				<Tetris />
 			</Col>
 			<InfoBoxOuter>
