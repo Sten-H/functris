@@ -17,26 +17,17 @@ export const lens = {
 		x: lensIndex(0),
 		y: lensIndex(1)
 	},
+	options: {
+		tick: lensPath(['options', 'tickRate']),
+		paused: lensPath(['options', 'paused']),
+		shadow: lensPath(['options', 'shadow']),
+		all: lensProp(['options'])
+	},
 	// cell lens creates the lens as it is supplied with a coord
 	cell: compose(lensPath,
 		concat(['board']),
 		reverse)
-
 };
-export const posLens = lensProp('pos');
-export const boardLens = lensProp('board');
-export const pieceLens = lensProp('piece');
-export const pieceCoordLens = lensPath(['piece', 'coords']);
-export const pieceTokenLens = lensPath(['piece', 'token']);
-export const bagLens = lensProp('bag');
-
-// cell lens from state (ex: ['board', [0, 1]). coord is reversed because board is [y, x] oriented
-export const cellLens = compose(lensPath,
-	concat(['board']),
-	reverse);
-// Coord lenses
-export const xLens = lensIndex(0);
-export const yLens = lensIndex(1);
 
 // GENERAL HELPER FUNCTIONS
 // n -> n, transforms -0 to 0
@@ -47,8 +38,8 @@ export const normalizeCoord = map(normalizeZero);
 
 // c -> c
 export const clampCoord = compose(
-	over(yLens, clamp(0, dec(c.ROW_COUNT))),
-	over(xLens, clamp(0, dec(c.COL_COUNT))),
+	over(lens.coord.y, clamp(0, dec(c.ROW_COUNT))),
+	over(lens.coord.x, clamp(0, dec(c.COL_COUNT))),
 );
 
 // c -> c -> c
@@ -57,5 +48,5 @@ export const addCoords = zipWith(add);
 // state -> piece, adds position value to each piece coord to get true position
 export const pieceActualPosition = converge(
 	map,
-	[compose(addCoords, view(posLens)), view(pieceCoordLens)]
+	[compose(addCoords, view(lens.pos)), view(lens.pieceCoord)]
 );

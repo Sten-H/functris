@@ -5,6 +5,7 @@ import { KEYUP } from 'react-key-handler';
 import Tetris from './';
 import * as constants from '../../game-logic/constants';
 import { mountWithStore } from "../../testHelpers";
+import { tail } from 'ramda';
 
 
 function triggerKeyEvent(eventName, keyCode, keyValue = undefined) {
@@ -22,7 +23,10 @@ const state = {
         board: constants.EMPTY_BOARD,
         piece: constants.PIECES.L,
         pos: [ 0, 0 ],
-        bag: []
+        bag: [],
+	    options: {
+        	tick: 50
+	    }
     }
 };
 describe('Tetris container', () => {
@@ -64,5 +68,15 @@ describe('Tetris container', () => {
         triggerKeyEvent(KEYUP, undefined, SPACE);
         // expect(store.getActions()).toHaveLength(1);
         expect(store.getActions()[0].type).toEqual("DROP_PIECE");
+    });
+    it('should dispatch drop events on tick', () => {
+	    const component = mountWithStore(<Tetris />, store);
+	    const actionsAfterInit = tail(store.getActions());  // It always dispatches 1 SHIFT_DOWN on init, disregard
+	    expect(actionsAfterInit).toHaveLength(0);
+	    setTimeout(() => {
+		    const actionsAfterWait = tail(store.getActions());
+		    expect(actionsAfterWait.length).toEqual(2);
+	    }, 105);  // Tickrate in mockstate is 50
+
     });
 });
