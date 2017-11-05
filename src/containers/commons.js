@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {
-    addIndex, always, compose, converge, curry, ifElse, lensPath, map, prop, reduce, reverse, set,
-    view
+	addIndex, always, compose, converge, curry, ifElse, lensPath, map, prop, reduce, reverse, set, takeLast,
+	view
 } from 'ramda';
 import * as c from '../game-logic/constants';
 import { equals } from 'ramda';
@@ -25,7 +25,10 @@ const drawBlock = (content, idx) =>
 // (r, i) -> JSXElement
 const drawRow = (row, i) => <div key={i} className='tetris-row' >{addIndex(map)(drawBlock, row)}</div>;
 // board -> [JSXElement]
-export const drawBoard = addIndex(map)(drawRow);
+export const drawBoard = compose(
+    addIndex(map)(drawRow),
+    takeLast(c.LEGAL_ROWS)
+);
 // state -> board
 export const getBoardWithPiece = (state) =>
     converge(
