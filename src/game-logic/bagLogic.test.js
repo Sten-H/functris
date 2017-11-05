@@ -1,14 +1,8 @@
 import { getShuffledBag, getNextPiece, nextPiece } from "./bagLogic";
-import { compose, lensProp, set, takeLast, values } from "ramda";
+import { takeLast } from "ramda";
 import * as c from './constants';
-import { lens } from './helpers';
+import { getTestState, lens } from './helpers';
 
-const state = {
-        board: c.EMPTY_BOARD,
-        pos: [5, 5],
-        piece: c.PIECES.I,
-        bag: [ c.PIECES.L ]
-};
 describe('Seven Bag logic', () => {
     it('should return list of seven pieces (in random order)', () => {
         const bag = getShuffledBag();
@@ -16,18 +10,12 @@ describe('Seven Bag logic', () => {
         expect(takeLast(bag).length).toBeGreaterThanOrEqual(1);
     });
     it('should get piece from bag and set to active piece', () => {
-        const s = compose(
-            set(lens.bag, [ c.PIECES.L ]),
-            set(lens.piece, [ c.PIECES.J ])
-        )(state);
+        const s = getTestState({bag: [ c.PIECES.L ], piece: c.PIECES.J});
         const expected = c.PIECES.L;
         expect(getNextPiece(s).piece).toEqual(expected);
     });
     it('should replenish bag if bag is empty after get', () => {
-        const s = compose(
-            set(lens.bag, [ c.PIECES.L ]),
-            set(lens.piece, [ c.PIECES.J ])
-        )(state);
+	    const s = getTestState({bag: [ c.PIECES.L ], piece: c.PIECES.J});
         expect(getNextPiece(s).bag).toHaveLength(7);
     });
 });
