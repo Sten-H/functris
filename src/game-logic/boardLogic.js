@@ -1,6 +1,6 @@
 import {
-	__, always, any, anyPass, complement, compose, concat, converge, countBy, curry, equals, gte,
-	identity, ifElse, isNil, lt, over, prop, reduce, reject, repeat, set, takeLast, view
+	__, always, any, anyPass, complement, compose, concat, converge, curry, equals, filter, gte,
+	identity, ifElse, length, lt, over, reduce, reject, repeat, set, take, takeLast, view
 } from 'ramda';
 import { pieceActualPosition, lens } from './helpers';
 import * as c from './constants';

@@ -38,7 +38,7 @@ describe('Tetris container', () => {
     });
     it('Should render board state', () => {
         const component = mountWithStore(<Tetris isTest={true}/>, store);
-        expect(component.find('.tetris-row')).toHaveLength(c.ROW_COUNT);
+        expect(component.find('.tetris-row')).toHaveLength(c.LEGAL_ROWS);
         expect(component.find('.tetris-row').last().find('.empty-cell')).toHaveLength(c.COL_COUNT);
     });
     describe('Dispatch on events', () => {
