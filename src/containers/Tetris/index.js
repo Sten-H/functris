@@ -3,10 +3,10 @@ import { connect } from 'react-redux';
 import * as actions from "../../actions/actions";
 import KeyHandler from 'react-key-handler';
 import { drawBoard, getBoardWithPiece } from "../commons";
-
-import './Tetris.css';
 import { view } from 'ramda';
 import { lens } from '../../game-logic/helpers';
+
+import './Tetris.css';
 
 class Tetris extends React.Component {
 	tick() {
@@ -14,7 +14,9 @@ class Tetris extends React.Component {
 		setTimeout(this.tick.bind(this), view(lens.options.tick, this.props.gameState));
 	}
 	componentDidMount() {
-		this.tick();
+		if(!this.props.isTest) {
+			this.tick();  // Don't run tick in tests
+		}
     }
     render() {
         return (

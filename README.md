@@ -15,6 +15,7 @@ explicitly importing that partial and applying it as needed.
 * Score tally
 * Line clear tally
 ### Not so high prio, but interesting
+* Information about keybindings to the left of game probably
 * Holding down buttons to move repeatedly. Then more advanced and enjoyable with 
 Delayed auto shift http://tetris.wikia.com/wiki/DAS
 * On clearing rows, have a slight pause and flashing of row to be cleared. Not exactly sure how to do this one.
