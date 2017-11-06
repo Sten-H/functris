@@ -2,6 +2,10 @@
 A functional approach to tetris (its game logic atleast) using a lot of ramda
 for fun. Game state is presented purely with html components and css.
 ## BUGS
+* Not really a bug but it seems that I'm using bootstrap 3. I'm not sure if this is react-bootstrap
+that's made that decision or if can just ask it to use bootstrap 4 instead. Otherwise switch to
+reacstrap which uses bootstrap 4, though there will be some issues to fix (there are some bugs with
+modals in latest version, which are fixable)
 ## TODO
 ### High prio
 * Detect game over (top out) http://tetris.wikia.com/wiki/Top_out
@@ -29,8 +33,13 @@ with proper position and rotation individually somewhere
 intersect on Y and slide it to side if it intersects on X (wall kicks they call it). 
 Older variants don't do this, they just reject rotation. Maybe disregard until much
  later, should be easy enough to modify.
-## Words
+## Reminders
+### Words
 I've been using some words in the code and comments which I think I've kind of made up myself, so this is for me when I come back to this
 in a month.
 * Lock piece, piece position is final and is waiting to be written to board.
 * Dirty row, a row that neither full nor empty, is has non-empty tokens in it.
+### Other
+* The board is structured in a way that it has 5 invisible top rows that are called illegal rows,
+these are legal to have an active piece in (for example spawn a piece in or rotatate/moe when you
+are very close to top out). However if a piece is written/locked in an illegal row, the game is over.

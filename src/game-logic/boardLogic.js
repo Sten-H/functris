@@ -1,5 +1,5 @@
 import {
-	__, always, any, anyPass, complement, compose, concat, converge, curry, equals, filter, gte,
+	__, always, any, anyPass, complement, compose, concat, converge, curry, either, equals, filter, gte,
 	identity, ifElse, length, lt, over, reduce, reject, repeat, set, take, takeLast, view
 } from 'ramda';
 import { pieceActualPosition, lens } from './helpers';
@@ -21,15 +21,14 @@ const coordValidator = (lens, predicates) =>
 		anyPass(predicates),
 		view(lens)
 	);
-// coord -> boolean
+// coord -> boolean, for all out of bounds validators
 const isXOutOfBounds = coordValidator(lens.coord.x, [ lt(__, 0), gte(__, c.COL_COUNT) ]);
-// coord -> boolean
 const isBottomYOutOfBounds = coordValidator(lens.coord.y, [ gte(__, c.ROW_COUNT) ]);
-// coord -> boolean
 const isTopYOutOfBounds = coordValidator(lens.coord.y, [ lt(__, 0) ]);
+const isYOutOfBounds = either(isBottomYOutOfBounds, isTopYOutOfBounds);
 
 // coord -> boolean, above board top does not count as out of bounds, can move piece freely at top.
-export const isCoordOutOfBounds = anyPass([isXOutOfBounds, isBottomYOutOfBounds]);
+export const isCoordOutOfBounds = anyPass([isXOutOfBounds, isYOutOfBounds]);
 
 // state -> boolean
 export const isPieceOutOfBounds = compose(

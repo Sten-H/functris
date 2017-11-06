@@ -104,8 +104,8 @@ describe('Tetris Movement', () => {
             const expected = view(lens.piece, s);
             expect(rotateClockwise(s).piece).toEqual(expected);
         });
-        it('should rotate piece, even if it it is out of bounds after rotation', () => {
-	        const s = getTestState({pos: [4, 0], piece: c.PIECES.L});
+        it('should rotate piece, even if it it is out of "legal" bounds after rotation', () => {
+	        const s = getTestState({pos: [4, 2], piece: c.PIECES.L});
             expect(rotateClockwise(s).piece.coords).not.toEqual(c.PIECES.L.coords);
         });
         it('should return call value if piece out of lower y bound after rotation', () => {

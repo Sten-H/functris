@@ -1,15 +1,4 @@
-// CELL COLORS
-//$empty-cell-color: #3f3e3e;
-$empty-cell-color: #555755;
-$I-color: #00b7b7;
-$O-color: #F5FF00;
-$T-color: #FF00FC;
-$L-color: #FF8200;
-$J-color: #5100FF;
-$S-color: #00FF2E;
-$Z-color: #FF0000;
-$shadow-color: #363535;
-$border-lighten-value: 10%;  // By how much lighter all piece borders should be
+@import 'partials/color-partial';
 
 html, body {
     height: 100%;
@@ -20,102 +9,20 @@ body {
     margin: 0;
     padding: 0;
     font-family: sans-serif;
-    //background: #440026;
-    background: #661141;
-    color: #CD88AF;
+    background: $purple3;
+    color: $purple1;
     background: linear-gradient(#7b154e, #5d0034); /* Standard syntax */
 }
 hr {
-    border-color: #A5C663;
+    border-color: $green2;
 }
 h1, h2 {
-    color: #D4EE9F;
-    //color: ;
+    color: $green1;
 }
 h3, h4, h5, h6 {
-    color: #A5C663;
+    color: $green2;
 }
 
 .solid-border {
-    border: 0.4em solid  #A5C663;
+    border: 0.4em solid  $green2;
 }
-/* GAME STYLING */ // FIXME move out all game styling to a separate file. Maybe a partial?
-
-@mixin piece-color($main-color) {
-    background-color: $main-color;
-    border-color: lighten($main-color, $border-lighten-value);
-}
-/* Every cell is a block whether empty or filled */
-.cell {
-    width:1em;
-    height:1em;
-    padding: 0;
-    margin: 0;
-    display: inline-block;
-    line-height: 1em;
-}
-/* Empty block styling */
-.empty-cell {
-    @extend .cell;
-    border: 1px solid darken($empty-cell-color, 7%);
-    background-color: $empty-cell-color;
-}
-/* Tetris pieces specific styling */
-.piece {
-    @extend .cell;
-    border: 3px outset;
-    // I use opacity just as an easy way to adjust the brightness of all pieces. Probably a better way
-    opacity: 0.87;
-}
-.piece-I {
-    @extend .piece;
-    @include piece-color($I-color);
-}
-.piece-O {
-    @extend .piece;
-    @include piece-color($O-color);
-}
-.piece-T {
-    @extend .piece;
-    @include piece-color($T-color);
-}
-.piece-L {
-    @extend .piece;
-    @include piece-color($L-color);
-}
-.piece-J {
-    @extend .piece;
-    @include piece-color($J-color);
-}
-.piece-T {
-    @extend .piece;
-    @include piece-color($T-color);
-}
-.piece-S {
-    @extend .piece;
-    @include piece-color($S-color);
-}
-.piece-Z {
-    @extend .piece;
-    @include piece-color($Z-color);
-}
-.shadow {
-    opacity: 0.2;
-    // FIXME would be nice to like make the color a bit brighter than normal piece color, not sure what I mean by brighter, saturated?
-}
-
-.tetris-row {
-     font-size: 1.5em;
-     padding: 0;
-     margin: 0;
-     line-height: 0;
- }
-
-.tetris-game {
-    white-space: pre;
-    display: inline-block;
-    padding: 1em;
-    font-size: 1.5em;
-    background-color: $empty-cell-color;  // This is important so block transparency works
-}
-/* END GAME STYLING */

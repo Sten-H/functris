@@ -1,7 +1,9 @@
+@import '../../partials/color-partial';
+
 .hs-table, .hs-table tr {
-    border: 3px dotted #567714;
-    text-align: left;
+  border: 3px dotted $green3;
+  text-align: left;
 }
 .hs-table th {
-    color: #A5C663;
+  color: $green2;
 }
