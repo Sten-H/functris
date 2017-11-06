@@ -1,11 +1,20 @@
 import * as mv from './movementLogic';
 import * as brd from './boardLogic';
 import * as bag from './bagLogic';
-import { compose, identity, ifElse, not, over, set, view, when } from 'ramda';
+import { compose, either, identity, ifElse, not, or, over, set, tap, view, when } from 'ramda';
 import { lens } from './helpers';
 import * as c from './constants/index';
 // PRIVATE FUNCS
 const isPaused = view(lens.options.paused);
+const isGameOver = view(lens.flags.gameOver);
+const isGameHalted = either(isPaused, isGameOver);
+// state -> state
+const gameOver = compose(
+	// FIXME this func will probably do more later. Such as filling the board with randomly colored blocks
+	// and such. Also not sure how to make UI realize gameover was just flagged and show game over modal or something
+	set(lens.flags.gameOver, true)
+);
+export const isIllegalState = or(brd.isPieceOverlapping, brd.isTopOut);
 // state -> state
 export const lockPiece = compose(
 	set(lens.flags.lockRequested, false),
@@ -17,6 +26,10 @@ export const lockPiece = compose(
 // transform -> state -> state
 const execute = (transformFunc) => compose(
 	when(
+		isIllegalState,
+		gameOver
+	),
+	when(
 		view(lens.flags.lockRequested),
 		lockPiece
 	),
@@ -24,7 +37,7 @@ const execute = (transformFunc) => compose(
 );
 // state -> state
 const tryExecute = (transformFunc) => ifElse(
-	isPaused,
+	isGameHalted,
 	identity,
 	execute(transformFunc)
 );

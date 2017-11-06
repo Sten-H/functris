@@ -23,7 +23,8 @@ const defaultState = {
 const defaultBag = [ c.PIECES.L, c.PIECES.I, c.PIECES.O, c.PIECES.J,
 	c.PIECES.Z, c.PIECES.L, c.PIECES.T, c.PIECES.S ];
 const defaultOptions = { paused:false, shadow: true, tickRate: c.INITIAL_TICK_RATE };
-const defaultInfo = { gameOver: false, lines: 0, score: 0 };
+const defaultInfo = { lines: 0, score: 0 };
+const defaultFlags = { gameOver: false, lockRequested: false };
 const fillBoardBottomUp = compose(
 	takeLast(c.ROW_COUNT),
 	concat(c.EMPTY_BOARD)
@@ -35,14 +36,15 @@ const fillBoardBottomUp = compose(
  * @returns {Function}
  */
 export const getTestState = ({board=c.EMPTY_BOARD, piece=c.PIECES.I, pos=c.START_POS,
-	bag=defaultBag, options=defaultOptions, info= defaultInfo} = {}) => {
+	bag=defaultBag, options=defaultOptions, info= defaultInfo, flags=defaultFlags} = {}) => {
 	const s = compose(
 		set(lens.board, fillBoardBottomUp(board)),
 		set(lens.pos, pos),
 		set(lens.piece, piece),
 		set(lens.bag, bag),
 		set(lens.info.all, info),
-		set(lens.options.all, options)
+		set(lens.options.all, options),
+		set(lens.flags.all, flags)
 	)(defaultState);
 	return s;
 };
@@ -57,14 +59,15 @@ export const lens = {
 	bag: lensProp('bag'),
 	bagLength: lensPath(['bag', 'length']),
 	flags: {
-		lockRequested: lensPath(['flag', 'lockRequested'])
+		lockRequested: lensPath(['flag', 'lockRequested']),
+		gameOver: lensPath(['flag', 'gameOver']),
+		all: lensProp('flag')
 	},
 	coord: {
 		x: lensIndex(0),
 		y: lensIndex(1)
 	},
 	info: {
-		gameOver: lensPath(['info', 'gameOver']),
 		score: lensPath(['info', 'score']),
 		lines: lensPath(['info', 'lines']),
 		all: lensProp('info')

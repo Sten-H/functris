@@ -14,10 +14,11 @@ const defaultState = {
     bag: getShuffledBag(),
 	flags: {
     	lockRequested: false,
-		topOutDetected: false
+		// topOutDetected: false,
+		gameOver: false,  // When true game should not be unpausable
+
 	},
 	info: {
-    	gameOver: false,  // When true game should not be unpausable
 		score: 0,
 		lines: 0
 	},
