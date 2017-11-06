@@ -1,14 +1,14 @@
 import * as React from 'react';
 import Bag from '../../containers/Bag/index';
 import { Col, Row } from 'react-bootstrap';
-import { HighScore } from '../HighScore/index';
 import { PauseModal } from '../PauseModal';
 import Tetris from '../../containers/Tetris/index';
-import './App.css';
-import GameOverModal from '../GameOverModal/index';
+import GameOverModal from '../../containers/GameOverModal/index';
+import { Controls } from '../Controls';
 
+import './App.css';
 // Boxes to the sides of tetris games
-export const InfoBoxOuter = (props) => (
+const InfoBoxOuter = (props) => (
 	<Col className='info-box-wrapper' smOffset={1} sm={3} mdOffset={0} md={4} xsHidden>
 		{props.children}
 	</Col>
@@ -21,11 +21,8 @@ export const App = () => {
 				<hr />
 			</Col>
 			<InfoBoxOuter >
-				<Col className='solid-border' sm={12} mdOffset={6} md={6} lgOffset={6} lg={6}>
-					<span className="key key-space"></span>
-					<p>hello</p>
-					<p>hello</p>
-					<p>hello</p>
+				<Col sm={12} mdOffset={6} md={6} lgOffset={6} lg={6}>
+					<Controls />
 				</Col>
 			</InfoBoxOuter>
 			<Col xs={12} sm={4}>

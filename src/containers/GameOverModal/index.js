@@ -2,7 +2,7 @@ import React from 'react';
 import { Modal } from 'react-bootstrap';
 // import KeyHandler, { KEYUP } from 'react-key-handler';
 // import { triggerKeyEvent } from '../../helpers';
-import { HighScore } from '../HighScore/index';
+import { HighScore } from '../../components/HighScore/index';
 
 // const triggerPauseKeyPress = () => triggerKeyEvent(KEYUP, undefined, 'p');
 export class GameOverModal extends React.Component {
