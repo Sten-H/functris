@@ -8,7 +8,7 @@ import * as bag from "./bagLogic";
 import { normalizeCoord, lens } from './helpers';
 
 /**
- * Movement logic validates and executes valid shifts and rotations of pieces. As of right now it
+ * Movement tetris validates and executes valid shifts and rotations of pieces. As of right now it
  * also "locks" pieces meaning that it decides when to call writeToBoard which write piece to board
  * state, and it asks for next piece from bag. Not sure whose responsibility that should be.
  */
@@ -71,16 +71,10 @@ const rotatePiece = (dirFuncs) => map(
 const rotate = dirFuncs => over(lens.pieceCoord, rotatePiece(dirFuncs));
 
 // state -> state, entry point for writing active piece to board and getting a new piece
-export const lockPiece = compose(
-    bag.getNextPiece,
-	board.clearLines,
-    set(lens.pos, c.START_POS),
-    board.writeToBoard
-);
-
+export const lockPiece = set(lens.flags.lockRequested, true);
 // state -> boolean
 const isDownShiftInvalid = complement(isTransformValid(shift(downDir), isShiftValid));
-// PUBLIC FUNCS
+export const setToStartPos = set(lens.pos, c.START_POS);
 // state -> state
 export const dropPiece =
 	compose(

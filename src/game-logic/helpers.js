@@ -56,6 +56,9 @@ export const lens = {
 	pieceToken: lensPath(['piece', 'token']),
 	bag: lensProp('bag'),
 	bagLength: lensPath(['bag', 'length']),
+	flags: {
+		lockRequested: lensPath(['flag', 'lockRequested'])
+	},
 	coord: {
 		x: lensIndex(0),
 		y: lensIndex(1)

@@ -6,7 +6,7 @@ import { getTestState, lens } from './helpers';
 import * as b from './boardLogic';
 import * as m from './movementLogic';
 
-describe('Board logic', () => {
+describe('Board tetris', () => {
 	describe('Out of bounds', () => {
 		it('should detect x out of bounds', () => {
 			expect(b.isCoordOutOfBounds([-1, 10])).toBe(true);
@@ -72,13 +72,6 @@ describe('Board logic', () => {
 			const lastRowAfterClear = last(stateAfterClear.board);
 			expect(stateAfterClear.board.length).toEqual(c.ROW_COUNT);
 			expect(lastRowAfterClear).toEqual(secondLastRow);
-		});
-		it('should clear lines after piece drop', () => {
-			const lastRow = [concat([c.EMPTY_TOKEN], repeat('X', 9))];
-			const s = getTestState({ board: lastRow, pos: [0,0],
-				piece: { coords: [ [ 0, 0 ] ], token: c.FILL_TOKEN } });
-			const stateAfterDrop = m.dropPiece(s);
-			expect(last(stateAfterDrop.board)).toEqual(c.EMPTY_ROW);
 		});
 	});
 	describe('Game over (top out)', () => {

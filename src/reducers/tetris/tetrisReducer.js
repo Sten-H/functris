@@ -1,7 +1,7 @@
 import * as constants from '../../game-logic/constants';
 import * as actions from '../../actions/actions';
 import { handleActions } from "redux-actions";
-import * as logic from "../../game-logic/movementLogic";
+import tetris from "../../game-logic/main";
 import { getShuffledBag } from "../../game-logic/bagLogic";
 import { __, clamp, compose, identity, ifElse, not, over, subtract, view } from 'ramda';
 import { lens } from '../../game-logic/helpers';
@@ -12,6 +12,10 @@ const defaultState = {
     piece: constants.PIECES.L,
     pos: c.START_POS,
     bag: getShuffledBag(),
+	flags: {
+    	lockRequested: false,
+		topOutDetected: false
+	},
 	info: {
     	gameOver: false,  // When true game should not be unpausable
 		score: 0,
@@ -23,36 +27,29 @@ const defaultState = {
         shadow: true
     }
 };
-const isPaused = view(lens.options.paused);
-// FIXME I think this function should be in some root 'tetris api' file that doesn't exist
-const executeTranform = (transformFunc) => ifElse(
-	isPaused,
-	identity,
-	transformFunc
-);
 const reducer = handleActions({
     // I could combine all shifts (atleast horizontal) by having the action send the direction as an argument
-    // So it would be logic.shift(leftDir, state)
+    // So it would be tetris.shift(leftDir, state)
     [actions.shiftLeft](state) {
-        return executeTranform(logic.shiftLeft)(state)
+        return tetris.shiftLeft(state)
     },
     [actions.shiftRight](state) {
-        return executeTranform(logic.shiftRight)(state)
+        return tetris.shiftRight(state)
     },
     [actions.shiftDown](state) {
-        return executeTranform(logic.shiftDown)(state)
+        return tetris.shiftDown(state)
     },
     [actions.dropPiece](state) {
-        return executeTranform(logic.dropPiece)(state);
+        return tetris.dropPiece(state);
     },
     [actions.rotateClockwise](state) {
-        return executeTranform(logic.rotateClockwise)(state)
+        return tetris.rotateClockwise(state)
     },
     [actions.rotateCounter](state) {
-        return executeTranform(logic.rotateCounterClockwise)(state)
+        return tetris.rotateCounterClockwise(state)
     },
 	[actions.togglePause](state) {
-		return over(lens.options.paused, not, state);
+		return tetris.togglePause(state);
 	},
 	[actions.decreaseTick](state) {
     	const DECREASE_RATE = 100;  // FIXME temporary variable

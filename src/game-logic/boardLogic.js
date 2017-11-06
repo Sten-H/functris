@@ -6,7 +6,7 @@ import { pieceActualPosition, lens } from './helpers';
 import * as c from './constants';
 
 /**
- * Board logic contains validators if a piece or coord is out of board bounds, it also has transformers
+ * Board tetris contains validators if a piece or coord is out of board bounds, it also has transformers
  * for board state to write a piece to board or to clear lines.
  */
 // VALIDATORS
