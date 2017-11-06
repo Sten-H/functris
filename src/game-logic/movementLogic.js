@@ -1,6 +1,6 @@
 import {
 	compose, converge, curry, dec, head, inc, last, map, multiply, over, view, anyPass, ifElse, identity,
-	set, complement, until, allPass, not, equals
+	set, complement, until, allPass, not, equals, zipWith, reverse
 } from 'ramda';
 import * as c from './constants/index';
 import * as board from './boardLogic';
@@ -36,13 +36,15 @@ export const isTransformValid = (transformFunc, validator) =>
 	);
 
 // TRANSFORMERS
-// directions used as transformers for shift function
+// coord -> coord, directions used as transformers for shift function
 const leftDir = over(lens.coord.x, dec);
 const rightDir = over(lens.coord.x, inc);
 const downDir = over(lens.coord.y, inc);
 // rotation directions used as transformers for rotate functions
-const clockwise = [compose(multiply(-1), last), head];
-const counterClockwise = [last, compose(multiply(-1), head)];
+// Rotation algorithm is flip x y and depending on direction negate x or y coord
+// coord -> coord
+const clockwise = compose(zipWith(multiply, [-1, 1]), reverse);
+const counterClockwise = compose(zipWith(multiply, [1, -1]), reverse);
 /**
  * tries to transform state with transformFunc, returns transformed state if validated by validator
  * if invalid it returns result of running elseFunc with final arg (state)
@@ -59,14 +61,11 @@ const tryTransform = tryTransformElse(identity);
 // f -> state -> state, f is piece transformer (leftDir/rightDir)
 const shift = over(lens.pos);
 const rotatePiece = (dirFuncs) => map(
-    converge(
         compose(
             normalizeCoord,
-            Array.of
-        ),
-        dirFuncs
-    )
-);
+	        dirFuncs
+        )
+    );
 // [f] -> state -> state, f is a pair of transformers, first applies to x coord, second to y coord
 const rotate = dirFuncs => over(lens.pieceCoord, rotatePiece(dirFuncs));
 
@@ -74,6 +73,7 @@ const rotate = dirFuncs => over(lens.pieceCoord, rotatePiece(dirFuncs));
 export const lockPiece = set(lens.flags.lockRequested, true);
 // state -> boolean
 const isDownShiftInvalid = complement(isTransformValid(shift(downDir), isShiftValid));
+// FIXME set start pos might later be more flexible, raising start pos if overlap in start pos
 export const setToStartPos = set(lens.pos, c.START_POS);
 // state -> state
 export const dropPiece =

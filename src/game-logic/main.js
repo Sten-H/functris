@@ -20,7 +20,7 @@ export const lockPiece = compose(
 	set(lens.flags.lockRequested, false),
 	bag.getNextPiece,
 	brd.clearLines,
-	set(lens.pos, c.START_POS),
+	mv.setToStartPos,
 	brd.writeToBoard
 );
 // transform -> state -> state

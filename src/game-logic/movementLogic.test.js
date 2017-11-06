@@ -1,16 +1,15 @@
 import {
 	shiftLeft, shiftRight, rotateClockwise, rotateCounterClockwise,
-	shiftDown, lockPiece, dropPiece,
+	shiftDown, dropPiece,
 } from './movementLogic';
 import {
 	compose, concat, dec, last, prop, repeat, set, subtract, update, view, path, over, adjust,
 } from 'ramda';
 import {
-	ROW_COUNT, EMPTY_TOKEN, FILL_TOKEN, COL_COUNT, START_POS, SHADOW_TOKEN,
-	FILLED_ROW
+	EMPTY_TOKEN, FILL_TOKEN, COL_COUNT, SHADOW_TOKEN, FILLED_ROW
 } from './constants/index';
 import * as c from './constants/index';
-import { getTestState, lens, tokensInRow } from './helpers';
+import { getTestState, lens } from './helpers';
 import * as b from './boardLogic';
 
 describe('Tetris Movement', () => {

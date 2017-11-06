@@ -2,6 +2,7 @@ import { concat, dec, last, repeat } from 'ramda';
 import * as c from './constants/index';
 import { getTestState } from './helpers';
 import tetris, { isIllegalState, lockPiece } from './main';
+
 describe('Main unit tests', () => {
 	describe('Lock piece', () => {
 		it('should reset position after piece written to board', () => {

@@ -29,3 +29,8 @@ with proper position and rotation individually somewhere
 intersect on Y and slide it to side if it intersects on X (wall kicks they call it). 
 Older variants don't do this, they just reject rotation. Maybe disregard until much
  later, should be easy enough to modify.
+## Words
+I've been using some words in the code and comments which I think I've kind of made up myself, so this is for me when I come back to this
+in a month.
+* Lock piece, piece position is final and is waiting to be written to board.
+* Dirty row, a row that neither full nor empty, is has non-empty tokens in it.
