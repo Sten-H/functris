@@ -3,7 +3,7 @@ import { takeLast } from "ramda";
 import * as c from './constants';
 import { getTestState, lens } from './helpers';
 
-describe('Seven Bag logic', () => {
+describe('Seven Bag tetris', () => {
     it('should return list of seven pieces (in random order)', () => {
         const bag = getShuffledBag();
         expect(bag).toHaveLength(7);

@@ -1,0 +1,80 @@
+@import './color-partial';
+/* GAME STYLING */
+@mixin piece-color($main-color) {
+  background-color: $main-color;
+  border-color: lighten($main-color, $border-lighten-value);
+}
+/* Every cell is a block whether empty or filled */
+.cell {
+  width:1em;
+  height:1em;
+  padding: 0;
+  margin: 0;
+  display: inline-block;
+  line-height: 1em;
+}
+/* Empty block styling */
+.empty-cell {
+  @extend .cell;
+  border: 1px solid darken($empty-cell-color, 7%);
+  background-color: $empty-cell-color;
+}
+/* Tetris pieces specific styling */
+.piece {
+  @extend .cell;
+  border: 3px outset;
+  // I use opacity just as an easy way to adjust the brightness of all pieces. Probably a better way
+  opacity: 0.87;
+}
+.piece-I {
+  @extend .piece;
+  @include piece-color($I-color);
+}
+.piece-O {
+  @extend .piece;
+  @include piece-color($O-color);
+}
+.piece-T {
+  @extend .piece;
+  @include piece-color($T-color);
+}
+.piece-L {
+  @extend .piece;
+  @include piece-color($L-color);
+}
+.piece-J {
+  @extend .piece;
+  @include piece-color($J-color);
+}
+.piece-T {
+  @extend .piece;
+  @include piece-color($T-color);
+}
+.piece-S {
+  @extend .piece;
+  @include piece-color($S-color);
+}
+.piece-Z {
+  @extend .piece;
+  @include piece-color($Z-color);
+}
+.shadow {
+  opacity: 0.2;
+  // FIXME would be nice to like make the color a bit brighter than normal piece color, not sure what I mean by brighter, saturated?
+}
+
+.tetris-row {
+  font-size: 1.5em;
+  padding: 0;
+  margin: 0;
+  line-height: 0;
+}
+
+.tetris-game {
+  white-space: pre;
+  display: inline-block;
+  padding: 1em;
+  font-size: 1.5em;
+  background-color: $empty-cell-color;  // This is important so block transparency works
+}
+/* END GAME STYLING */

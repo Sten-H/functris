@@ -1,0 +1,63 @@
+@import "../../partials/color-partial";
+
+.control-list {
+  text-align: center;
+  list-style: none;
+  li {
+    margin: 0.4em 0;
+  }
+}
+.key-pair {
+  list-style: none;
+}
+.key {
+  color: $green2;
+  border: 2px solid $purple2;
+  font-size: 0.75em;
+  font-weight: bold;
+  display: inline-block;
+  margin-top: 3em;
+}
+
+.key.key-space {
+  padding: 0.2em 1.9em;
+  &:after {
+    content: 'SPACE';
+  }
+}
+.key-arrow {
+  padding: 0.3em 0.55em;
+  margin-left: 0.5em;
+  margin-right: 0.5em;
+}
+
+.key.key-left  {
+  @extend .key-arrow;
+  &:after {
+    content: '◀';
+  }
+}
+.key.key-right {
+  @extend .key-arrow;
+  &:after {
+    content: '▶';
+  }
+}
+.key.key-up {
+  @extend .key-arrow;
+  &:after {
+    content: '▲';
+  }
+}
+.key.key-down {
+  @extend .key-arrow;
+  &:after {
+    content: '▼';
+  }
+}.key.key-p {
+   @extend .key-arrow;
+   //font-size: 0.9em;
+   &:after {
+     content: 'P';
+   }
+ }
