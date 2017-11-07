@@ -1,6 +1,6 @@
-import { concat, dec, last, repeat } from 'ramda';
+import { concat, dec, last, repeat, view } from 'ramda';
 import * as c from './constants/index';
-import { getTestState } from './helpers';
+import { getTestState, lens } from './helpers';
 import tetris, { isIllegalState, lockPiece } from './main';
 
 describe('Main unit tests', () => {
@@ -16,7 +16,7 @@ describe('Main unit tests', () => {
 	});
 	describe('Should identify illegal state', () => {
 		const board = repeat(c.FILLED_ROW, c.ROW_COUNT);
-		const s = getTestState({board, pos: [4, 6], piece: c.PIECES.O });
+		const s = getTestState({board});
 		expect(isIllegalState(s)).toBe(true);
 	});
 });
@@ -41,8 +41,9 @@ describe('Integration tests', () => {
 		const board = repeat(messyRow, c.LEGAL_ROWS);
 		const s = getTestState({ board: board, pos: [4,2], piece: c.PIECES.O });
 		expect(isIllegalState(s)).toBe(false);
+		expect(view(lens.flags.gameOver, s)).toBe(false);
 		const stateAfterDrop = tetris.dropPiece(s);
-		console.log(stateAfterDrop.board);
 		expect(isIllegalState(stateAfterDrop)).toBe(true);
-	})
+		expect(view(lens.flags.gameOver, stateAfterDrop)).toBe(true);
+	});
 });

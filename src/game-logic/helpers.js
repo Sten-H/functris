@@ -59,9 +59,9 @@ export const lens = {
 	bag: lensProp('bag'),
 	bagLength: lensPath(['bag', 'length']),
 	flags: {
-		lockRequested: lensPath(['flag', 'lockRequested']),
-		gameOver: lensPath(['flag', 'gameOver']),
-		all: lensProp('flag')
+		lockRequested: lensPath(['flags', 'lockRequested']),
+		gameOver: lensPath(['flags', 'gameOver']),
+		all: lensProp('flags')
 	},
 	coord: {
 		x: lensIndex(0),

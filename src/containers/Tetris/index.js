@@ -43,7 +43,7 @@ const mapStateToProps = (state) => {
     };
 };
 
-export function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch) {
     return {
     	onPausePress: () => dispatch(actions.togglePause()),
     	onDecreasePress: () => dispatch(actions.decreaseTick()),

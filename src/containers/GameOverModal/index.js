@@ -1,34 +1,27 @@
 import React from 'react';
-import { Modal } from 'react-bootstrap';
+import { Button, Modal } from 'react-bootstrap';
 // import KeyHandler, { KEYUP } from 'react-key-handler';
 // import { triggerKeyEvent } from '../../helpers';
 import { HighScore } from '../../components/HighScore/index';
+import { connect } from 'react-redux';
+import { view } from 'ramda';
+import { lens } from '../../game-logic/helpers';
 
 // const triggerPauseKeyPress = () => triggerKeyEvent(KEYUP, undefined, 'p');
 export class GameOverModal extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = {
-			modal: false
-		};
-		this.toggle = this.toggle.bind(this);
 	}
-
-	toggle() {
-		this.setState({
-			modal: !this.state.modal
-		});
-	}
-
 	render() {
 		return (
 			<div>
-				<Modal show={this.state.modal} onHide={this.toggle} className="game-over-modal">
+				<Modal show={this.props.gameOver} className="game-over-modal">
 					<Modal.Header closeButton>
 						<h3 className="text-center">GAME OVER</h3>
 					</Modal.Header>
 					<Modal.Body>
-						I'm sure you did great x)
+						<p>I'm sure you did great x)</p>
+						<Button className="btn-primary">Restart</Button>
 						<HighScore />
 					</Modal.Body>
 				</Modal>
@@ -37,5 +30,14 @@ export class GameOverModal extends React.Component {
 		);
 	}
 }
+const mapStateToProps = (state) => {
+	return {
+		gameOver: view(lens.flags.gameOver, state.tetris)
+	}
+};
+function mapDispatchToProps(dispatch) {
+	return {
 
-export default GameOverModal;
+	}
+}
+export default connect(mapStateToProps, mapDispatchToProps)(GameOverModal);
