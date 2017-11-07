@@ -34,4 +34,8 @@ describe('Actions', () => {
 		const expected = 'TOGGLE_PAUSE';
 		expect(prop('type', actions.togglePause())).toEqual(expected);
 	});
+	it('should create restart game action', () => {
+		const expected = 'RESTART_GAME';
+		expect(prop('type', actions.restartGame())).toEqual(expected);
+	});
 });

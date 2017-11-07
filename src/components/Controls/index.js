@@ -36,5 +36,9 @@ export const Controls = () => (
 			<span className="key key-p" />
 			<span className="key-info">Pause/Unpause</span>
 		</KeyPair>
+		<KeyPair>
+			<span className="key key-r" />
+			<span className="key-info">Restart</span>
+		</KeyPair>
 	</ul>
 );

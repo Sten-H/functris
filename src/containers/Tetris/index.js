@@ -31,6 +31,7 @@ class Tetris extends React.Component {
 	        {/* FIXME This key is just here for testing things out, remove later */}
             <KeyHandler keyValue='t' onKeyHandle={this.props.onDecreasePress} />
             <KeyHandler keyValue='p' onKeyHandle={this.props.onPausePress} />
+            <KeyHandler keyValue='r' onKeyHandle={this.props.onRestartPress} />
             {drawBoard(getBoardWithPiece(this.props.gameState))}
         </div>
         );
@@ -45,6 +46,7 @@ const mapStateToProps = (state) => {
 
 function mapDispatchToProps(dispatch) {
     return {
+	    onRestartPress: () => dispatch(actions.restartGame()),
     	onPausePress: () => dispatch(actions.togglePause()),
     	onDecreasePress: () => dispatch(actions.decreaseTick()),
         onLeftPress: () => dispatch(actions.shiftLeft()),

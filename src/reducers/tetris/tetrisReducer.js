@@ -3,33 +3,37 @@ import * as actions from '../../actions/actions';
 import { handleActions } from "redux-actions";
 import tetris from "../../game-logic/main";
 import { getShuffledBag } from "../../game-logic/bagLogic";
-import { __, clamp, compose, identity, ifElse, not, over, subtract, view } from 'ramda';
+import { __, clamp, compose, head, identity, ifElse, not, over, subtract, tail, view } from 'ramda';
 import { lens } from '../../game-logic/helpers';
 import * as c from '../../game-logic/constants';
 
-const defaultState = {
-    board: constants.EMPTY_BOARD,
-    piece: constants.PIECES.L,
-    pos: c.START_POS,
-    bag: getShuffledBag(),
-	flags: {
-    	lockRequested: false,
-		gameOver: false,  // When true game should not be unpausable
+const resetState = () =>  {
+	const startBag = getShuffledBag();
+	const startState = {
+		board: constants.EMPTY_BOARD,
+		pos: c.START_POS,
+		bag: tail(startBag),
+		piece: head(startBag),
+		flags: {
+			lockRequested: false,
+			gameOver: false,  // When true game should not be unpausable
 
-	},
-	info: {
-		score: 0,
-		lines: 0
-	},
-    options: {
-	    tickRate: c.INITIAL_TICK_RATE,
-        paused: false,
-        shadow: true
-    }
+		},
+		info: {
+			score: 0,
+			lines: 0
+		},
+		options: {
+			tickRate: c.INITIAL_TICK_RATE,
+			paused: false,
+			shadow: true
+		}
+	};
+	return startState
 };
 const reducer = handleActions({
     // I could combine all shifts (atleast horizontal) by having the action send the direction as an argument
-    // So it would be tetris.shift(leftDir, state)
+    // So it would be tetris.shift(leftDir, state), not sure if I want to
     [actions.shiftLeft](state) {
         return tetris.shiftLeft(state)
     },
@@ -51,6 +55,9 @@ const reducer = handleActions({
 	[actions.togglePause](state) {
 		return tetris.togglePause(state);
 	},
+	[actions.restartGame](state) {
+    	return resetState();
+	},
 	[actions.decreaseTick](state) {
     	const DECREASE_RATE = 100;  // FIXME temporary variable
 		return over(
@@ -61,6 +68,6 @@ const reducer = handleActions({
 			)
 		)(state);
 	}
-}, defaultState);
+}, resetState());
 
 export default reducer;

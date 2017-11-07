@@ -54,10 +54,16 @@
   &:after {
     content: '▼';
   }
-}.key.key-p {
+}
+.key.key-p {
    @extend .key-arrow;
-   //font-size: 0.9em;
    &:after {
      content: 'P';
    }
  }
+.key.key-r {
+  @extend .key-arrow;
+  &:after {
+    content: 'R';
+  }
+}
