@@ -1,4 +1,4 @@
-import { add, dec, repeat, subtract } from 'ramda';
+import { repeat, subtract } from 'ramda';
 
 export const COL_COUNT = 10;
 /**

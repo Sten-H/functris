@@ -3,12 +3,10 @@ import { connect } from 'react-redux';
 import * as actions from "../../actions/actions";
 import KeyHandler from 'react-key-handler';
 import { drawBoard, getBoardWithPiece } from "../commons";
-import { append, last, map, multiply, uniq, view } from 'ramda';
+import { append, last, map, uniq, view } from 'ramda';
 import { lens } from '../../game-logic/helpers';
 
 import './Tetris.css';
-const scaleFactor = 1;
-const keyTickRate = 5;
 /**
  * These counter values can be set to Tetris component's state.activeCounter, they determine the
  * wait time for next key input to be executed. The first appearance of a keypress (not same as previous key press) is
@@ -16,44 +14,50 @@ const keyTickRate = 5;
  * the key will execute fast (keyCounterRepeatWait).  This is called delayed auto shift. It is harder to trigger
  * the auto shift on the rotation (takes longest time), and easiest on shift down.
  */
+const keyTickRate = 5;  // How often the keys pressed queue is being checked (in ms)
+const scaleFactor = 1;
 const keyCounterInitialWait = {
-	left: keyTickRate * 25,
-		right: keyTickRate * 25,
-		up: keyTickRate * 50,
-		down: keyTickRate * 10
+	left: keyTickRate * 20 * scaleFactor,
+		right: keyTickRate * 20 * scaleFactor,
+		up: keyTickRate * 50 * scaleFactor,
+		down: keyTickRate * 10 * scaleFactor
 };
 const keyCounterRepeatWait = {
-	left: keyTickRate * 2,
-		right: keyTickRate * 2,
-		up: keyTickRate * 7,
-		down: keyTickRate
+	left: keyTickRate * 2 * scaleFactor,
+		right: keyTickRate * 2 * scaleFactor,
+		up: keyTickRate * 7 * scaleFactor,
+		down: keyTickRate * scaleFactor
 };
+let activeKeyValues = {
+	prevKey: 'none',
+	keyQueue: [],
+	activeCounter: -1,
+	executePress: false
+};
+const setActive = (obj) => activeKeyValues = {...activeKeyValues, ...obj};
 class Tetris extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			prevKey: 'none',
-			keyQueue: [],
-			activeCounter: -1,
-
-			executePress: false
-		}
-	}
 	shiftTick() {
 		this.props.onDownPress();
 		setTimeout(this.shiftTick.bind(this), view(lens.options.tick, this.props.gameState));
 	}
 	updateKeyPress = (key) => {
-		if(this.state.prevKey !== key) {
-			this.state.executePress = true;
-			this.state.activeCounter = keyCounterInitialWait[key];
-		} else if (this.state.activeCounter <= 0) {
-			this.state.executePress= true;
-			this.state.activeCounter = keyCounterRepeatWait[key];
+		if(activeKeyValues.prevKey !== key) {
+			setActive({
+				executePress: true,
+				activeCounter: keyCounterInitialWait[key]
+				}
+			);
+		} else if (activeKeyValues.activeCounter <= 0) {
+			setActive({
+				executePress: true,
+				activeCounter: keyCounterRepeatWait[key]
+			});
 		} else {
-			this.state.activeCounter -= keyTickRate;
+			const newCounter = activeKeyValues.activeCounter - keyTickRate;
+			setActive({
+				activeCounter: newCounter
+			});
 		}
-		return this.state;
 	};
 	executeKeyPress = (key) => {
 		switch(key) {
@@ -73,18 +77,18 @@ class Tetris extends React.Component {
 				return;
 		}
 	};
-	addKeyToQueue = (key) => this.state.keyQueue = append(key, this.state.keyQueue);
+	addKeyToQueue = (key) => setActive({keyQueue: append(key, activeKeyValues.keyQueue)});
 	handleInputQueue = (key) => {
-		this.state = this.updateKeyPress(key);
-		if(this.state.executePress) {
+		this.updateKeyPress(key);
+		if(activeKeyValues.executePress) {
 			this.executeKeyPress(key, this.props);
 		}
-		this.state.executePress = false;
-		this.state.prevKey = key;
+		setActive({
+			executePress: false, prevKey: key});
 	};
 	keyTick() {
-		map(this.handleInputQueue.bind(this), uniq(this.state.keyQueue));
-		this.state.keyQueue = (this.state.keyQueue.length > 0 ) ? [last(this.state.keyQueue)] : [];
+		map(this.handleInputQueue.bind(this), uniq(activeKeyValues.keyQueue));
+		activeKeyValues.keyQueue = (activeKeyValues.keyQueue.length > 0 ) ? [last(activeKeyValues.keyQueue)] : [];
 		setTimeout(this.keyTick.bind(this), 10);
 	}
 	componentDidMount() {

@@ -3,7 +3,7 @@ import * as actions from '../../actions/actions';
 import { handleActions } from "redux-actions";
 import tetris from "../../game-logic/main";
 import { getShuffledBag } from "../../game-logic/bagLogic";
-import { __, clamp, compose, head, identity, ifElse, not, over, subtract, tail, view } from 'ramda';
+import { __, clamp, compose, head, over, subtract, tail } from 'ramda';
 import { lens } from '../../game-logic/helpers';
 import * as c from '../../game-logic/constants';
 

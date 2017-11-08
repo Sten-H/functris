@@ -1,18 +1,12 @@
 import React from 'react';
 import { Button, Modal } from 'react-bootstrap';
-// import KeyHandler, { KEYUP } from 'react-key-handler';
-// import { triggerKeyEvent } from '../../helpers';
 import { HighScore } from '../../components/HighScore/index';
 import { connect } from 'react-redux';
 import { view } from 'ramda';
 import { lens } from '../../game-logic/helpers';
 import * as actions from '../../actions/actions';
 
-// const triggerPauseKeyPress = () => triggerKeyEvent(KEYUP, undefined, 'p');
 export class GameOverModal extends React.Component {
-	constructor(props) {
-		super(props);
-	}
 	render() {
 		return (
 			<div>

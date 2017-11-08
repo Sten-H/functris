@@ -1,10 +1,9 @@
 import {
-	compose, converge, curry, dec, head, inc, last, map, multiply, over, view, anyPass, ifElse, identity,
+	compose, curry, dec, inc, map, multiply, over, view, anyPass, ifElse, identity,
 	set, complement, until, allPass, not, equals, zipWith, reverse
 } from 'ramda';
 import * as c from './constants/index';
 import * as board from './boardLogic';
-import * as bag from "./bagLogic";
 import { normalizeCoord, lens } from './helpers';
 
 /**

@@ -1,9 +1,8 @@
 import * as mv from './movementLogic';
 import * as brd from './boardLogic';
 import * as bag from './bagLogic';
-import { always, compose, either, identity, ifElse, not, or, over, set, tap, view, when } from 'ramda';
+import { compose, either, identity, ifElse, not, over, set, view, when } from 'ramda';
 import { lens } from './helpers';
-import * as c from './constants/index';
 // PRIVATE FUNCS
 const isPaused = view(lens.options.paused);
 const isGameOver = view(lens.flags.gameOver);
