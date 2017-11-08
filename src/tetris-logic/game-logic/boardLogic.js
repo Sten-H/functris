@@ -3,7 +3,7 @@ import {
 	identity, ifElse, length, lt, over, reduce, reject, repeat, set, take, takeLast, view
 } from 'ramda';
 import { pieceActualPosition, lens } from './helpers';
-import * as c from './constants';
+import * as c from './constants/index';
 
 /**
  * Board tetris contains validators if a piece or coord is out of board bounds, it also has transformers

@@ -2,9 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import * as actions from "../../actions/actions";
 import KeyHandler from 'react-key-handler';
-import { drawBoard } from "../commons";
+import { drawBoard } from "../../tetris-logic/draw-logic/draw";
 import { append, last, map, uniq, view } from 'ramda';
-import { lens } from '../../game-logic/helpers';
+import { lens } from '../../tetris-logic/game-logic/helpers';
 
 import './Tetris.css';
 /**

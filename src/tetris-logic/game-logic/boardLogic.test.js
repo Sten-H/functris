@@ -1,7 +1,7 @@
 import {
 	all, compose, concat, dec, equals, last, repeat, set, subtract, update, takeLast, reverse
 } from 'ramda';
-import * as c from './constants';
+import * as c from './constants/index';
 import { getTestState, lens } from './helpers';
 import * as b from './boardLogic';
 import * as m from './movementLogic';

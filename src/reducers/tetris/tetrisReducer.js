@@ -1,11 +1,11 @@
-import * as constants from '../../game-logic/constants';
+import * as constants from '../../tetris-logic/game-logic/constants';
 import * as actions from '../../actions/actions';
 import { handleActions } from "redux-actions";
-import tetris from "../../game-logic/main";
-import { getShuffledBag } from "../../game-logic/bagLogic";
+import tetris from "../../tetris-logic/game-logic/main";
+import { getShuffledBag } from "../../tetris-logic/game-logic/bagLogic";
 import { __, clamp, compose, head, over, subtract, tail } from 'ramda';
-import { lens } from '../../game-logic/helpers';
-import * as c from '../../game-logic/constants';
+import { lens } from '../../tetris-logic/game-logic/helpers';
+import * as c from '../../tetris-logic/game-logic/constants';
 
 const resetState = () =>  {
 	const startBag = getShuffledBag();

@@ -3,7 +3,7 @@ import { Button, Modal } from 'react-bootstrap';
 import { HighScore } from '../../components/HighScore/index';
 import { connect } from 'react-redux';
 import { view } from 'ramda';
-import { lens } from '../../game-logic/helpers';
+import { lens } from '../../tetris-logic/game-logic/helpers';
 import * as actions from '../../actions/actions';
 
 export class GameOverModal extends React.Component {

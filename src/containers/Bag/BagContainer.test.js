@@ -2,7 +2,7 @@ import 'jsdom-global/register';  // Needed for enzyme mounting
 import * as React from 'react';
 import configureMockStore, { MockStore } from 'redux-mock-store';
 import Bag from './index';
-import * as constants from "../../game-logic/constants/index";
+import * as constants from "../../tetris-logic/game-logic/constants/index";
 import { mountWithStore } from "../../testHelpers";
 
 const state = {

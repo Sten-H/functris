@@ -4,7 +4,7 @@ import {
 	addIndex, always, compose, concat, converge, curry, identity, ifElse, inc, lensPath, map, merge, objOf,
 	prop, reduce, reverse, set, takeLast, view,
 } from 'ramda';
-import * as c from '../game-logic/constants';
+import * as c from '../game-logic/constants/index';
 import { equals } from 'ramda';
 import { pieceActualPosition, lens } from '../game-logic/helpers';
 import * as tetris from '../game-logic/main';

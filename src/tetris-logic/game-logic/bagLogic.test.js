@@ -1,6 +1,6 @@
 import { getShuffledBag, getNextPiece, nextPiece } from "./bagLogic";
 import { takeLast } from "ramda";
-import * as c from './constants';
+import * as c from './constants/index';
 import { getTestState, lens } from './helpers';
 
 describe('Seven Bag tetris', () => {

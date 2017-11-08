@@ -1,4 +1,4 @@
-import * as c from './constants';
+import * as c from './constants/index';
 import {
 	add, always, clamp, compose, concat, converge, countBy, curry, dec, equals, identity, ifElse, isNil, lensIndex,
 	lensPath, lensProp, map, over, prop, reverse, set, takeLast, view, when, zipWith
