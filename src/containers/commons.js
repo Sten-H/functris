@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {
-	addIndex, always, compose, converge, curry, ifElse, lensPath, map, prop, reduce, reverse, set, takeLast,
+	addIndex, always, compose, converge, curry, ifElse, inc, lensPath, map, prop, reduce, reverse, set, takeLast,
 	view
 } from 'ramda';
 import * as c from '../game-logic/constants';
@@ -23,11 +23,14 @@ const drawBlock = (content, idx) =>
         always(<span key={idx} className={`piece-${content}`} />)
 )(content);
 // (r, i) -> JSXElement
-const drawRow = (row, i) => <div key={i} className='tetris-row' >{addIndex(map)(drawBlock, row)}</div>;
+const drawRow = (row, i) =>
+	<div key={i} className={(i !== 0) ? 'tetris-row' : 'tetris-row half-row'} >
+		{addIndex(map)(drawBlock, row)}
+	</div>
 // board -> [JSXElement]
 export const drawBoard = compose(
     addIndex(map)(drawRow),
-    takeLast(c.LEGAL_ROWS)
+    takeLast(inc(c.LEGAL_ROWS))
 );
 // state -> board
 export const getBoardWithPiece = (state) =>
