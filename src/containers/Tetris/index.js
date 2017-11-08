@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import * as actions from "../../actions/actions";
-import KeyHandler from 'react-key-handler';
+import KeyHandler, { KEYDOWN, KEYUP } from 'react-key-handler';
 import { drawBoard } from "../../tetris-logic/draw-logic/draw";
 import { append, last, map, uniq, view } from 'ramda';
 import { lens } from '../../tetris-logic/game-logic/helpers';
@@ -101,14 +101,14 @@ class Tetris extends React.Component {
         return (
         <div className='tetris-game solid-border'>
 	        {/* START DELAYED AUTO SHIFT KEYS */}
-            <KeyHandler keyEventName={'keydown'} keyValue='ArrowLeft' onKeyHandle={() => this.addKeyToQueue('left')} />
-            <KeyHandler keyEventName={'keyup'} keyValue='ArrowLeft' onKeyHandle={() => this.addKeyToQueue('none')} />
-            <KeyHandler keyEventName={'keydown'} keyValue='ArrowRight' onKeyHandle={() => this.addKeyToQueue('right')} />
-            <KeyHandler keyEventName={'keyup'} keyValue='ArrowRight' onKeyHandle={() => this.addKeyToQueue('none')} />
-	        <KeyHandler keyEventName={'keydown'} keyValue='ArrowUp' onKeyHandle={() => this.addKeyToQueue('up')} />
-	        <KeyHandler keyEventName={'keyup'} keyValue='ArrowUp' onKeyHandle={() => this.addKeyToQueue('none')} />
-	        <KeyHandler keyEventName={'keydown'} keyValue='ArrowDown' onKeyHandle={() => this.addKeyToQueue('down')} />
-            <KeyHandler keyEventName={'keyup'} keyValue='ArrowDown' onKeyHandle={() => this.addKeyToQueue('none')} />
+            <KeyHandler keyEventName={KEYDOWN} keyValue='ArrowLeft' onKeyHandle={() => this.addKeyToQueue('left')} />
+            <KeyHandler keyEventName={KEYUP} keyValue='ArrowLeft' onKeyHandle={() => this.addKeyToQueue('none')} />
+            <KeyHandler keyEventName={KEYDOWN} keyValue='ArrowRight' onKeyHandle={() => this.addKeyToQueue('right')} />
+            <KeyHandler keyEventName={KEYUP} keyValue='ArrowRight' onKeyHandle={() => this.addKeyToQueue('none')} />
+	        <KeyHandler keyEventName={KEYDOWN} keyValue='ArrowUp' onKeyHandle={() => this.addKeyToQueue('up')} />
+	        <KeyHandler keyEventName={KEYUP} keyValue='ArrowUp' onKeyHandle={() => this.addKeyToQueue('none')} />
+	        <KeyHandler keyEventName={KEYDOWN} keyValue='ArrowDown' onKeyHandle={() => this.addKeyToQueue('down')} />
+            <KeyHandler keyEventName={KEYUP} keyValue='ArrowDown' onKeyHandle={() => this.addKeyToQueue('none')} />
 	        {/* END DELAYED AUTO SHIFT KEYS */}
             <KeyHandler keyValue=' ' onKeyHandle={this.props.onDropPress} />
             <KeyHandler keyValue='z' onKeyHandle={this.props.onRotateClockwisePress} />

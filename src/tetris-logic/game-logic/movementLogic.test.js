@@ -146,30 +146,4 @@ describe('Tetris Movement', () => {
 	        expect(b.getCell(s, [0, -5])).toEqual(EMPTY_TOKEN);
         })
     });
-    describe('Piece Shadow', () => {
-    	/* FIXME Actually I don't think I want to write shadow to board state like this
-	       I think I'll go with having a shadowPos: [5,19] type of deal in state and then
-	       the thing drawing the state can do whatever it wants. Will have to redo tests.
-	       */
-        it('should present piece shadow at lowest valid point', () => {
-            // Because initializing with proper shadow is a bit harder than shadow after move this test first
-	        const tempState = getTestState({ pos: [4, 0], piece: c.PIECES.I });
-            const finalState = shiftDown(tempState);
-            const bottomRow = last(view(lens.board, finalState));
-            // FIXME This is a very lazy test, should make sure that piece shape is accurate
-            expect(bottomRow).toContain(SHADOW_TOKEN);
-        });
-        it('should initialize board with piece shadow', () => {
-            // Hmm actually how do I test this, I'm setting the state explicitly, unlike when react app
-            // is run where it will have a random piece on init. An interesting solution to this
-            // would be to have a top row that is invisible where all pieces spawn and immediately shift down
-            // once to get shadow written.
-            // I read that many old and maybe new(?) official tetris games actually have 40 rows internally
-            // while only presenting 20 But maybe they meant that each row was subdivided by 2? Sounds likely
-	        const s = getTestState({pos: [4,0], piece: c.PIECES.I});
-            const bottomRow = last(view(lens.board, s));
-            // FIXME This is a very lazy test, should make sure that piece shape is accurate
-            expect(bottomRow).toContain(SHADOW_TOKEN);
-        })
-    });
 });

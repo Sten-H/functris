@@ -30,20 +30,19 @@ ShallowWrapper {
           </h2>
           <hr />
 </Col>,
-        <Unknown>
+        <InfoBoxOuter>
           <Col
                     bsClass="col"
-                    className="solid-border"
                     componentClass="div"
-                    lg={10}
-                    lgOffset={2}
-                    md={10}
-                    mdOffset={2}
+                    lg={6}
+                    lgOffset={6}
+                    md={6}
+                    mdOffset={6}
                     sm={12}
           >
                     <Unknown />
           </Col>
-</Unknown>,
+</InfoBoxOuter>,
         <Col
           bsClass="col"
           componentClass="div"
@@ -51,9 +50,10 @@ ShallowWrapper {
           xs={12}
 >
           <PauseModal />
+          <Connect(GameOverModal) />
           <Connect(Tetris) />
 </Col>,
-        <Unknown>
+        <InfoBoxOuter>
           <Row
                     bsClass="row"
                     componentClass="div"
@@ -88,7 +88,7 @@ ShallowWrapper {
                               </p>
                     </Col>
           </Row>
-</Unknown>,
+</InfoBoxOuter>,
       ],
       "className": "App",
       "componentClass": "div",
@@ -143,12 +143,11 @@ ShallowWrapper {
         "props": Object {
           "children": <Col
             bsClass="col"
-            className="solid-border"
             componentClass="div"
-            lg={10}
-            lgOffset={2}
-            md={10}
-            mdOffset={2}
+            lg={6}
+            lgOffset={6}
+            md={6}
+            mdOffset={6}
             sm={12}
 >
             <Unknown />
@@ -162,12 +161,11 @@ ShallowWrapper {
           "props": Object {
             "bsClass": "col",
             "children": <Unknown />,
-            "className": "solid-border",
             "componentClass": "div",
-            "lg": 10,
-            "lgOffset": 2,
-            "md": 10,
-            "mdOffset": 2,
+            "lg": 6,
+            "lgOffset": 6,
+            "md": 6,
+            "mdOffset": 6,
             "sm": 12,
           },
           "ref": null,
@@ -192,6 +190,7 @@ ShallowWrapper {
           "bsClass": "col",
           "children": Array [
             <PauseModal />,
+            <Connect(GameOverModal) />,
             <Connect(Tetris) />,
           ],
           "componentClass": "div",
@@ -200,6 +199,15 @@ ShallowWrapper {
         },
         "ref": null,
         "rendered": Array [
+          Object {
+            "instance": null,
+            "key": null,
+            "nodeType": "class",
+            "props": Object {},
+            "ref": null,
+            "rendered": null,
+            "type": [Function],
+          },
           Object {
             "instance": null,
             "key": null,
@@ -440,20 +448,19 @@ ShallowWrapper {
             </h2>
             <hr />
 </Col>,
-          <Unknown>
+          <InfoBoxOuter>
             <Col
                         bsClass="col"
-                        className="solid-border"
                         componentClass="div"
-                        lg={10}
-                        lgOffset={2}
-                        md={10}
-                        mdOffset={2}
+                        lg={6}
+                        lgOffset={6}
+                        md={6}
+                        mdOffset={6}
                         sm={12}
             >
                         <Unknown />
             </Col>
-</Unknown>,
+</InfoBoxOuter>,
           <Col
             bsClass="col"
             componentClass="div"
@@ -461,9 +468,10 @@ ShallowWrapper {
             xs={12}
 >
             <PauseModal />
+            <Connect(GameOverModal) />
             <Connect(Tetris) />
 </Col>,
-          <Unknown>
+          <InfoBoxOuter>
             <Row
                         bsClass="row"
                         componentClass="div"
@@ -498,7 +506,7 @@ ShallowWrapper {
                                     </p>
                         </Col>
             </Row>
-</Unknown>,
+</InfoBoxOuter>,
         ],
         "className": "App",
         "componentClass": "div",
@@ -553,12 +561,11 @@ ShallowWrapper {
           "props": Object {
             "children": <Col
               bsClass="col"
-              className="solid-border"
               componentClass="div"
-              lg={10}
-              lgOffset={2}
-              md={10}
-              mdOffset={2}
+              lg={6}
+              lgOffset={6}
+              md={6}
+              mdOffset={6}
               sm={12}
 >
               <Unknown />
@@ -572,12 +579,11 @@ ShallowWrapper {
             "props": Object {
               "bsClass": "col",
               "children": <Unknown />,
-              "className": "solid-border",
               "componentClass": "div",
-              "lg": 10,
-              "lgOffset": 2,
-              "md": 10,
-              "mdOffset": 2,
+              "lg": 6,
+              "lgOffset": 6,
+              "md": 6,
+              "mdOffset": 6,
               "sm": 12,
             },
             "ref": null,
@@ -602,6 +608,7 @@ ShallowWrapper {
             "bsClass": "col",
             "children": Array [
               <PauseModal />,
+              <Connect(GameOverModal) />,
               <Connect(Tetris) />,
             ],
             "componentClass": "div",
@@ -610,6 +617,15 @@ ShallowWrapper {
           },
           "ref": null,
           "rendered": Array [
+            Object {
+              "instance": null,
+              "key": null,
+              "nodeType": "class",
+              "props": Object {},
+              "ref": null,
+              "rendered": null,
+              "type": [Function],
+            },
             Object {
               "instance": null,
               "key": null,

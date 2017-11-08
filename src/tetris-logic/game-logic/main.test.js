@@ -19,12 +19,6 @@ describe('Main unit tests', () => {
 		const s = getTestState({board});
 		expect(isIllegalState(s)).toBe(true);
 	});
-	describe('should get shadow', () => {
-		const s = getTestState({ pos: [1, 0], piece: c.PIECES.O });
-		const shadow = getShadow(s);
-		console.log(shadow);
-		// expect(shadow[0][0]).toEqual(s.piece.coords[0][0])
-	});
 });
 // NOTE consider that full rows will be cleared on almost all tetris.* functions. Can trip you up.
 describe('Integration tests', () => {

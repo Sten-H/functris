@@ -13,7 +13,8 @@ const state = {
         bag: [
             { coords: [ [ 1, 0 ], [ 0 , 1 ] ], token: 'X' },
             { coords: [ [ 0, -1 ], [ 0 , 0 ] ], token: 'X' } ,
-        ]
+        ],
+        options: {shadow: false}
     }
 };
 describe('Bag Container', () => {
