@@ -19,7 +19,8 @@ explicitly importing that partial and applying it as needed.
 ## Medium prio
 * I think the way the pieces spawn is a bit flexible, in a normal situation they spawn 1 down from top
 in most tetris games, but when top out is coming close I think it will spawn piece further up to not spawn
-on overlap and give unfair illegal state(overlapping piece) or top out.
+on overlap and give unfair illegal state(overlapping piece) or top out. AKSCHUALLY: this isn't true, I'm just spawning
+the piece one cell too low, but other games seem to show half of the illegal row above so you understand which piece you have
 * Holding down buttons to move repeatedly. Then more advanced and enjoyable with 
 Delayed auto shift http://tetris.wikia.com/wiki/DAS
 ### Not so high prio
@@ -29,6 +30,7 @@ Delayed auto shift http://tetris.wikia.com/wiki/DAS
 until it fits the board or something. Maybe easier to have each presentation piece orientation hard coded
 with proper position and rotation individually somewhere 
 ## Thoughts
+* Should 'gravity' tick be reset on manual shift down? Probably? Now it can give you a surprise double down shift
 * I wonder about rotations, some tetris games will raise the piece if it 
 intersect on Y and slide it to side if it intersects on X (wall kicks they call it). 
 Older variants don't do this, they just reject rotation. Maybe disregard until much

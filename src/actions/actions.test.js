@@ -26,7 +26,7 @@ describe('Actions', () => {
         const expected = 'ROTATE_COUNTER';
         expect(prop('type', actions.rotateCounter())).toEqual(expected);
     });
-	it('should create decrease tick action', () => {
+	it('should create decrease shiftTick action', () => {
 		const expected = 'DECREASE_TICK';
 		expect(prop('type', actions.decreaseTick())).toEqual(expected);
 	});
