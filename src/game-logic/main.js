@@ -2,7 +2,7 @@ import * as mv from './movementLogic';
 import * as brd from './boardLogic';
 import * as bag from './bagLogic';
 import { compose, either, identity, ifElse, not, over, set, view, when } from 'ramda';
-import { lens } from './helpers';
+import { lens, pieceActualPosition } from './helpers';
 // PRIVATE FUNCS
 const isPaused = view(lens.options.paused);
 const isGameOver = view(lens.flags.gameOver);
@@ -39,6 +39,11 @@ const tryExecute = (transformFunc) => ifElse(
 	identity,
 	execute(transformFunc)
 );
+// state -> [coord]
+export const getShadow = compose(
+	pieceActualPosition,
+	mv.dropPiece
+);
 // PUBLIC FUNCS
 // state -> state for all public funcs
 const shiftLeft = tryExecute(mv.shiftLeft);
@@ -49,4 +54,5 @@ const rotateClockwise = tryExecute(mv.rotateClockwise);
 const rotateCounterClockwise = tryExecute(mv.rotateCounterClockwise);
 const togglePause = over(lens.options.paused, not);
 
-export default { shiftLeft, shiftRight, shiftDown, dropPiece, rotateClockwise, rotateCounterClockwise, togglePause }
+export default { shiftLeft, shiftRight, shiftDown, dropPiece, rotateClockwise, rotateCounterClockwise, togglePause,
+	getShadow}

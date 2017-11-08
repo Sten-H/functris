@@ -26,6 +26,9 @@
   // I use opacity just as an easy way to adjust the brightness of all pieces. Probably a better way
   opacity: 0.87;
 }
+.piece.G {
+  opacity: 0.17;
+}
 .piece-I {
   @extend .piece;
   @include piece-color($I-color);
@@ -58,10 +61,11 @@
   @extend .piece;
   @include piece-color($Z-color);
 }
-.shadow {
-  opacity: 0.2;
-  // FIXME would be nice to like make the color a bit brighter than normal piece color, not sure what I mean by brighter, saturated?
-}
+//.piece-I, .piece-O, .piece-T, .piece-L, .piece-J, .piece-T, .piece-S, .piece-Z {
+//  +.G {
+//    opacity: 0.2 !important;
+//  }
+//}
 .row-wrapper {
 }
 .tetris-row {

@@ -11,14 +11,10 @@ I thought it wouldn't have to since it's set to a fixed 5 ms interval, but when 
 differently when I changed some simple things in the functions, making it slower so that's not good.
 ## TODO
 ### High prio
-* Detect game over (top out) http://tetris.wikia.com/wiki/Top_out
-* New game after game over
-* Refactor css, a lot of styling is housed in root index.scss file right now because it is used by many files.
-I don't think this is according to react way, I think I should refactor it out to a partial and have the components
-explicitly importing that partial and applying it as needed.
 * Piece shadow where it would end up on drop
 * Score tally
 * Line clear tally
+* Level that decides speed (level increases on amt of lines cleared)
 ## Medium prio
 * I think the way the pieces spawn is a bit flexible, in a normal situation they spawn 1 down from top
 in most tetris games, but when top out is coming close I think it will spawn piece further up to not spawn

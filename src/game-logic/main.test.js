@@ -1,7 +1,7 @@
 import { concat, dec, last, repeat, view } from 'ramda';
 import * as c from './constants/index';
 import { getTestState, lens } from './helpers';
-import tetris, { isIllegalState, lockPiece } from './main';
+import tetris, { getShadow, isIllegalState, lockPiece } from './main';
 
 describe('Main unit tests', () => {
 	describe('Lock piece', () => {
@@ -10,14 +10,20 @@ describe('Main unit tests', () => {
 			expect(lockPiece(s).pos).toEqual(c.START_POS);
 		});
 		it('should get new piece after piece written to board', () => {
-			const s = getTestState({pos: [1, dec(c.ROW_COUNT)], piece: c.PIECES. I, bag: [c.PIECES.L]});
+			const s = getTestState({pos: [1, dec(c.ROW_COUNT)], piece: c.PIECES.I, bag: [c.PIECES.L]});
 			expect(lockPiece(s).piece).toEqual(c.PIECES.L);
 		});
 	});
-	describe('Should identify illegal state', () => {
+	describe('should identify illegal state', () => {
 		const board = repeat(c.FILLED_ROW, c.ROW_COUNT);
 		const s = getTestState({board});
 		expect(isIllegalState(s)).toBe(true);
+	});
+	describe('should get shadow', () => {
+		const s = getTestState({ pos: [1, 0], piece: c.PIECES.O });
+		const shadow = getShadow(s);
+		console.log(shadow);
+		// expect(shadow[0][0]).toEqual(s.piece.coords[0][0])
 	});
 });
 // NOTE consider that full rows will be cleared on almost all tetris.* functions. Can trip you up.

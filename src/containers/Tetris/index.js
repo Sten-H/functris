@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import * as actions from "../../actions/actions";
 import KeyHandler from 'react-key-handler';
-import { drawBoard, getBoardWithPiece } from "../commons";
+import { drawBoard } from "../commons";
 import { append, last, map, uniq, view } from 'ramda';
 import { lens } from '../../game-logic/helpers';
 
@@ -117,7 +117,7 @@ class Tetris extends React.Component {
             <KeyHandler keyValue='t' onKeyHandle={this.props.onDecreasePress} />
             <KeyHandler keyValue='p' onKeyHandle={this.props.onPausePress} />
             <KeyHandler keyValue='r' onKeyHandle={this.props.onRestartPress} />
-            {drawBoard(getBoardWithPiece(this.props.gameState))}
+            {drawBoard(this.props.gameState)}
         </div>
         );
     };
