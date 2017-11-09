@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
+import { inc } from 'ramda';
 
 export const GameInfo = ({info}, blah) => (
 	<div>
@@ -12,7 +12,7 @@ export const GameInfo = ({info}, blah) => (
 		<p className='info-text'>{info.lines}</p>
 		<hr />
 		<h4>Level</h4>
-		<p className='info-text'>{info.level}</p>
+		<p className='info-text'>{inc(info.level)}</p>
 	</div>
 );
 

@@ -22,7 +22,7 @@ const resetState = () =>  {
 		info: {
 			score: 0,
 			lines: 0,
-			level: 1
+			level: 0
 		},
 		options: {
 			tickRate: c.INITIAL_TICK_RATE,

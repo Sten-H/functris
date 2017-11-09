@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import * as actions from "../../actions/actions";
 import KeyHandler, { KEYDOWN, KEYUP } from 'react-key-handler';
 import { drawBoard } from "../../tetris-logic/draw-logic/draw";
-import { append, last, map, uniq, view } from 'ramda';
+import { append, last, map, multiply, subtract, uniq, view } from 'ramda';
 import { lens } from '../../tetris-logic/game-logic/helpers';
 
 import './Tetris.css';
@@ -38,7 +38,10 @@ const setActive = (obj) => activeKeyValues = {...activeKeyValues, ...obj};
 class Tetris extends React.Component {
 	shiftTick() {
 		this.props.onDownPress();
-		setTimeout(this.shiftTick.bind(this), view(lens.options.tick, this.props.gameState));
+		const tickRate = subtract(
+			view(lens.options.tick, this.props.gameState),
+			multiply(view(lens.info.level, this.props.gameState), 50));
+		setTimeout(this.shiftTick.bind(this), tickRate);
 	}
 	updateKeyPress = (key) => {
 		if(activeKeyValues.prevKey !== key) {

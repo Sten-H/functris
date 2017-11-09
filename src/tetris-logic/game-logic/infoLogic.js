@@ -1,8 +1,9 @@
 import {
 	__,
-	add, always, compose, converge, divide, filter, identity, juxt, length, mergeWith, multiply, set, subtract, tap,
-	view,
-	zipObj,
+	add, always, clamp, compose, converge, divide, filter, identity, inc, juxt, length, mergeWith, multiply, nth, over,
+	set,
+	subtract,
+	view, zipObj,
 } from 'ramda';
 import { isRowFull } from './boardLogic';
 import { lens } from './helpers';
@@ -17,24 +18,23 @@ const fullRowCount = compose(
 	filter(isRowFull),
 	view(lens.board)
 );
-// const updateLevel = identity;
-// const updateScore = (state, linesCleared) => identity;
-// // state -> state
-// const addToLines = (lines, state) =>
-// 	converge(
-// 		over(lens.info.lines, add(lines), state),
-// 		[
-// 			fullRowCount,
-// 			identity
-// 		]
-// 	);
-// FIXME scoring should be done from a table look up basically, looking up the value of 0-4 rows cleared and multiplying by level
-const calculateScore = multiply(10);
-// FIXME this is just a mock fucntion that calculates level from lines, not real algorithm most likely
+/**
+ * score system is sort of stripped form of the modern guideline
+ * http://tetris.wikia.com/wiki/Scoring, I've only taken the lines cleared part.
+ * Guideline also has weird spins and back to back, and rewards for hard and soft dropping.
+ * If I'm only using lines cleared I should consider NES scoring system, but I didn't like
+ * how heavily it favored 4 line clears
+ */
+const SCORE_TABLE = [0, 100, 300, 500, 800];
+const calculateScore = (cleared, {level}) => compose(
+	multiply(inc(level)),
+	nth(__, SCORE_TABLE)
+)(cleared);
+// FIXME this is just a mock function that calculates level from lines, not real algorithm most likely
 const calculateLevel = compose(Math.floor, divide(__, 10));
 // (i, j) -> l, this function got out of hand because it wants to calculate the difference of old level and new level
 // so it can be added to previous level together with the other values
-const calculateLevelChange = (cleared, oldLines) =>
+const calculateLevelChange = (cleared, {lines: oldLines}) =>
 	converge(
 		subtract,
 		[compose(
@@ -49,14 +49,16 @@ const getChange = compose(
 	zipObj(['lines', 'score', 'level']),
 	converge(
 		juxt([identity, calculateScore, calculateLevelChange]),
-		[fullRowCount, view(lens.info.lines)]  // Only calculateLevelChange uses the secondValue
+		[fullRowCount, view(lens.info.all)]
 	)
 );
 // state -> info
-const getUpdatedValues =
+const getUpdatedValues = compose(
+	over(lens.info.level, clamp(0, 29)),
 	converge(
-	mergeWith(add),
-	[getChange, view(lens.info.all)]
+		mergeWith(add),
+		[getChange, view(lens.info.all)]
+	)
 );
 // state -> state
 export const updateInfo =
