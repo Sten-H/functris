@@ -1,6 +1,8 @@
 import * as mv from './movementLogic';
 import * as brd from './boardLogic';
 import * as bag from './bagLogic';
+import * as info from './infoLogic';
+
 import { compose, either, identity, ifElse, not, over, set, view, when } from 'ramda';
 import { lens, pieceActualPosition } from './helpers';
 // PRIVATE FUNCS
@@ -17,8 +19,9 @@ export const isIllegalState = either(brd.isPieceOverlapping, brd.isTopOut);
 export const lockPiece = compose(
 	set(lens.flags.lockRequested, false),
 	bag.getNextPiece,
-	brd.clearLines,
 	mv.setToStartPos,
+	brd.clearLines,
+	info.updateInfo,
 	brd.writeToBoard
 );
 // transform -> state -> state

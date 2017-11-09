@@ -16,12 +16,13 @@ const resetState = () =>  {
 		piece: head(startBag),
 		flags: {
 			lockRequested: false,
-			gameOver: false,  // When true game should not be unpausable
+			gameOver: false,
 
 		},
 		info: {
 			score: 0,
-			lines: 0
+			lines: 0,
+			level: 1
 		},
 		options: {
 			tickRate: c.INITIAL_TICK_RATE,

@@ -23,7 +23,7 @@ const defaultState = {
 const defaultBag = [ c.PIECES.L, c.PIECES.I, c.PIECES.O, c.PIECES.J,
 	c.PIECES.Z, c.PIECES.L, c.PIECES.T, c.PIECES.S ];
 const defaultOptions = { paused:false, shadow: true, tickRate: c.INITIAL_TICK_RATE };
-const defaultInfo = { lines: 0, score: 0 };
+const defaultInfo = { lines: 0, score: 0, level: 1 };
 const defaultFlags = { gameOver: false, lockRequested: false };
 const fillBoardBottomUp = compose(
 	takeLast(c.ROW_COUNT),
@@ -70,6 +70,7 @@ export const lens = {
 	info: {
 		score: lensPath(['info', 'score']),
 		lines: lensPath(['info', 'lines']),
+		level: lensPath(['info', 'level']),
 		all: lensProp('info')
 
 	},

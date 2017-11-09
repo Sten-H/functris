@@ -5,6 +5,7 @@ import { PauseModal } from '../PauseModal';
 import Tetris from '../../containers/Tetris/index';
 import GameOverModal from '../../containers/GameOverModal/index';
 import { Controls } from '../Controls';
+import GameInfo from '../../containers/GameInfo/index';
 
 import './App.css';
 // Boxes to the sides of tetris games
@@ -31,17 +32,10 @@ export const App = () => {
 				<Tetris />
 			</Col>
 			<InfoBoxOuter>
-				<Row>
-					<Col className='game-info solid-border text-left' sm={12} md={6}>
-						<Bag />
-						<hr className='line-top-margin'/>
-						<h4>Score</h4>
-						<p className='info-text'>100</p>
-						<hr />
-						<h4>Lines</h4>
-						<p className='info-text'>23</p>
-					</Col>
-				</Row>
+				<Col className='game-info solid-border text-left' sm={12} md={6}>
+					<Bag />
+					<GameInfo />
+				</Col>
 			</InfoBoxOuter>
 		</Row>
 	);
